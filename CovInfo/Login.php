@@ -7,7 +7,7 @@ require_once "Classes/Pdo.php";
          return;
     }
     if(isset($_POST["account_id"]) && isset($_POST["password"])) {
-        //unset($_SESSION["user_id"]);
+        unset($_SESSION["user_id"]); //Logout current user
         $pwd = md5($_POST["password"]);
         $sql = "SELECT user.user_id,status.status_name FROM user join status ON user.status_id=status.status_id  WHERE user.password=:password and user.account_id=:account_id";
         $stmt = $connection->prepare($sql);
