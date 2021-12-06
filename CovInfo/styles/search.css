@@ -1,0 +1,189 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif
+}
+
+.search {
+    background-color: #fff;
+    padding: 4px;
+    border-radius: 5px;
+
+}
+
+.search-1 {
+    position: relative;
+    width: 100%
+}
+
+.search-1 input {
+    height: 45px;
+    border: none;
+    width: 100%;
+    padding-left: 34px;
+    padding-right: 10px;
+    border-right: 2px solid #eee
+}
+
+.search-1 input:focus {
+    border-color: none;
+    box-shadow: none;
+    outline: none
+}
+
+.search-1 i {
+    position: absolute;
+    top: 12px;
+    left: 5px;
+    font-size: 24px;
+    color: #eee
+}
+
+::placeholder {
+    color: #858585;
+    opacity: 1
+}
+
+.search-2 {
+    position: relative;
+    width: 100%
+}
+
+.search-2 input {
+    height: 45px;
+    border: none;
+    width: 100%;
+    padding-left: 18px;
+    padding-right: 100px
+}
+
+.search-2 input:focus {
+    border-color: none;
+    box-shadow: none;
+    outline: none
+}
+
+.search-2 i {
+    position: absolute;
+    top: 12px;
+    left: -10px;
+    font-size: 24px;
+    color: #eee
+}
+
+.search-2 button {
+    position: absolute;
+    right: 1px;
+    top: 0px;
+    border: none;
+    height: 45px;
+    background-color: #0384c5;
+    color: #fff;
+    width: 90px;
+    border-radius: 4px
+}
+
+@media (max-width:800px) {
+    .search-1 input {
+        border-right: none;
+        border-bottom: 1px solid #eee
+    }
+
+    .search-2 i {
+        left: 4px
+    }
+
+    .search-2 input {
+        padding-left: 34px
+    }
+
+    .search-2 button {
+        height: 37px;
+        top: 5px
+    }
+}
+
+.container {
+    margin-top: 50px
+}
+
+.container .table-wrap {
+    overflow-x: auto
+}
+
+.container .table-wrap::-webkit-scrollbar {
+    height: 5px
+}
+
+.container .table-wrap::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background-image: linear-gradient(to right, #5D7ECD, #0C91E6)
+}
+
+.table>:not(caption)>*>* {
+    padding: 2rem 0.5rem
+}
+
+.table tbody td input[type="checkbox"] {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background-color: #eee;
+    position: relative;
+    border-radius: 3px;
+    cursor: pointer
+}
+
+.table tbody td input[type="checkbox"]:after {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    font-family: "Font Awesome 5 Free";
+    font-weight: 600;
+    content: "\f00c";
+    color: #fff;
+    font-size: 15px;
+    display: none
+}
+
+.table tbody td input[type="checkbox"]:checked,
+.table tbody td input[type="checkbox"]:checked:hover {
+    background-color: #40bfc1
+}
+
+.table tbody td input[type="checkbox"]:checked::after {
+    display: flex;
+    align-items: center;
+    justify-content: center
+}
+
+.table tbody td input[type="checkbox"]:hover {
+    background-color: #ddd
+}
+
+.table tbody td .img-container {
+    width: 50px;
+    height: 50px
+}
+
+.table tbody td .img-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%
+}
+
+.table tbody,
+.table thead {
+    background-color: #fff
+}
+
+.table tbody tr td:nth-of-type(1) {
+    text-align: center;
+    min-width: 70px;
+    max-width: 70px
+}
+

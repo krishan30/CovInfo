@@ -23,6 +23,7 @@ class Person
     private $vaccinationStatus;
     private $status;
     private $bloodType;
+    private $userType;
 
     /**
      * @param $accountID
@@ -45,7 +46,7 @@ class Person
      * @param $vaccinationStatus
      * @param $status
      */
-    public function __construct($accountID, $password, $emailAddress, $firstName, $middleName, $lastName, $NICNumber, $DOB, $gender, $district, $province, $MOHDivision, $address, $phoneNumber, $status, $vaccinationStatus,$bloodType)
+    public function __construct($accountID, $password, $emailAddress, $firstName, $middleName, $lastName, $NICNumber, $DOB, $gender, $district, $province, $MOHDivision, $address, $phoneNumber, $status, $vaccinationStatus,$bloodType,$userType)
     {
         $this->accountID = $accountID;
         $this->password = $password;
@@ -64,7 +65,26 @@ class Person
         $this->status = $status;
         $this->vaccinationStatus = $vaccinationStatus;
         $this->bloodType = $bloodType;
+        $this->userType = $userType;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getUserType()
+    {
+        return $this->userType;
+    }
+
+    /**
+     * @param mixed $userType
+     */
+    public function setUserType($userType): void
+    {
+        $this->userType = $userType;
+    }
+
+
 
     /**
      * @return mixed
@@ -590,6 +610,31 @@ class VaccineRecord
     }
 
 
+}
+
+class UserBuilder{
+    private $user;
+
+    public function buildUser($user_id){
+        $serverName = 'localhost';
+        $username = 'root';
+        $password = '';
+        $connection = null;
+        try{
+            $connection = new PDO("mysql: host=$serverName;dbname=CovInfo",$username,$password);
+            $connection->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+        }catch (PDOException $e){
+            echo $e->getMessage();
+        }
+        $stmt = $connection->query("SELECT user.account_id,user.password,user.email_address,user.first_name,user.middle_name,user.last_name,user.nic_number,user.birth_day,gender.gender,district.name,province.prov_name,moh_division.moh_name,user.address,user.phone_number,status.status_name,vaccine_status.vaccine_status_name,blood_type.blood_type_name,user_type.user_type_name
+                                            FROM user,gender,district,province,moh_division,status,vaccine_status,blood_type,user_type
+                                            WHERE user_id = $user_id AND user.gender_id = gender.gender_id AND user.district_id = district.district_id AND user.province_id = province.province_id AND user.blood_type_id = blood_type.blood_type_id AND user.moh_division_id = moh_division.moh_division_id AND user.status_id = status.status_id AND user.vaccine_status_id = vaccine_status.vaccine_status_id AND user.user_type_id = user_type.user_type_id");
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $this->user = new User($row["account_id"],$row["password"],$row["email_address"],$row["first_name"],$row["middle_name"],$row["last_name"],$row["nic_number"],
+                $row["birth_day"],$row["gender"],$row["name"],$row["prov_name"],$row["moh_name"],$row["address"],$row["phone_number"],$row["status_name"],$row["vaccine_status_name"],$row["blood_type_name"],$row["user_type_name"]);
+        }
+        return $this->user;
+}
 }
 
 //$me = new User(1,"a","b","supun","dhananjaya","dasanayaka",777,1999-7-5,"male","ga","ga","ga","ga","ga","ga");

@@ -1,4 +1,6 @@
 <?php
+
+    // change //
     require_once ("Classes/PDO.php");
     require_once ("Classes/classes.php");
 
@@ -8,13 +10,8 @@
     $user = null;
     if($logged_user){
         $user_id = $_SESSION["user_id"];
-        $stmt = $connection->query("SELECT user.account_id,user.password,user.email_address,user.first_name,user.middle_name,user.last_name,user.nic_number,user.birth_day,gender.gender,district.name,province.prov_name,moh_division.moh_name,user.address,user.phone_number,status.status_name,vaccine_status.vaccine_status_name,blood_type.blood_type_name
-                                            FROM user,gender,district,province,moh_division,status,vaccine_status,blood_type
-                                            WHERE user_id = $user_id AND user.gender_id = gender.gender_id AND user.district_id = district.district_id AND user.province_id = province.province_id AND user.blood_type_id = blood_type.blood_type_id AND user.moh_division_id = moh_division.moh_division_id AND user.status_id = status.status_id AND user.vaccine_status_id = vaccine_status.vaccine_status_id");
-        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $user = new User($row["account_id"],$row["password"],$row["email_address"],$row["first_name"],$row["middle_name"],$row["last_name"],$row["nic_number"],
-                $row["birth_day"],$row["gender"],$row["name"],$row["prov_name"],$row["moh_name"],$row["address"],$row["phone_number"],$row["status_name"],$row["vaccine_status_name"],$row["blood_type_name"]);
-        }
+        $userBuilder = new UserBuilder();
+        $user = $userBuilder->buildUser($user_id);
     }
 
 
@@ -26,7 +23,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>CovInfo-Home</title>
+    <title>CovInfo - Home</title>
     <link rel="stylesheet" href="https://www.cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
     <script src="https://code.jquery.com/jquery-1.8.2.min.js"></script>
@@ -55,7 +52,16 @@ https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css
                 <li class="nav-item">
                     <a class="nav-link" aria-current="page" href="statistic.php">Statistics</a>
                 </li>
-            </ul>
+                <?php
+                    if($logged_user){
+                        if($user->getUserType() != "Public"){?>
+                            <li class="nav-item">
+                                <a class="nav-link" aria-current="page" href="search.php">Search</a>
+                            </li>
+                        <?php }
+                    }
+                ?>
+
             </ul>
             <?php if ($logged_user) { ?>
                 <ul class="nav navbar-nav ">
