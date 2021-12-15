@@ -2,8 +2,33 @@
     require_once "Classes/Pdo.php";
     require_once "Classes/classes.php";
     session_start();
-    $medical_officer_id=3; //user id
-    if(isset($_POST["medical_centre_id"])){
+
+    if(!isset($_SESSION["user_id"])){
+        header("Location:Login.php");
+        return;
+    }
+
+    if(!isset($_SESSION["searchedId"])){
+        header("Location:search.php");
+        return;
+    }
+
+    $medical_officer_id=$_SESSION["user_id"];
+    $userBuilder = new UserBuilder();
+    $user = $userBuilder->buildUser($medical_officer_id);
+
+    if($user->getUserType() == "Public"){
+        header("Location:index.php");
+    }else{
+        $logged_user = true ;
+    }
+
+    if(isset($_POST["cancel"])){
+        header("Location:profile-view.php?id=".$_SESSION["searchedId"]);
+        return;
+    }
+
+    if(isset($_POST["medical_centre_id"]) && isset($_POST["register"])){
         unset($_SESSION["PRegistration"]);
         $sql = "INSERT INTO infection_record (user_id,medical_officer_id,admitted_date,medical_centre_id,remarks) VALUES (:user_id,:medical_officer_id,:admitted_date,:medical_centre_id,:remarks)";
         $stmt = $connection->prepare($sql);
@@ -43,19 +68,9 @@
         header("Location:index.php");
         return;
     }
-?>
-<?php
-    $userBuilder = new UserBuilder();
-    $user = $userBuilder->buildUser($medical_officer_id);
 
-    $logged_user = true ;
-    $accountId="19991026000"; //Temporary for evaluation purpose
-    $sql="SELECT user.user_id,user.first_name,user.middle_name,user.last_name,user.nic_number,user.birth_day,gender.gender FROM user join gender ON user.gender_id=gender.gender_id  WHERE user.account_id=:account_id";
-    $stmt=$connection->prepare($sql);
-    $stmt->execute(array(':account_id'=>$accountId));
-    $row=$stmt->fetch(PDO:: FETCH_ASSOC);
-    $medical_officer = $connection->query("SELECT first_name,middle_name,last_name FROM user WHERE user_id=".$medical_officer_id)->fetch(PDO:: FETCH_ASSOC);
-    $m_full_name=$medical_officer['first_name']." ".$medical_officer['middle_name']." ".$medical_officer['last_name'];
+    $searchedId=$_SESSION["searchedId"];
+    $searchedPerson = $userBuilder->buildUser($searchedId);
 ?>
 
 <!DOCTYPE html>
@@ -86,6 +101,18 @@
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="statistic.php">Statistics</a>
                     </li>
+
+                    <?php
+                    if($logged_user){
+                        if($user->getUserType() != "Public"){?>
+                            <li class="nav-item">
+                                <a class="nav-link" aria-current="page" href="search.php">Search</a>
+                            </li>
+                        <?php }
+                    }
+                    ?>
+
+
                 </ul>
                 
                 <?php if ($logged_user) { ?>
@@ -118,21 +145,21 @@
         <div class="row">
             <div class="col-sm">
                 <label class="form-label" for="first-name">First Name</label>
-                <input class="form-control" type="text" value="<?=$row['first_name'] ?>" name="first_name" form="new-patient" readonly>
+                <input class="form-control" type="text" value="<?=$searchedPerson->getFirstName() ?>" name="first_name" form="new-patient" readonly>
             </div>
             <div class="col-sm">
                 <label class="form-label" for="middle_name">Middle Name</label>
-                <input class="form-control" type="text" id="second-name" value="<?=$row['middle_name']?>" name="middle_name" form="new-patient" readonly>
+                <input class="form-control" type="text" id="second-name" value="<?=$searchedPerson->getMiddleName()?>" name="middle_name" form="new-patient" readonly>
             </div>
             <div class="col-sm">
                 <label  class="form-label" for="last_name">Last Name</label>
-                <input class="form-control" type="text" id="third-name" value="<?=$row['last_name'] ?>" name="last_name" form="new-patient" readonly>
+                <input class="form-control" type="text" id="third-name" value="<?=$searchedPerson->getLastName() ?>" name="last_name" form="new-patient" readonly>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-3">
                 <label class="form-label" for="nic_number">ID Number</label>
-                <input class="form-control" type="text" name="nic_number" id="id=no" value="<?=$row['nic_number'] ?>" form="new-patient" readonly>
+                <input class="form-control" type="text" name="nic_number" id="id=no" value="<?=$searchedPerson->getNICNumber() ?>" form="new-patient" readonly>
             </div>
         </div>
     </div>
@@ -144,9 +171,9 @@
         <form action="NewPatientReport.php" method="post">
             <div class="row">
                 <div class="col-sm">
-                    <input type="text" name="user_id" value="<?=$row['user_id']?>" style="display: none" readonly>
+                    <input type="text" name="user_id" value="<?=$_SESSION["searchedId"]?>" style="display: none" readonly>
                     <label class="form-label" for="doc-name">Medical Officer</label>
-                    <input class="form-control" type="text" name="doc-name" id="doc-name" value="<?=$m_full_name?>" readonly>
+                    <input class="form-control" type="text" name="doc-name" id="doc-name" value="<?= $user->getFirstName()." ".$user->getLastName()?>" readonly>
                 </div>
                 <div class="col-sm">
                     <label class="form-label" for="inst-name">Institute</label>
@@ -180,10 +207,10 @@
             <br> <br>
             <div class="row">
                 <div class="col-sm text-center">
-                    <button type="submit" class="btn btn-outline-secondary btn-lg">Cancel</button>
+                    <button type="submit" class="btn btn-outline-secondary btn-lg" name="cancel">Cancel</button>
                 </div>
                 <div class="col-sm text-center">
-                    <button type="submit" class="btn btn-outline-primary btn-lg" >Register</button>
+                    <button type="submit" class="btn btn-outline-primary btn-lg" name="register" >Register</button>
                 </div>
                 
             </div>
