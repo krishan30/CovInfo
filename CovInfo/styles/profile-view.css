@@ -1,0 +1,95 @@
+
+.card-1 {
+    width: 400px;
+    border-radius: 18px;
+    border: none
+}
+
+.card-2 {
+    border-radius: 20px
+}
+
+.card-child {
+    border: 3px solid blue;
+    border-radius: 16px
+}
+
+.circle {
+    background-color: #ebdffb;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    display: flex;
+    color: #9553ea;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px
+}
+
+.circle-2 {
+    background-color: #fbebdf;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    display: flex;
+    color: #ea9253;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px
+}
+
+.circle-3 {
+    background-color: #9c9cff;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    display: flex;
+    color: #fff;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px
+}
+
+.circle-4 {
+    background-color: #dbffba;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    display: flex;
+    color: #ffffff;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px
+}
+
+.circle-5 {
+    background-color: #b5fcf1;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    display: flex;
+    color: #ffffff;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px
+}
+
+a:link {
+    text-decoration: none;
+    color: black;
+}
+
+a:visited {
+    text-decoration: none;
+    color: black;
+}
+
+a:hover {
+    text-decoration: none;
+    color: gray;
+}
+
+a:active {
+    text-decoration: none;
+    color: black;
+}

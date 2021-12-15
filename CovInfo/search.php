@@ -32,6 +32,12 @@
 
     }
 
+    if(isset($_GET["findPage"])){
+        if($_GET["id"] != ""){
+            header("Location:profile-view.php?id=".$_GET["id"]);
+        }
+    }
+
     if(isset($_SESSION["search_account_id"]) || isset($_SESSION["search_nic_number"])){
         $result = true;
         $searchSql = "SELECT user.user_id FROM user WHERE user.account_id=:account_id OR user.nic_number=:nic_number ORDER BY account_id";
@@ -113,7 +119,7 @@ https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css
 <br><br>
 <p class="h-4 m-3 p-3 row justify-content-center border border-2 rounded-3 boxy" style="font-weight: bold">Search user</p>
 <br>
-<div class="container justify-content-center">
+<p class="container justify-content-center">
 
     <form method="post" action="search.php">
         <div class="container">
@@ -198,7 +204,12 @@ https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css
                         </div>
                     </td>
                     <td>
-                        <div class="fw-600">Select</div>
+                        <div class="fw-600">
+                            <form method="get">
+                                <input type="text" name="id" value="<?php echo $row["user_id"]?>" hidden>
+                                <button type="submit" name="findPage">Select</button>
+                            </form>
+                        </div>
                     </td>
                 </tr>
 
@@ -215,6 +226,8 @@ https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css
            <?php }
         }
     ?>
+
+
 
 
 
