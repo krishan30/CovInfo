@@ -454,13 +454,15 @@ $quarantineRecords = $connection->query("SELECT quarantine_record.start_date,qua
 
 
         <?php if($status =="Healthy" && $authority->getUserType() == "Authority"){?>
-            <div class="p-3 card-child mt-4">
-                <div class="d-flex flex-row align-items-center"> <span class="circle-3"> <i class="fa fa-bank"> <img src="images\addQ.png" width="80%"> </i> </span>
-                    <div class="d-flex flex-column ms-3">
-                        <h6 class="fw-bold">Add to Quarantine</h6> <span>To mark the profile owner as a quarantining person</span>
+            <a href="QuarantineReport.php" class="hiddenLink">
+                <div class="p-3 card-child mt-4">
+                    <div class="d-flex flex-row align-items-center"> <span class="circle-3"> <i class="fa fa-bank"> <img src="images\addQ.png" width="80%"> </i> </span>
+                        <div class="d-flex flex-column ms-3">
+                            <h6 class="fw-bold">Add to Quarantine</h6> <span>To mark the profile owner as a quarantining person</span>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </a>
 
         <?php } ?>
 

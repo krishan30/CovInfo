@@ -24,7 +24,7 @@
     }
 
     if(isset($_POST["cancel"])){
-        header('Location:profile-view.php?id=".$_SESSION["searchedId"]');
+        header("Location:profile-view.php?id=".$_SESSION["searchedId"]);
         return;
     }
 
@@ -69,7 +69,7 @@
         return;
     }
 
-    $searchedId=$_SESSION["searchedId"]; //Temporary for evaluation purpose
+    $searchedId=$_SESSION["searchedId"];
     $searchedPerson = $userBuilder->buildUser($searchedId);
 ?>
 

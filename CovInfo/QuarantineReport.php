@@ -2,52 +2,57 @@
 require_once "Classes/Pdo.php";
 require_once "Classes/classes.php";
 session_start();
+$userBuilder = new UserBuilder();
+$user = null;
 
+if(isset($_SESSION["user_id"])){
+    $logged_user = true ;
+    $auth_id = $_SESSION["user_id"];
+    $user = $userBuilder->buildUser($auth_id);
+    if($user->getUserType() != "Authority"){
+        header("Location:index.php");
+        return;
+    }elseif(!isset($_SESSION["searchedId"])){
+        header("Location:search.php");
+        return;
+    }else{
 
-$logged_user = true ; // $logged_user = isset($_SESSION["LogIn"]);
+    }
+
+}else{
+    header("Location:Login.php");
+    return;
+}
+ // $logged_user = isset($_SESSION["LogIn"]);
 
 /*
  * below $_SESSION["user_id"] should be get from session global variable after connecting
  * with other pages. For the testing, it hard coded as 2.
  */
-$_SESSION["user_id"] = 2;
-$auth_id = $_SESSION["user_id"];
 
-if(isset($_SESSION["user_id"])) {
-    if (isset($_POST["end-date"]) && isset($_POST["place-of-quarantine"])) {
-        unset($_SESSION["QRegistration"]);
-        $sql = "INSERT INTO  quarantine_record (user_id, start_date, end_date, administrator_id,place_id) VALUES (:user_id,:start_date,:end_date,:administrator_id,:place_id)";
-        $stmt = $connection->prepare($sql);
-        $administrator_id = $connection->query("SELECT administrator_id FROM administrator WHERE user_id=".$_SESSION["user_id"])->fetch(PDO:: FETCH_ASSOC);
-        $user_id=$_POST["user-id"];
-        $stmt->execute(array(':user_id' =>$user_id, ':start_date' => $_POST["start-date"], ':end_date' => $_POST["end-date"], ':administrator_id' => $administrator_id["administrator_id"],':place_id'=>$_POST['place-of-quarantine']));
-        $sql = "UPDATE user set status_id=2  where user_id=:user_id";
-        $stmt=$connection->prepare($sql);
-        $stmt->execute(array(':user_id' => $user_id));
-        $_SESSION["QRegistration"]=true;
-        header("Location:QuarantineReport.php");
-        return;
-    }elseif (isset($_POST["backToHome"])){
-        unset($_SESSION["QRegistration"]);
-        header("Location:index.php");
-        return;
-    }
-}else{
-    header("Location:Login.php");
+
+if (isset($_POST["end-date"]) && isset($_POST["place-of-quarantine"])) {
+    unset($_SESSION["QRegistration"]);
+    $sql = "INSERT INTO  quarantine_record (user_id, start_date, end_date, administrator_id,place_id) VALUES (:user_id,:start_date,:end_date,:administrator_id,:place_id)";
+    $stmt = $connection->prepare($sql);
+    $administrator_id = $connection->query("SELECT administrator_id FROM administrator WHERE user_id=".$_SESSION["user_id"])->fetch(PDO:: FETCH_ASSOC);
+    $user_id=$_POST["user-id"];
+    $stmt->execute(array(':user_id' =>$user_id, ':start_date' => $_POST["start-date"], ':end_date' => $_POST["end-date"], ':administrator_id' => $administrator_id["administrator_id"],':place_id'=>$_POST['place-of-quarantine']));
+    $sql = "UPDATE user set status_id=2  where user_id=:user_id";
+    $stmt=$connection->prepare($sql);
+    $stmt->execute(array(':user_id' => $user_id));
+    $_SESSION["QRegistration"]=true;
+    header("Location:QuarantineReport.php");
+    return;
+}elseif (isset($_POST["backToHome"])){
+    unset($_SESSION["QRegistration"]);
+    header("Location:index.php");
     return;
 }
 
-?>
-<?php
 
-    $userBuilder = new UserBuilder();
-    $user = $userBuilder->buildUser($auth_id);
-
-    $accountId="19991026000"; //Temporary for evaluation purpose
-    $sql="SELECT user.user_id,user.first_name,user.middle_name,user.last_name,user.nic_number,user.birth_day,gender.gender FROM user join gender ON user.gender_id=gender.gender_id  WHERE user.account_id=:account_id";
-    $stmt=$connection->prepare($sql);
-    $stmt->execute(array(':account_id'=>$accountId));
-    $row=$stmt->fetch(PDO:: FETCH_ASSOC);
+$searchedId=$_SESSION["searchedId"];
+$searchedPerson = $userBuilder->buildUser($searchedId);
 ?>
 
 
@@ -112,29 +117,29 @@ if(isset($_SESSION["user_id"])) {
     <div class="row">
         <div class="col-sm">
             <label for="first-name" class="form-label">First Name</label>
-            <input type="text" id="fist-name" form="quarantine-form" name="first-name" class="form-control" value="<?=$row['first_name'] ?>" readonly>
+            <input type="text" id="fist-name" form="quarantine-form" name="first-name" class="form-control" value="<?=$searchedPerson->getFirstName() ?>" readonly>
         </div>
         <div class="col-sm">
             <label for="second-name" class="form-label">Second Name</label>
-            <input type="text" id="second-name" name="second-name" form="quarantine-form" class="form-control" value="<?=$row['middle_name']?>" readonly>
+            <input type="text" id="second-name" name="second-name" form="quarantine-form" class="form-control" value="<?=$searchedPerson->getMiddleName()?>" readonly>
         </div>
         <div class="col-sm">
             <label for="last-name" class="form-label">Last Name</label>
-            <input type="text" id="last-name" name="last-name" form="quarantine-form" class="form-control" value="<?=$row['last_name'] ?>" readonly>
+            <input type="text" id="last-name" name="last-name" form="quarantine-form" class="form-control" value="<?=$searchedPerson->getLastName() ?>" readonly>
         </div>
     </div>
     <div class="row">
         <div class="col-sm">
             <label for="id-num" class="form-label">NIC Number</label>
-            <input type="text" id="id-num" name="id-num" form="quarantine-form" class="form-control" value="<?=$row['nic_number'] ?>" readonly>
+            <input type="text" id="id-num" name="id-num" form="quarantine-form" class="form-control" value="<?=$searchedPerson->getNICNumber() ?>" readonly>
         </div>
         <div class="col-sm">
             <label for="birth-day" class="form-label">Birth Date</label>
-            <input type="text" id="birth-day" name="birth-day" form="quarantine-form" class="form-control" value="<?=$row['birth_day'] ?>" readonly>
+            <input type="text" id="birth-day" name="birth-day" form="quarantine-form" class="form-control" value="<?=$searchedPerson->getDOBString();?>" readonly>
         </div>
         <div class="col-sm">
             <label for="sex" class="form-label">Sex</label>
-            <input type="text" id="sex" name="sex" form="quarantine-form" class="form-control" value="<?=$row['gender'] ?>" readonly>
+            <input type="text" id="sex" name="sex" form="quarantine-form" class="form-control" value="<?=$searchedPerson->getGender();?>" readonly>
         </div>
     </div>
 </div>
@@ -146,7 +151,7 @@ if(isset($_SESSION["user_id"])) {
     <form action="" method="post" id="quarantine-form">
         <div class="row">
             <div class="col-sm">
-                <input type="text" name="user-id" value="<?=$row['user_id']?>" style="display: none" readonly>
+                <input type="text" name="user-id" value="<?=$searchedId?>" style="display: none" readonly>
                 <label for="start-date" class="form-label">Quarantine Start Date</label>
                 <input type="date" id="start-date" name="start-date" class="form-control" value="<?= date('Y-m-d', time());?>" readonly>
             </div>
