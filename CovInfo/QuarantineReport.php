@@ -86,6 +86,16 @@ $searchedPerson = $userBuilder->buildUser($searchedId);
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="statistic.php">Statistics</a>
                     </li>
+
+                    <?php
+                    if($logged_user){
+                        if($user->getUserType() != "Public"){?>
+                            <li class="nav-item">
+                                <a class="nav-link" aria-current="page" href="search.php">Search</a>
+                            </li>
+                        <?php }
+                    }
+                    ?>
                 </ul>
                 
                 <?php if ($logged_user) { ?>
