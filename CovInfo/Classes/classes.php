@@ -618,10 +618,10 @@ class UserBuilder{
     public function buildUser($user_id){
         $serverName = 'localhost';
         $username = 'root';
-        $password = '';
+        $password = 'root';
         $connection = null;
         try{
-            $connection = new PDO("mysql: host=$serverName;dbname=CovInfo",$username,$password);
+            $connection = new PDO("mysql: host=$serverName;port=3307;dbname=CovInfo",$username,$password);
             $connection->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
         }catch (PDOException $e){
             echo $e->getMessage();
