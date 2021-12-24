@@ -68,6 +68,7 @@ class Person
         $this->userType = $userType;
     }
 
+
     /**
      * @return mixed
      */
@@ -460,7 +461,31 @@ class MedicalOfficer extends User implements IAdministrator
 
 class User extends Person
 {
+    private $accountState;
 
+    public function __construct($accountID, $password, $emailAddress, $firstName, $middleName, $lastName, $NICNumber, $DOB, $gender, $district, $province, $MOHDivision, $address, $phoneNumber, $status, $vaccinationStatus, $bloodType, $userType)
+    {
+        parent::__construct($accountID, $password, $emailAddress, $firstName, $middleName, $lastName, $NICNumber, $DOB, $gender, $district, $province, $MOHDivision, $address, $phoneNumber, $status, $vaccinationStatus, $bloodType, $userType);
+       // $this->accountState=new PreUser();
+    }
+
+    public function setAccountState(AccountState $state){
+        $this->accountState=$state;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public  function activateUserAccount(){
+        $this->accountState->activate($this);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public  function DeactivateUserAccount(){
+        $this->accountState->Deactivate($this);
+    }
 }
 
 
