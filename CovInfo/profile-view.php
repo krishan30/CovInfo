@@ -5,12 +5,13 @@ require_once ("Classes/classes.php");
 session_start();
 $today = date("Y-m-d");
 $logged_user = false;
-$userBuilder = new UserBuilder();
+$userFactory = new UserFactory();
 $authority = null;
 $user = null;
+$connection = PDOSingleton::getInstance();
 
 if (isset($_SESSION["user_id"])){
-    $authority = $userBuilder->buildUser($_SESSION["user_id"]);
+    $authority = $userFactory->buildUser($_SESSION["user_id"]);
     $logged_user = true;
     if($authority->getUserType() == "Public"){
         header("Location:index.php");
@@ -24,7 +25,7 @@ if (isset($_SESSION["user_id"])){
 
 if (isset($_GET["id"])){
     $user_id = $_GET["id"];
-    $user = $userBuilder->buildUser($_GET["id"]);
+    $user = $userFactory->buildUser($_GET["id"]);
     $_SESSION["searchedId"] = $user_id;
 }else{
     header("Location:search.php");
@@ -442,6 +443,7 @@ $quarantineRecords = $connection->query("SELECT quarantine_record.start_date,qua
         <?php } ?>
 
         <?php if($status =="Infected" && $authority->getUserType() == "Medical"){?>
+        <a href="PatientReleaseForm.php" class="hiddenLink">
             <div class="p-3 card-child mt-4">
                 <div class="d-flex flex-row align-items-center"> <span class="circle-4"> <i class="fa fa-bank"> <img src="images\releaseP.png" width="80%"> </i> </span>
                     <div class="d-flex flex-column ms-3">
@@ -449,6 +451,7 @@ $quarantineRecords = $connection->query("SELECT quarantine_record.start_date,qua
                     </div>
                 </div>
             </div>
+        </a>
 
         <?php } ?>
 
@@ -467,13 +470,16 @@ $quarantineRecords = $connection->query("SELECT quarantine_record.start_date,qua
         <?php } ?>
 
         <?php if($status =="Quarantined" && $authority->getUserType() == "Authority"){?>
-            <div class="p-3 card-child mt-4">
+            <?php unset($_SESSION["QExtend"]);?>
+            <a href="QuarantineExtendForm.php" class="hiddenLink">
+            <div class="p-3 card-child mt-4" >
                 <div class="d-flex flex-row align-items-center"> <span class="circle-3"> <i class="fa fa-bank"> <img src="images\extendQ.png" width="80%"> </i> </span>
                     <div class="d-flex flex-column ms-3">
                         <h6 class="fw-bold">Extend the Quarantine</h6> <span>Extend the quarantining period of the person</span>
                     </div>
                 </div>
             </div>
+            </a>
 
         <?php } ?>
 

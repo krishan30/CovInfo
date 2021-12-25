@@ -1,7 +1,6 @@
 <?php
 
     // change //
-    require_once ("Classes/PDO.php");
     require_once ("Classes/classes.php");
 
     session_start();
@@ -10,8 +9,8 @@
     $user = null;
     if($logged_user){
         $user_id = $_SESSION["user_id"];
-        $userBuilder = new UserBuilder();
-        $user = $userBuilder->buildUser($user_id);
+        $userFactory = new UserFactory();
+        $user = $userFactory->buildUser($user_id);
     }
 
 

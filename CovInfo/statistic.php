@@ -1,9 +1,9 @@
 <?php
-require_once "Classes/PDO.php";
 require_once "Classes/classes.php";
 
 session_start();
 $today = date("Y-m-d");
+$connection = PDOSingleton::getInstance();
 $stmt = $connection->query("SELECT new_cases,deaths,recovered,date FROM daily_report WHERE date = '$today'");
 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
     $new_cases = $row['new_cases'];
@@ -23,8 +23,8 @@ $logged_user = isset($_SESSION["LogIn"]);
 $user = null;
 if($logged_user){
     $user_id = $_SESSION["user_id"];
-    $userBuilder = new UserBuilder();
-    $user = $userBuilder->buildUser($user_id);
+    $userFactory = new UserFactory();
+    $user = $userFactory->buildUser($user_id);
 }
 
 ?>

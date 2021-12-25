@@ -1,17 +1,17 @@
 <?php
-    require_once ("Classes/PDO.php");
     require_once ("Classes/classes.php");
 
     session_start();
 
     $logged_user = isset($_SESSION["LogIn"]);
+    $connection = PDOSingleton::getInstance();
     $user = null;
     $result = false;
     $results = [];
     if($logged_user){
         $user_id = $_SESSION["user_id"];
-        $userBuilder = new UserBuilder();
-        $user = $userBuilder->buildUser($user_id);
+        $userFactory = new UserFactory();
+        $user = $userFactory->buildUser($user_id);
         if($user->getUserType() == "Public"){
             header("Location:index.php");
             return;
@@ -161,7 +161,7 @@ https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css
                                 </thead>
                                 <tbody>
                 <?php }
-                $newResult = $userBuilder->buildUser($row["user_id"]);
+                $newResult = $userFactory->buildUser($row["user_id"]);
                 $name = $newResult->getFirstName()." ".$newResult->getMiddleName()." ".$newResult->getLastName();
                 $nic = $newResult->getNICNumber();
                 $dob = $newResult->getDOBString();

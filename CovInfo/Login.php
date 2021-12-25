@@ -1,6 +1,7 @@
 <?php
-require_once "Classes/Pdo.php";
+require_once "Classes/classes.php";
 
+    $connection = PDOSingleton::getInstance();
     session_start();
     if(isset($_SESSION["LogIn"])){
          header('Location:index.php');
@@ -71,6 +72,11 @@ require_once "Classes/Pdo.php";
                     }
                     ?>
                 </div>
+                <!--<div class="form-check mb-4">
+                    <label class="form-check-label">
+                        <input class="form-check-input " type="checkbox" name="remember"> Remember me
+                    </label>
+                </div>-->
                 <div class="text-center mt-5">
                     <button type="submit" name="sign-in" class="btn btn-outline-primary bg-gradient btn-lg ">Sign In</button>
                 </div>

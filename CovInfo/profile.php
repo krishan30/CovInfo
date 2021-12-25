@@ -1,5 +1,4 @@
 <?php
-    require_once ("Classes/PDO.php");
     require_once ("Classes/classes.php");
 
     session_start();
@@ -13,12 +12,14 @@
         return;
     }
 
+    $connection = PDOSingleton::getInstance();
+
     /*
       should get from session variable after connecting with logging page
     */
 
-    $userBuilder = new UserBuilder();
-    $user = $userBuilder->buildUser($user_id);
+    $userFactory = new UserFactory();
+    $user = $userFactory->buildUser($user_id);
 
 
     $name = $user->getFirstName()." ".$user->getMiddleName()." ".$user->getLastName();

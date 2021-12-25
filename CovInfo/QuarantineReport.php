@@ -1,5 +1,4 @@
 <?php
-    require_once "Classes/Pdo.php";
     require_once "Classes/classes.php";
     session_start();
 
@@ -11,9 +10,10 @@
         header("Location:search.php");
         return;
     }
+    $connection = PDOSingleton::getInstance();
     $medical_officer_id=$_SESSION["user_id"];
-    $userBuilder = new UserBuilder();
-    $user = $userBuilder->buildUser($medical_officer_id);
+    $userFactory = new UserFactory();
+    $user = $userFactory->buildUser($medical_officer_id);
 
     if($user->getUserType() === "Public"){
         header("Location:index.php");
@@ -23,7 +23,7 @@
     }
     $is_page_refreshed = (isset($_SERVER['HTTP_CACHE_CONTROL']) && $_SERVER['HTTP_CACHE_CONTROL'] == 'max-age=0');
     $searchedId=$_SESSION["searchedId"];
-    $searchedPerson = $userBuilder->buildUser($searchedId);
+    $searchedPerson = $userFactory->buildUser($searchedId);
     if(!$is_page_refreshed && $searchedPerson->getStatus()!=="Quarantined"){
          unset($_SESSION["QRegistration"]);
     }
@@ -145,7 +145,7 @@
     <div class="row border-bottom border-primary">
         <p class="fs-5 text-justify">Quarantine Details</p>
     </div>
-    <form action="" method="post" id="quarantine-form">
+    <form action="QuarantineReport.php" method="post" id="quarantine-form">
         <div class="row">
             <div class="col-sm">
                 <input type="text" name="user-id" value="<?=$searchedId?>" style="display: none" readonly>
