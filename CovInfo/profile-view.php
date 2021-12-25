@@ -1,5 +1,4 @@
 <?php
-require_once ("Classes/PDO.php");
 require_once ("Classes/classes.php");
 
 session_start();
@@ -11,7 +10,7 @@ $user = null;
 $connection = PDOSingleton::getInstance();
 
 if (isset($_SESSION["user_id"])){
-    $authority = $userFactory->buildUser($_SESSION["user_id"]);
+    $authority = $userFactory->build($_SESSION["user_id"]);
     $logged_user = true;
     if($authority->getUserType() == "Public"){
         header("Location:index.php");
@@ -25,7 +24,7 @@ if (isset($_SESSION["user_id"])){
 
 if (isset($_GET["id"])){
     $user_id = $_GET["id"];
-    $user = $userFactory->buildUser($_GET["id"]);
+    $user = $userFactory->build($_GET["id"]);
     $_SESSION["searchedId"] = $user_id;
 }else{
     header("Location:search.php");

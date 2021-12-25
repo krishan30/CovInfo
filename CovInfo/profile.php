@@ -19,7 +19,7 @@
     */
 
     $userFactory = new UserFactory();
-    $user = $userFactory->buildUser($user_id);
+    $user = $userFactory->build($user_id);
 
 
     $name = $user->getFirstName()." ".$user->getMiddleName()." ".$user->getLastName();

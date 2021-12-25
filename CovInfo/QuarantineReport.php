@@ -13,7 +13,7 @@
     $connection = PDOSingleton::getInstance();
     $medical_officer_id=$_SESSION["user_id"];
     $userFactory = new UserFactory();
-    $user = $userFactory->buildUser($medical_officer_id);
+    $user = $userFactory->build($medical_officer_id);
 
     if($user->getUserType() === "Public"){
         header("Location:index.php");
@@ -23,7 +23,7 @@
     }
     $is_page_refreshed = (isset($_SERVER['HTTP_CACHE_CONTROL']) && $_SERVER['HTTP_CACHE_CONTROL'] == 'max-age=0');
     $searchedId=$_SESSION["searchedId"];
-    $searchedPerson = $userFactory->buildUser($searchedId);
+    $searchedPerson = $userFactory->build($searchedId);
     if(!$is_page_refreshed && $searchedPerson->getStatus()!=="Quarantined"){
          unset($_SESSION["QRegistration"]);
     }

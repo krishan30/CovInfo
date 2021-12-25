@@ -24,7 +24,7 @@ $user = null;
 if($logged_user){
     $user_id = $_SESSION["user_id"];
     $userFactory = new UserFactory();
-    $user = $userFactory->buildUser($user_id);
+    $user = $userFactory->build($user_id);
 }
 
 ?>
