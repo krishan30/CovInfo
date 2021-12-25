@@ -1,5 +1,4 @@
 <?php
-    require_once "Classes/Pdo.php";
     require_once "Classes/classes.php";
     session_start();
 
@@ -13,8 +12,8 @@
         return;
     }
     $medical_officer_id=$_SESSION["user_id"];
-    $userBuilder = new UserBuilder();
-    $user = $userBuilder->buildUser($medical_officer_id);
+    $userFactory = new UserFactory();
+    $user = $userFactory->buildUser($medical_officer_id);
 
     if($user->getUserType() == "Public"){
         header("Location:index.php");
@@ -22,9 +21,11 @@
     }else{
         $logged_user = true ;
     }
+
+    $connection = PDOSingleton::getInstance();
     $is_page_refreshed = (isset($_SERVER['HTTP_CACHE_CONTROL']) && $_SERVER['HTTP_CACHE_CONTROL'] == 'max-age=0');
     $searchedId=$_SESSION["searchedId"];
-    $searchedPerson = $userBuilder->buildUser($searchedId);
+    $searchedPerson = $userFactory->buildUser($searchedId);
     if(!$is_page_refreshed && $searchedPerson->getStatus()!=="Infected"){
         unset($_SESSION["PRegistration"]);
     }
