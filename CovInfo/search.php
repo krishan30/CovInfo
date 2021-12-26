@@ -10,8 +10,8 @@
     $results = [];
     if($logged_user){
         $user_id = $_SESSION["user_id"];
-        $userFactory = new UserFactory();
-        $user = $userFactory->buildUser($user_id);
+        $userProxyFactory = new UserProxyFactory();
+        $user = $userProxyFactory->build($user_id);
         if($user->getUserType() == "Public"){
             header("Location:index.php");
             return;
@@ -84,7 +84,7 @@ https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css
         <div class="collapse navbar-collapse" id="navbarText">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Home</a>
+                    <a class="nav-link" href="index.php">Home</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" aria-current="page" href="statistic.php">Statistics</a>
@@ -161,10 +161,9 @@ https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css
                                 </thead>
                                 <tbody>
                 <?php }
-                $newResult = $userFactory->buildUser($row["user_id"]);
+                $newResult = $userProxyFactory->build($row["user_id"]);
                 $name = $newResult->getFirstName()." ".$newResult->getMiddleName()." ".$newResult->getLastName();
                 $nic = $newResult->getNICNumber();
-                $dob = $newResult->getDOBString();
                 $sex = $newResult->getGender();
                 $status = $newResult->getStatus(); //Infected, Quarantined, Healthy
                 $address = $newResult->getAddress();

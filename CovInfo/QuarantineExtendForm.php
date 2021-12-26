@@ -11,8 +11,8 @@
         return;
     }
     $medical_officer_id=$_SESSION["user_id"];
-    $userFactory = new UserFactory();
-    $user = $userFactory->buildUser($medical_officer_id);
+    $userProxyFactory = new UserProxyFactory();
+    $user = $userProxyFactory->build($medical_officer_id);
 
     if($user->getUserType() == "Public"){
         header("Location:index.php");
