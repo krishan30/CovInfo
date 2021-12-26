@@ -23,8 +23,8 @@ $logged_user = isset($_SESSION["LogIn"]);
 $user = null;
 if($logged_user){
     $user_id = $_SESSION["user_id"];
-    $userFactory = new UserFactory();
-    $user = $userFactory->build($user_id);
+    $userProxyFactory = new UserProxyFactory();
+    $user = $userProxyFactory->build($user_id);
 }
 
 ?>

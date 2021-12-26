@@ -5,12 +5,13 @@ session_start();
 $today = date("Y-m-d");
 $logged_user = false;
 $userFactory = new UserFactory();
+$userProxyFactory = new UserProxyFactory();
 $authority = null;
 $user = null;
 $connection = PDOSingleton::getInstance();
 
 if (isset($_SESSION["user_id"])){
-    $authority = $userFactory->build($_SESSION["user_id"]);
+    $authority = $userProxyFactory->build($_SESSION["user_id"]);
     $logged_user = true;
     if($authority->getUserType() == "Public"){
         header("Location:index.php");

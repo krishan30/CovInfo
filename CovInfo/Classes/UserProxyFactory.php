@@ -16,7 +16,7 @@ class UserProxyFactory implements IFactory{
         $outPut = DataBaseAdapter::GetData($sqlStmt);
         $row = $outPut[0][0];
         $this->userProxy = new UserProxy($row["account_id"],$row["email_address"],$row["first_name"],$row["middle_name"],$row["last_name"],$row["nic_number"],
-            $row["gender"],$row["address"],$row["status_name"],$row["user_type_name"]);
+            $row["gender"],$row["address"],$row["status_name"],$row["user_type_name"],$user_id);
         return $this->userProxy;
     }
 }
