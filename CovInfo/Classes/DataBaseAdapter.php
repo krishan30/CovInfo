@@ -1,23 +1,44 @@
 <?php
 
-class DataBaseAdapter
-{
+require_once "Target.php";
 
-    //return an array of data from the database
-    public static function GetData($sqlStatement){
-        $out = array();
-        $connection = PDOSingleton::getInstance();
-        $stmt = $connection->query($sqlStatement);
-        $i = 0;
-        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $newRow = $row  + [];
-            $out[$i] = $newRow;
-            $i++;
-        }
-        return array($out,$i);
+class DataBaseAdapter implements Target{
+    private PDO $connection;
+
+    public function __construct(PDO $PDO){
+        $this->connection=$PDO;
     }
 
+    public function selectAllFromTable(String $sqlQuery,array $parameters)
+    {
+        $stmt = $this->connection->prepare($sqlQuery);
+        $stmt->execute($parameters);
+        return $stmt->fetchAll(PDO:: FETCH_ASSOC);
+    }
 
+    public function selectOneFromTable(String $sqlQuery,array $parameters)
+    {
+        $stmt = $this->connection->prepare($sqlQuery);
+        $stmt->execute($parameters);
+        return $stmt->fetch(PDO:: FETCH_ASSOC);
+    }
 
+    public function updateTable(String $sqlQuery,array $parameters)
+    {
+        $stmt=$this->connection->prepare($sqlQuery);
+        return $stmt->execute($parameters);
+    }
+
+    public function insertToTable(String $sqlQuery,array $parameters)
+    {
+        $stmt = $this->connection->prepare($sqlQuery);
+        return $stmt->execute($parameters);
+    }
+
+    public function deleteFromTable(String $sqlQuery,array $parameters)
+    {
+        $stmt = $this->connection->prepare($sqlQuery);
+        return $stmt->execute($parameters);
+    }
 
 }

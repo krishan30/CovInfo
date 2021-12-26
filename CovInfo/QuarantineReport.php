@@ -31,12 +31,11 @@
         unset($_SESSION["QRegistration"]);
         $sql = "INSERT INTO  quarantine_record (user_id, start_date, end_date, administrator_id,place_id) VALUES (:user_id,:start_date,:end_date,:administrator_id,:place_id)";
         $stmt = $connection->prepare($sql);
-        $administrator_id = $connection->query("SELECT administrator_id FROM administrator WHERE user_id=".$_SESSION["user_id"])->fetch(PDO:: FETCH_ASSOC);
-        $user_id=$_POST["user-id"];
-        $stmt->execute(array(':user_id' =>$user_id, ':start_date' => $_POST["start-date"], ':end_date' => $_POST["end-date"], ':administrator_id' => $administrator_id["administrator_id"],':place_id'=>$_POST['place-of-quarantine']));
+        $administrator_id = $connection->query("SELECT administrator_id FROM administrator WHERE user_id=".$medical_officer_id)->fetch(PDO:: FETCH_ASSOC);
+        $stmt->execute(array(':user_id' =>$searchedId, ':start_date' => $_POST["start-date"], ':end_date' => $_POST["end-date"], ':administrator_id' => $administrator_id["administrator_id"],':place_id'=>$_POST['place-of-quarantine']));
         $sql = "UPDATE user set status_id=2  where user_id=:user_id";
         $stmt=$connection->prepare($sql);
-        $stmt->execute(array(':user_id' => $user_id));
+        $stmt->execute(array(':user_id' =>$searchedId));
         $_SESSION["QRegistration"]=true;
         header("Location:QuarantineReport.php");
         return;
@@ -154,7 +153,7 @@
             </div>
             <div class="col-sm">
                 <label for="end-date" class="form-label">Quarantine End Date</label>
-                <input type="date" min="<?=date('Y-m-d', time());?>" id="end-date" name="end-date" class="form-control" required>
+                <input type="date" min="<?=date('Y-m-d', strtotime(' +7 day'));?>" id="end-date" name="end-date" class="form-control" required>
             </div>
             <div class="col-sm">
                 <label for="place" class="form-label">Quarantine Location</label>

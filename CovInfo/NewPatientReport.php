@@ -33,10 +33,10 @@
         unset($_SESSION["PRegistration"]);
         $sql = "INSERT INTO infection_record (user_id,medical_officer_id,admitted_date,medical_centre_id,remarks) VALUES (:user_id,:medical_officer_id,:admitted_date,:medical_centre_id,:remarks)";
         $stmt = $connection->prepare($sql);
-        $stmt->execute(array('user_id'=>$_POST['user_id'],'medical_officer_id'=>$medical_officer_id,'admitted_date'=>$_POST['admission-date'],'medical_centre_id'=>$_POST["medical_centre_id"],'remarks'=>$_POST["remarks"]));
+        $stmt->execute(array('user_id'=>$searchedId,'medical_officer_id'=>$medical_officer_id,'admitted_date'=>$_POST['admission-date'],'medical_centre_id'=>$_POST["medical_centre_id"],'remarks'=>$_POST["remarks"]));
         $sql = "UPDATE user set status_id=3  where user_id=:user_id";
         $stmt=$connection->prepare($sql);
-        $stmt->execute(array(':user_id' => $_POST['user_id']));
+        $stmt->execute(array(':user_id' =>$searchedId));
 
 
         $today = date("Y-m-d");

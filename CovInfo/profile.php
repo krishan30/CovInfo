@@ -35,7 +35,7 @@
     $address = $user->getAddress();
     $email = $user->getEmailAddress();
 
-    $vaccineRecords = $connection->query("SELECT vaccination_record.dose,vaccine.vaccine_name,vaccination_record.place,vaccination_record.date,vaccination_record.batch_number,vaccination_record.next_appoinment,vaccination_record.remarks 
+    $vaccineRecords = $connection->query("SELECT vaccination_record.dose,vaccine.vaccine_name,vaccination_record.place,vaccination_record.date,vaccination_record.batch_number,vaccination_record.next_appointment,vaccination_record.remarks 
                                                     FROM vaccination_record,vaccine 
                                                     WHERE vaccination_record.user_id = $user_id AND vaccination_record.vaccine_id = vaccine.vaccine_id 
                                                     ORDER BY vaccination_record.dose");

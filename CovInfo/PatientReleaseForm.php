@@ -86,9 +86,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="css/bootstrap.css" rel="stylesheet">
     <link href="styles/styles.css" rel="stylesheet">
-    <title>CovInfo - New Patient Form</title>
-    <link rel = "icon" href = "logos/logo_icon.png"
-          type = "image/x-icon">
+    <title>CovInfo - Patient Release Form</title>
+    <link rel = "icon" href = "logos/logo_icon.png" type = "image/x-icon">
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow fixed-top bg-light">
@@ -105,7 +104,6 @@
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="statistic.php">Statistics</a>
                 </li>
-
                 <?php
                 if($logged_user){
                     if($user->getUserType() != "Public"){?>
@@ -115,10 +113,7 @@
                     <?php }
                 }
                 ?>
-
-
             </ul>
-
             <?php if ($logged_user) { ?>
                 <ul class="nav navbar-nav ">
                     <li class="nav-item"><a class="nav-link" href="profile.php" title=""><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M12 2.5a5.5 5.5 0 00-3.096 10.047 9.005 9.005 0 00-5.9 8.18.75.75 0 001.5.045 7.5 7.5 0 0114.993 0 .75.75 0 101.499-.044 9.005 9.005 0 00-5.9-8.181A5.5 5.5 0 0012 2.5zM8 8a4 4 0 118 0 4 4 0 01-8 0z"></path></svg><?php echo $user->getFirstName()." ".$user->getLastName()?></a></li>
@@ -180,7 +175,7 @@
                         </div>
                         <div class="col-sm">
                             <label for="end-date" class="form-label">Quarantine End Date</label>
-                            <input type="date" min="<?=date('Y-m-d', time());?>" id="end-date" name="end-date" class="form-control" required>
+                            <input type="date" min="<?=date('Y-m-d', strtotime(' +7 day'));?>" id="end-date" name="end-date" class="form-control" required>
                         </div>
                         <div class="col-sm">
                             <label for="place" class="form-label">Quarantine Location</label>

@@ -50,7 +50,7 @@ $phone = $user->getPhoneNumber();
 $address = $user->getAddress();
 $email = $user->getEmailAddress();
 
-$vaccineRecords = $connection->query("SELECT vaccination_record.dose,vaccine.vaccine_name,vaccination_record.place,vaccination_record.date,vaccination_record.batch_number,vaccination_record.next_appoinment,vaccination_record.remarks 
+$vaccineRecords = $connection->query("SELECT vaccination_record.dose,vaccine.vaccine_name,vaccination_record.place,vaccination_record.date,vaccination_record.batch_number,vaccination_record.next_appointment,vaccination_record.remarks 
                                                     FROM vaccination_record,vaccine 
                                                     WHERE vaccination_record.user_id = $user_id AND vaccination_record.vaccine_id = vaccine.vaccine_id 
                                                     ORDER BY vaccination_record.dose");
@@ -304,7 +304,7 @@ $quarantineRecords = $connection->query("SELECT quarantine_record.start_date,qua
                                         <td><?php echo $row["vaccine_name"]?></td>
                                         <td><?php echo $row["place"]?></td>
                                         <td><?php echo $row["date"]?></td>
-                                        <td><?php echo $row["next_appoinment"]?></td>
+                                        <td><?php echo $row["next_appointment"]?></td>
                                         <td><?php echo $row["batch_number"]?></td>
                                         <td><?php echo $row["remarks"]?></td>
                                     </tr>
@@ -484,6 +484,8 @@ $quarantineRecords = $connection->query("SELECT quarantine_record.start_date,qua
         <?php } ?>
 
         <?php if($vaccinated !="Completed" && $authority->getUserType() == "Medical"){?>
+           <?php unset($_SESSION["VRegistration"]); ?>
+        <a href="VaccinationRegisterForm.php" class="hiddenLink">
             <div class="p-3 card-child mt-4">
                 <div class="d-flex flex-row align-items-center"> <span class="circle-5"> <i class="fa fa-bank"> <img src="images\vaccine.png" width="80%"> </i> </span>
                     <div class="d-flex flex-column ms-3">
@@ -491,6 +493,7 @@ $quarantineRecords = $connection->query("SELECT quarantine_record.start_date,qua
                     </div>
                 </div>
             </div>
+        </a>
 
         <?php } ?>
 
