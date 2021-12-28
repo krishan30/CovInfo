@@ -6,7 +6,6 @@ require_once ("Person.php");
 abstract class PersonProxy implements Iperson
 {
     private $user;
-
     private $user_id;
     private $accountID;
     private $emailAddress;
@@ -16,8 +15,8 @@ abstract class PersonProxy implements Iperson
     private $NICNumber;
     private $gender;
     private $address;
-    private $status;
     private $userType;
+    private UserState $userState;
 
     /**
      * @param $accountID
@@ -28,7 +27,6 @@ abstract class PersonProxy implements Iperson
      * @param $NICNumber
      * @param $gender
      * @param $address
-     * @param $status
      * @param $userType
      */
     public function __construct($accountID, $emailAddress, $firstName, $middleName, $lastName, $NICNumber, $gender, $address, $status, $userType,$user_id)
@@ -42,8 +40,50 @@ abstract class PersonProxy implements Iperson
         $this->NICNumber = $NICNumber;
         $this->gender = $gender;
         $this->address = $address;
-        $this->status = $status;
         $this->userType = $userType;
+        $userStateFactory=new UserStateFactory();
+        $this->userState=$userStateFactory->createState($status);
+    }
+
+    public function setUserState(UserState $userState)
+    {
+        $connection = PDOSingleton::getInstance();
+        $sql = "UPDATE user set status_id=:status_id  where user_id=:user_id";
+        $stmt = $connection->prepare($sql);
+        $stmt->execute(array(':user_id'=>$this->getUserID(),':status_id'=>$userState->getStatusID()));
+        $this->userState=$userState;
+    }
+
+    public function getUserState(): UserState
+    {
+        return $this->userState;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public  function addAsPatient(){
+        $this->userState->addPatient($this);
+    }
+    /**
+     * @throws Exception
+     */
+    public  function startQuarantine(){
+        $this->userState->startQuarantine($this);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public  function endQuarantine(){
+        $this->userState->endQuarantine($this);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public  function reportAsDeath(){
+        $this->userState->reportDeath($this);
     }
 
     /**
@@ -103,10 +143,7 @@ abstract class PersonProxy implements Iperson
         return $this->address;
     }
 
-    public function getStatus()
-    {
-        return $this->status;
-    }
+
 
     public function getFullName(): string
     {

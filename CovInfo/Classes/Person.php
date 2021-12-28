@@ -20,8 +20,6 @@ class Person
     private $qurontineRecords;
     private $infectionRecord;
     private $deathRecord;
-    private $vaccinationStatus;
-    private $status;
     private $bloodType;
     private $userType;
 
@@ -43,10 +41,8 @@ class Person
      * @param $qurontineRecords
      * @param $infectionRecord
      * @param $deathRecord
-     * @param $vaccinationStatus
-     * @param $status
      */
-    public function __construct($accountID, $password, $emailAddress, $firstName, $middleName, $lastName, $NICNumber, $DOB, $gender, $district, $province, $MOHDivision, $address, $phoneNumber, $status, $vaccinationStatus,$bloodType,$userType)
+    public function __construct($accountID, $password, $emailAddress, $firstName, $middleName, $lastName, $NICNumber, $DOB, $gender, $district, $province, $MOHDivision, $address, $phoneNumber,$bloodType,$userType)
     {
         $this->accountID = $accountID;
         $this->password = $password;
@@ -62,8 +58,6 @@ class Person
         $this->MOHDivision = $MOHDivision;
         $this->address = $address;
         $this->phoneNumber = $phoneNumber;
-        $this->status = $status;
-        $this->vaccinationStatus = $vaccinationStatus;
         $this->bloodType = $bloodType;
         $this->userType = $userType;
     }
@@ -397,38 +391,6 @@ class Person
     public function setDeathRecord($deathRecord)
     {
         $this->deathRecord = $deathRecord;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getVaccinationStatus()
-    {
-        return $this->vaccinationStatus;
-    }
-
-    /**
-     * @param mixed $vaccinationStatus
-     */
-    public function setVaccinationStatus($vaccinationStatus)
-    {
-        $this->vaccinationStatus = $vaccinationStatus;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getStatus()
-    {
-        return $this->status;
-    }
-
-    /**
-     * @param mixed $status
-     */
-    public function setStatus($status)
-    {
-        $this->status = $status;
     }
 
     public function getAge(){

@@ -31,7 +31,7 @@
             $sql = "UPDATE quarantine_record  set end_date=:end_date  where user_id=:user_id && end_date=:prev_end_date";
             $stmt = $connection->prepare($sql);
             $stmt->execute(array(":user_id"=>$searchedId,":end_date"=>$_POST["new_end_date"],":prev_end_date"=>$end_date));
-            $_SESSION['QExtend']=$searchedId;
+            $_SESSION['QExtend']=true;
         }
         header("Location:QuarantineExtendForm.php");
         return;

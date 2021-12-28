@@ -36,7 +36,7 @@
     $address = $user->getAddress();
     $email = $user->getEmailAddress();
 
-    $vaccineRecords = $connection->query("SELECT vaccination_record.dose,vaccine.vaccine_name,vaccination_record.place,vaccination_record.date,vaccination_record.batch_number,vaccination_record.next_appoinment,vaccination_record.remarks 
+    $vaccineRecords = $connection->query("SELECT vaccination_record.dose,vaccine.vaccine_name,vaccination_record.place,vaccination_record.date,vaccination_record.batch_number,vaccination_record.next_appointment,vaccination_record.remarks 
                                                     FROM vaccination_record,vaccine 
                                                     WHERE vaccination_record.user_id = $user_id AND vaccination_record.vaccine_id = vaccine.vaccine_id 
                                                     ORDER BY vaccination_record.dose");
@@ -63,8 +63,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
     <link rel="stylesheet" href="styles\profile-view.css">
-    <!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
- --><link rel="stylesheet" href="css\bootstrap.css">
+    <link rel="stylesheet" href="css\bootstrap.css">
     <link rel="stylesheet" href="styles\styles.css">
     <link rel = "icon" href = "logos/logo_icon.png"
           type = "image/x-icon">
@@ -290,7 +289,7 @@
                                             <td><?php echo $row["vaccine_name"]?></td>
                                             <td><?php echo $row["place"]?></td>
                                             <td><?php echo $row["date"]?></td>
-                                            <td><?php echo $row["next_appoinment"]?></td>
+                                            <td><?php echo $row["next_appointment"]?></td>
                                             <td><?php echo $row["batch_number"]?></td>
                                             <td><?php echo $row["remarks"]?></td>
                                         </tr>

@@ -36,9 +36,8 @@ if($logged_user){
     <title>CovInfo - Dashboard</title>
     <link rel="stylesheet" href="https://www.cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css" />
 
-    <!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-        --><link rel="stylesheet" href="css\bootstrap.css">
-    <link rel="stylesheet" href="styles\styles.css">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="styles/styles.css">
     <link rel = "icon" href = "logos/logo_icon.png"
           type = "image/x-icon">
 </head>
@@ -46,7 +45,7 @@ if($logged_user){
 
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow fixed-top bg-light">
     <div class="container-fluid">
-        <a class="navbar-brand" href="index.php"><img src="logos\brand.png" alt="Site logo" width="110px" height="auto"> </a>
+        <a class="navbar-brand" href="index.php"><img src="logos/brand.png" alt="Site logo" width="110px" height="auto"> </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -93,7 +92,7 @@ if($logged_user){
         <div class="row justify-content-center py-4">
             <div class="col mx-5 rounded-3 boxy-blue">
                 <div class="row">
-                    <div class="col-3 border-end py-4 px-1"><img src="images\cases.png" width="45px" height="45px" alt=""></div>
+                    <div class="col-3 border-end py-4 px-1"><img src="images/cases.png" width="45px" height="45px" alt=""></div>
                     <div class="col-9">
                         <div class="row py-2 border-bottom" style="text-align: center; display: block;">New Cases</div>
                         <div class="row pt-2 h4" style="text-align: center; display: block; color: #0d6efd;"><?php echo $new_cases;?></div>
@@ -102,7 +101,7 @@ if($logged_user){
             </div>
             <div class="col mx-5 rounded-3 boxy-red">
                 <div class="row">
-                    <div class="col-3 border-end py-4 px-1"><img src="images\2PX.png" width="45px" height="45px" alt=""></div>
+                    <div class="col-3 border-end py-4 px-1"><img src="images/2PX.png" width="45px" height="45px" alt=""></div>
                     <div class="col-9">
                         <div class="row py-2 border-bottom" style="text-align: center; display: block;">Deaths</div>
                         <div class="row pt-2 h4" style="text-align: center; display: block; color: rgba(255,46,49,0.87);"><?php echo $new_deaths;?></div>
@@ -111,7 +110,7 @@ if($logged_user){
             </div>
             <div class="col mx-5 rounded-3 boxy-green">
                 <div class="row">
-                    <div class="col-3 border-end py-2 ps-0 pt-3"><img src="images\recovered.png" width="50px" height="50px" alt=""></div>
+                    <div class="col-3 border-end py-2 ps-0 pt-3"><img src="images/recovered.png" width="50px" height="50px" alt=""></div>
                     <div class="col-9">
                         <div class="row py-2 border-bottom" style="text-align: center; display: block;">Recovered</div>
                         <div class="row pt-2 h4" style="text-align: center; display: block; color: rgba(47,231,47,0.87); -webkit-text-stroke: 0.1px black;"><?php echo $new_recovered;?></div>
@@ -126,7 +125,7 @@ if($logged_user){
         <div class="row justify-content-center py-4">
             <div class="col mx-5 rounded-3 boxy-blue">
                 <div class="row">
-                    <div class="col-3 border-end py-4 px-1"><img src="images\cases.png" width="45px" height="45px" alt=""></div>
+                    <div class="col-3 border-end py-4 px-1"><img src="images/cases.png" width="45px" height="45px" alt=""></div>
                     <div class="col-9">
                         <div class="row py-2 border-bottom" style="text-align: center; display: block;">Total Cases</div>
                         <div class="row pt-2 h4" style="text-align: center; display: block; color: #0d6efd;"><?php echo $total_cases;?></div>
@@ -135,7 +134,7 @@ if($logged_user){
             </div>
             <div class="col mx-5 rounded-3 boxy-red">
                 <div class="row">
-                    <div class="col-3 border-end py-4 px-1"><img src="images\2PX.png" width="45px" height="45px" alt=""></div>
+                    <div class="col-3 border-end py-4 px-1"><img src="images/2PX.png" width="45px" height="45px" alt=""></div>
                     <div class="col-9">
                         <div class="row py-2 border-bottom" style="text-align: center; display: block;">Total Deaths</div>
                         <div class="row pt-2 h4" style="text-align: center; display: block; color: rgba(255,46,49,0.87);"><?php echo $total_deaths;?></div>
@@ -144,7 +143,7 @@ if($logged_user){
             </div>
             <div class="col mx-5 rounded-3 boxy-green">
                 <div class="row">
-                    <div class="col-3 border-end py-2 ps-0 pt-3"><img src="images\recovered.png" width="50px" height="50px" alt=""></div>
+                    <div class="col-3 border-end py-2 ps-0 pt-3"><img src="images/recovered.png" width="50px" height="50px" alt=""></div>
                     <div class="col-9">
                         <div class="row py-2 border-bottom" style="text-align: center; display: block;">Total Recovered</div>
                         <div class="row pt-2 h4" style="text-align: center; display: block; color: rgba(47,231,47,0.87); -webkit-text-stroke: 0.1px black;"><?php echo $total_recovered;?></div>
@@ -186,8 +185,7 @@ if($logged_user){
         </div>
     </div>
 </div>
-<!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
--->
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
 <script src="https://code.jquery.com/jquery-1.8.2.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>

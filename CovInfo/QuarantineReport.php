@@ -34,8 +34,7 @@ if (isset($_POST["end-date"]) && isset($_POST["place-of-quarantine"])) {
         $sql = "INSERT INTO  quarantine_record (user_id, start_date, end_date, administrator_id,place_id) VALUES (:user_id,:start_date,:end_date,:administrator_id,:place_id)";
         $stmt = $connection->prepare($sql);
         $administrator_id = $connection->query("SELECT administrator_id FROM administrator WHERE user_id=".$medical_officer_id)->fetch(PDO:: FETCH_ASSOC);
-        $user_id=$_POST["user-id"];
-        $stmt->execute(array(':user_id' =>$user_id, ':start_date' => $_POST["start-date"], ':end_date' => $_POST["end-date"], ':administrator_id' => $administrator_id["administrator_id"],':place_id'=>$_POST['place-of-quarantine']));
+        $stmt->execute(array(':user_id' =>$searchedId, ':start_date' => $_POST["start-date"], ':end_date' => $_POST["end-date"], ':administrator_id' => $administrator_id["administrator_id"],':place_id'=>$_POST['place-of-quarantine']));
         try {
             $searchedPerson->startQuarantine();
         } catch (Exception $e) {
@@ -150,7 +149,6 @@ if (isset($_POST["end-date"]) && isset($_POST["place-of-quarantine"])) {
         <form action="QuarantineReport.php" method="post" id="quarantine-form">
             <div class="row">
                 <div class="col-sm">
-                    <input type="text" name="user-id" value="<?=$searchedId?>" style="display: none" readonly>
                     <label for="start-date" class="form-label">Quarantine Start Date</label>
                     <input type="date" id="start-date" name="start-date" class="form-control" value="<?= date('Y-m-d', time());?>" readonly>
                 </div>

@@ -12,8 +12,8 @@
         return;
     }
     $medical_officer_id=$_SESSION["user_id"];
-    $userFactory = new UserFactory();
-    $user = $userFactory->buildUser($medical_officer_id);
+    $userProxyFactory = new UserProxyFactory();
+    $user = $userProxyFactory->build($medical_officer_id);
 
     if($user->getUserType() == "Public"){
         header("Location:index.php");
@@ -22,10 +22,11 @@
         $logged_user = true ;
     }
 
+    $userFactory = new UserFactory();
     $connection = PDOSingleton::getInstance();
     $is_page_refreshed = (isset($_SERVER['HTTP_CACHE_CONTROL']) && $_SERVER['HTTP_CACHE_CONTROL'] == 'max-age=0');
     $searchedId=$_SESSION["searchedId"];
-    $searchedPerson = $userFactory->buildUser($searchedId);
+    $searchedPerson = $userFactory->build($searchedId);
     if(isset($_POST["next-appointment-date"]) && isset($_POST["batch-number"]) && isset($_POST["vaccine-id"]) && isset($_POST["vaccination-place"]) && isset($_POST["remarks"])) {
         $dose_count=(int)$_POST['dose-count'];
         $administrator_id = $connection->query("SELECT administrator_id FROM administrator WHERE user_id=".$medical_officer_id)->fetch(PDO:: FETCH_ASSOC);
@@ -33,17 +34,11 @@
         $stmt = $connection->prepare($sql);
         $stmt->execute(array(':user_id' => $searchedId, ':registration_date' => date('y-m-d'), ':vaccine_id' => $_POST["vaccine-id"], ':administrator_id' => $administrator_id["administrator_id"], ':place' => $_POST["vaccination-place"],':dose' =>++$dose_count,':batch_number' => $_POST["batch-number"],':next_appointment' => $_POST["next-appointment-date"],'remarks' => $_POST["remarks"]));
 
-        /*if($dose_count===1){
-            $sql = "UPDATE user set vaccine_status_id=2  where user_id=:user_id";
-        }else if($dose_count>=2){
-            $sql = "UPDATE user set vaccine_status_id=3  where user_id=:user_id";
-        }*/
         try {
             $searchedPerson->getDose();
         } catch (Exception $e) {
         }
-        //$stmt = $connection->prepare($sql);
-       // $stmt->execute(array(':user_id' => $searchedId));
+
 
 
         $_SESSION["VRegistration"] = true;

@@ -35,7 +35,7 @@ if(isset($_POST["medical_centre_id"]) && isset($_POST["register"])){
         unset($_SESSION["PRegistration"]);
         $sql = "INSERT INTO infection_record (user_id,medical_officer_id,admitted_date,medical_centre_id,remarks) VALUES (:user_id,:medical_officer_id,:admitted_date,:medical_centre_id,:remarks)";
         $stmt = $connection->prepare($sql);
-        $stmt->execute(array('user_id'=>$_POST['user_id'],'medical_officer_id'=>$medical_officer_id,'admitted_date'=>$_POST['admission-date'],'medical_centre_id'=>$_POST["medical_centre_id"],'remarks'=>$_POST["remarks"]));
+        $stmt->execute(array('user_id'=>$searchedId,'medical_officer_id'=>$medical_officer_id,'admitted_date'=>$_POST['admission-date'],'medical_centre_id'=>$_POST["medical_centre_id"],'remarks'=>$_POST["remarks"]));
         try {
             $searchedPerson->addAsPatient();
         } catch (Exception $e) {
@@ -43,7 +43,7 @@ if(isset($_POST["medical_centre_id"]) && isset($_POST["register"])){
 
 
 
-    $today = date("Y-m-d");
+        $today = date("Y-m-d");
         $casesCount = $connection->query("SELECT new_cases FROM daily_report WHERE date = '$today'");
         $count = 0;
         while ($row = $casesCount->fetch(PDO::FETCH_ASSOC)){
@@ -79,8 +79,7 @@ You are identified as a covid 19 positive person. Relevant authorities will cont
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-     --><link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/bootstrap.css" rel="stylesheet">
     <link href="styles/styles.css" rel="stylesheet">
     <title>CovInfo - New Patient Form</title>
     <link rel = "icon" href = "logos/logo_icon.png"
