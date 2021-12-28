@@ -44,13 +44,13 @@ $dob = $user->getDOBString();
 $sex = $user->getGender();
 $bloodType = $user->getBloodType();
 $district = $user->getDistrict();
-$status = $user->getStatus(); //Infected, Quarantined, Healthy
-$vaccinated = $user->getVaccinationStatus();   //Partial, None
+$status = get_class($user->getUserState()); //Infected, Quarantined, Healthy
+$vaccinated = get_class($user->getVaccinationState());   //Partial, None
 $phone = $user->getPhoneNumber();
 $address = $user->getAddress();
 $email = $user->getEmailAddress();
 
-$vaccineRecords = $connection->query("SELECT vaccination_record.dose,vaccine.vaccine_name,vaccination_record.place,vaccination_record.date,vaccination_record.batch_number,vaccination_record.next_appoinment,vaccination_record.remarks 
+$vaccineRecords = $connection->query("SELECT vaccination_record.dose,vaccine.vaccine_name,vaccination_record.place,vaccination_record.date,vaccination_record.batch_number,vaccination_record.next_appointment,vaccination_record.remarks 
                                                     FROM vaccination_record,vaccine 
                                                     WHERE vaccination_record.user_id = $user_id AND vaccination_record.vaccine_id = vaccine.vaccine_id 
                                                     ORDER BY vaccination_record.dose");
@@ -167,9 +167,9 @@ $quarantineRecords = $connection->query("SELECT quarantine_record.start_date,qua
                                             ?>
                                             <br>
                                             <?php
-                                            if ($vaccinated=="None"){
+                                            if ($vaccinated=="NotVaccinated"){
                                                 echo '<h3 class="h6 mb-0" style="color: #bf1919; text-align: center">Not Vaccinated!</h3>';}
-                                            elseif ($vaccinated=="Partial"){
+                                            elseif ($vaccinated=="PartiallyVaccinated"){
                                                 echo '<h3 class="h5 mb-0" style="color: #bf8b19; text-align: center">Partially Vaccinated</h3>';}
                                             else{
                                                 echo '<h3 class="h5 mb-0" style="color: #27bf19; text-align: center">Fully Vaccinated</h3>';}
@@ -485,14 +485,17 @@ $quarantineRecords = $connection->query("SELECT quarantine_record.start_date,qua
 
         <?php } ?>
 
-        <?php if($vaccinated !="Completed" && $authority->getUserType() == "Medical"){?>
-            <div class="p-3 card-child mt-4">
-                <div class="d-flex flex-row align-items-center"> <span class="circle-5"> <i class="fa fa-bank"> <img src="images\vaccine.png" width="80%"> </i> </span>
-                    <div class="d-flex flex-column ms-3">
-                        <h6 class="fw-bold">Add vaccination record</h6> <span>To add record about vaccination dose for user</span>
+        <?php if($vaccinated !="FullyVaccinated" && $authority->getUserType() == "Medical"){?>
+            <?php unset($_SESSION["VRegistration"]); ?>
+            <a href="VaccinationRegisterForm.php" class="hiddenLink">
+                <div class="p-3 card-child mt-4">
+                    <div class="d-flex flex-row align-items-center"> <span class="circle-5"> <i class="fa fa-bank"> <img src="images\vaccine.png" width="80%"> </i> </span>
+                        <div class="d-flex flex-column ms-3">
+                            <h6 class="fw-bold">Add vaccination record</h6> <span>To add record about vaccination dose for user</span>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </a>
 
         <?php } ?>
 

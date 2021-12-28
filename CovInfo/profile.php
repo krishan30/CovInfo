@@ -30,8 +30,8 @@
     $sex = $user->getGender();
     $bloodType = $user->getBloodType();
     $district = $user->getDistrict();
-    $status = $user->getStatus(); //Infected, Quarantined, Healthy
-    $vaccinated = $user->getVaccinationStatus();   //Partial, None
+    $status = get_class($user->getUserState()); //Infected, Quarantined, Healthy
+    $vaccinated = get_class($user->getVaccinationState());   //Partial, None
     $phone = $user->getPhoneNumber();
     $address = $user->getAddress();
     $email = $user->getEmailAddress();
@@ -153,9 +153,9 @@
                                             ?>
                                             <br>
                                             <?php
-                                            if ($vaccinated=="None"){
+                                            if ($vaccinated=="NotVaccinated"){
                                                 echo '<h3 class="h6 mb-0" style="color: #bf1919; text-align: center">Not Vaccinated!</h3>';}
-                                            elseif ($vaccinated=="Partial"){
+                                            elseif ($vaccinated=="PartiallyVaccinated"){
                                                 echo '<h3 class="h5 mb-0" style="color: #bf8b19; text-align: center">Partially Vaccinated</h3>';}
                                             else{
                                                 echo '<h3 class="h5 mb-0" style="color: #27bf19; text-align: center">Fully Vaccinated</h3>';}

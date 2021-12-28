@@ -165,7 +165,7 @@ https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css
                 $name = $newResult->getFirstName()." ".$newResult->getMiddleName()." ".$newResult->getLastName();
                 $nic = $newResult->getNICNumber();
                 $sex = $newResult->getGender();
-                $status = $newResult->getStatus(); //Infected, Quarantined, Healthy
+                $status = get_class($newResult->getUserState());
                 $address = $newResult->getAddress();
                 $email = $newResult->getEmailAddress();
                 $accountId = $newResult->getAccountId();
