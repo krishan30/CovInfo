@@ -60,8 +60,9 @@
         $updatesql = "UPDATE report SET total_cases = $count where report_id = 1";
         $updatestmt = $connection->prepare($updatesql);
         $updatestmt->execute();
-
-
+        MailWrapper::sendMail($userProxyFactory->build($searchedId),"Informing Covid-19 Test Result","
+You are identified as a covid 19 positive person. Relevant authorities will contact you immediately. Stay alone and follow all health guidelines. 
+");
         $_SESSION["PRegistration"]=true;
         header("Location:NewPatientReport.php");
         return;

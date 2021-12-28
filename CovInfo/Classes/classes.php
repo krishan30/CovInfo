@@ -14,6 +14,7 @@ require_once("UserFactory.php");
 require_once ("UserProxy.php");
 require_once ("UserProxyFactory.php");
 require_once ("VaccineRecord.php");
+require_once ("MailWrapper.php");
 
 ?>
 

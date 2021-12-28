@@ -422,6 +422,7 @@ $quarantineRecords = $connection->query("SELECT quarantine_record.start_date,qua
 
 
     <div class="p-3 card-2">
+        <a href="editProfile.php" class="hiddenLink">
         <div class="p-3 card-child">
             <div class="d-flex flex-row align-items-center"> <span class="circle"> <i class="fa fa-home"> <img src="images\edit.png" width="80%"></i>  </span>
                 <div class="d-flex flex-column ms-3">
@@ -429,6 +430,7 @@ $quarantineRecords = $connection->query("SELECT quarantine_record.start_date,qua
                 </div>
             </div>
         </div>
+        </a>
 
         <?php if($status!="Infected"){?>
             <a href="NewPatientReport.php" class="hiddenLink">
