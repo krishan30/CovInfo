@@ -25,10 +25,11 @@
     $is_page_refreshed = (isset($_SERVER['HTTP_CACHE_CONTROL']) && $_SERVER['HTTP_CACHE_CONTROL'] == 'max-age=0');
     $searchedId=$_SESSION["searchedId"];
     $searchedPerson = $userFactory->build($searchedId);
-    if(!$is_page_refreshed && $searchedPerson->getStatus()==="Infected"){
-       unset($_SESSION["PRelease"]);
-     }
-    $connection=PDOSingleton::getInstance();
+    if(!$is_page_refreshed && is_a($searchedPerson->getUserState(),'Infected')){
+        unset($_SESSION["PRelease"]);
+    }
+
+$connection=PDOSingleton::getInstance();
 
     if(isset($_POST["end-date"])){
         $todayDate=date('Y-m-d');
@@ -39,9 +40,12 @@
         $stmt = $connection->prepare($sql);
         $administrator_id = $connection->query("SELECT administrator_id FROM administrator WHERE user_id=".$medical_officer_id)->fetch(PDO:: FETCH_ASSOC);
         $stmt->execute(array(':user_id' =>$searchedId, ':start_date' =>$todayDate, ':end_date' => $_POST["end-date"], ':administrator_id' => $administrator_id["administrator_id"],':place_id'=>1));
-        $sql = "UPDATE user set status_id=2  where user_id=:user_id";
-        $stmt=$connection->prepare($sql);
-        $stmt->execute(array(':user_id' =>$searchedId));
+        try {
+            $searchedPerson->startQuarantine();
+        } catch (Exception $e) {
+
+        }
+
 
 
         $casesCount = $connection->query("SELECT new_cases FROM daily_report WHERE date = '$todayDate'");
@@ -87,9 +91,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="css/bootstrap.css" rel="stylesheet">
     <link href="styles/styles.css" rel="stylesheet">
-    <title>CovInfo - New Patient Form</title>
-    <link rel = "icon" href = "logos/logo_icon.png"
-          type = "image/x-icon">
+    <title>CovInfo - Patient Release Form</title>
+    <link rel = "icon" href = "logos/logo_icon.png" type = "image/x-icon">
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow fixed-top bg-light">
@@ -106,7 +109,6 @@
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="statistic.php">Statistics</a>
                 </li>
-
                 <?php
                 if($logged_user){
                     if($user->getUserType() != "Public"){?>
@@ -116,10 +118,7 @@
                     <?php }
                 }
                 ?>
-
-
             </ul>
-
             <?php if ($logged_user) { ?>
                 <ul class="nav navbar-nav ">
                     <li class="nav-item"><a class="nav-link" href="profile.php" title=""><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M12 2.5a5.5 5.5 0 00-3.096 10.047 9.005 9.005 0 00-5.9 8.18.75.75 0 001.5.045 7.5 7.5 0 0114.993 0 .75.75 0 101.499-.044 9.005 9.005 0 00-5.9-8.181A5.5 5.5 0 0012 2.5zM8 8a4 4 0 118 0 4 4 0 01-8 0z"></path></svg><?php echo $user->getFirstName()." ".$user->getLastName()?></a></li>
@@ -161,12 +160,12 @@
                     <input class="form-control" type="text"  value="<?=$admissionOfficerFullName ?>" readonly>
                 </div>
             </div>
-        <div class="row">
-            <div class="col-sm">
-                <label class="form-label" >Remark</label>
-                <input class="form-control" type="text"  value="<?=$remark?>" readonly>
+            <div class="row">
+                <div class="col-sm">
+                    <label class="form-label" >Remark</label>
+                    <input class="form-control" type="text"  value="<?=$remark?>" readonly>
+                </div>
             </div>
-        </div>
             <br>
             <div class=" container d-grid gap-3 bg-white p-3">
                 <div class="row border-bottom border-primary ">
@@ -181,7 +180,7 @@
                         </div>
                         <div class="col-sm">
                             <label for="end-date" class="form-label">Quarantine End Date</label>
-                            <input type="date" min="<?=date('Y-m-d', time());?>" id="end-date" name="end-date" class="form-control" required>
+                            <input type="date" min="<?=date('Y-m-d', strtotime(' +7 day'));?>" id="end-date" name="end-date" class="form-control" required>
                         </div>
                         <div class="col-sm">
                             <label for="place" class="form-label">Quarantine Location</label>

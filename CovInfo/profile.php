@@ -11,6 +11,7 @@
         header("Location:Login.php");
         return;
     }
+    $_SESSION["searchedId"] = $user_id;
 
     $connection = PDOSingleton::getInstance();
 
@@ -29,8 +30,8 @@
     $sex = $user->getGender();
     $bloodType = $user->getBloodType();
     $district = $user->getDistrict();
-    $status = $user->getStatus(); //Infected, Quarantined, Healthy
-    $vaccinated = $user->getVaccinationStatus();   //Partial, None
+    $status = get_class($user->getUserState()); //Infected, Quarantined, Healthy
+    $vaccinated = get_class($user->getVaccinationState());   //Partial, None
     $phone = $user->getPhoneNumber();
     $address = $user->getAddress();
     $email = $user->getEmailAddress();
@@ -61,6 +62,7 @@
     <script src="https://code.jquery.com/jquery-1.8.2.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <link rel="stylesheet" href="styles\profile-view.css">
     <!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
  --><link rel="stylesheet" href="css\bootstrap.css">
     <link rel="stylesheet" href="styles\styles.css">
@@ -151,9 +153,9 @@
                                             ?>
                                             <br>
                                             <?php
-                                            if ($vaccinated=="None"){
+                                            if ($vaccinated=="NotVaccinated"){
                                                 echo '<h3 class="h6 mb-0" style="color: #bf1919; text-align: center">Not Vaccinated!</h3>';}
-                                            elseif ($vaccinated=="Partial"){
+                                            elseif ($vaccinated=="PartiallyVaccinated"){
                                                 echo '<h3 class="h5 mb-0" style="color: #bf8b19; text-align: center">Partially Vaccinated</h3>';}
                                             else{
                                                 echo '<h3 class="h5 mb-0" style="color: #27bf19; text-align: center">Fully Vaccinated</h3>';}
@@ -394,6 +396,24 @@
                 </div>
             </div>
         </div>
+    </div>
+</div>
+
+
+<div class="card p-3 py-3 mt-3 card-1 text-center">
+    <h4></h4>
+
+
+    <div class="p-3 card-2">
+        <a href="editProfile.php" class="hiddenLink">
+            <div class="p-3 card-child">
+                <div class="d-flex flex-row align-items-center"> <span class="circle"> <i class="fa fa-home"> <img src="images\edit.png" width="80%"></i>  </span>
+                    <div class="d-flex flex-column ms-3">
+                        <h6 class="fw-bold">Edit Profile</h6> <span>change the profile details</span>
+                    </div>
+                </div>
+            </div>
+        </a>
     </div>
 </div>
 
