@@ -6,7 +6,6 @@ require_once ("Person.php");
 abstract class PersonProxy implements Iperson
 {
     private $user;
-
     private $user_id;
     private $accountID;
     private $emailAddress;
@@ -16,7 +15,6 @@ abstract class PersonProxy implements Iperson
     private $NICNumber;
     private $gender;
     private $address;
-    private $status;
     private $userType;
 
     /**
@@ -28,7 +26,6 @@ abstract class PersonProxy implements Iperson
      * @param $NICNumber
      * @param $gender
      * @param $address
-     * @param $status
      * @param $userType
      */
     public function __construct($accountID, $emailAddress, $firstName, $middleName, $lastName, $NICNumber, $gender, $address, $status, $userType,$user_id)
@@ -42,8 +39,8 @@ abstract class PersonProxy implements Iperson
         $this->NICNumber = $NICNumber;
         $this->gender = $gender;
         $this->address = $address;
-        $this->status = $status;
         $this->userType = $userType;
+
     }
 
     /**
@@ -103,10 +100,7 @@ abstract class PersonProxy implements Iperson
         return $this->address;
     }
 
-    public function getStatus()
-    {
-        return $this->status;
-    }
+
 
     public function getFullName(): string
     {

@@ -76,17 +76,16 @@ $quarantineRecords = $connection->query("SELECT quarantine_record.start_date,qua
     <script src="https://code.jquery.com/jquery-1.8.2.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
-    <!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
- --><link rel="stylesheet" href="css\bootstrap.css">
-    <link rel="stylesheet" href="styles\styles.css">
-    <link rel="stylesheet" href="styles\profile-view.css">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="styles/styles.css">
+    <link rel="stylesheet" href="styles/profile-view.css">
     <link rel = "icon" href = "logos/logo_icon.png"
           type = "image/x-icon">
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow fixed-top bg-light">
     <div class="container-fluid">
-        <a class="navbar-brand" href="index.php"><img src="logos\brand.png" alt="Site logo" width="110px" height="auto"> </a>
+        <a class="navbar-brand" href="index.php"><img src="logos/brand.png" alt="Site logo" width="110px" height="auto"> </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -112,7 +111,7 @@ $quarantineRecords = $connection->query("SELECT quarantine_record.start_date,qua
 
             </ul>
             <ul class="nav navbar-nav ">
-                <li class="nav-item active"><a class="nav-link active" href="#" title=""><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M12 2.5a5.5 5.5 0 00-3.096 10.047 9.005 9.005 0 00-5.9 8.18.75.75 0 001.5.045 7.5 7.5 0 0114.993 0 .75.75 0 101.499-.044 9.005 9.005 0 00-5.9-8.181A5.5 5.5 0 0012 2.5zM8 8a4 4 0 118 0 4 4 0 01-8 0z"></path></svg><?php echo $authority->getFirstName()." ".$authority->getLastName()?></a></li>
+                <li class="nav-item active"><a class="nav-link active" href="profile.php" title=""><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M12 2.5a5.5 5.5 0 00-3.096 10.047 9.005 9.005 0 00-5.9 8.18.75.75 0 001.5.045 7.5 7.5 0 0114.993 0 .75.75 0 101.499-.044 9.005 9.005 0 00-5.9-8.181A5.5 5.5 0 0012 2.5zM8 8a4 4 0 118 0 4 4 0 01-8 0z"></path></svg><?php echo $authority->getFirstName()." ".$authority->getLastName()?></a></li>
                 <li class="nav-item"><a class="nav-link" href="logout.php" title=""><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M3 3.25c0-.966.784-1.75 1.75-1.75h5.5a.75.75 0 010 1.5h-5.5a.25.25 0 00-.25.25v17.5c0 .138.112.25.25.25h5.5a.75.75 0 010 1.5h-5.5A1.75 1.75 0 013 20.75V3.25zm16.006 9.5l-3.3 3.484a.75.75 0 001.088 1.032l4.5-4.75a.75.75 0 000-1.032l-4.5-4.75a.75.75 0 00-1.088 1.032l3.3 3.484H10.75a.75.75 0 000 1.5h8.256z"></path></svg>Logout</a></li>
             </ul>
         </div>
@@ -304,7 +303,7 @@ $quarantineRecords = $connection->query("SELECT quarantine_record.start_date,qua
                                         <td><?php echo $row["vaccine_name"]?></td>
                                         <td><?php echo $row["place"]?></td>
                                         <td><?php echo $row["date"]?></td>
-                                        <td><?php echo $row["next_appoinment"]?></td>
+                                        <td><?php echo $row["next_appointment"]?></td>
                                         <td><?php echo $row["batch_number"]?></td>
                                         <td><?php echo $row["remarks"]?></td>
                                     </tr>
@@ -505,8 +504,6 @@ $quarantineRecords = $connection->query("SELECT quarantine_record.start_date,qua
 
 
 
-<!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
--->
-<script src="js\bootstrap.js"></script>
+<script src="js/bootstrap.js"></script>
 </body>
 </html>

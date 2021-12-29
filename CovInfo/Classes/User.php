@@ -2,9 +2,9 @@
 
 
 require_once("Person.php");
-require_once ("classes.php");
+require_once ("States/IUser.php");
 
-class User extends Person
+class User extends Person implements IUser
 {
     private UserState $userState;
     private AccountState $accountState;
@@ -13,7 +13,7 @@ class User extends Person
 
          public function __construct($accountID, $password, $emailAddress, $firstName, $middleName, $lastName, $NICNumber, $DOB, $gender, $district, $province, $MOHDivision, $address, $phoneNumber,int $userStatus, int $vaccinationStatus, $bloodType, $userType,int $userID,int $accountTypeID)
     {
-        parent::__construct($accountID, $password, $emailAddress, $firstName, $middleName, $lastName, $NICNumber, $DOB, $gender, $district, $province, $MOHDivision, $address, $phoneNumber, $userStatus, $vaccinationStatus, $bloodType, $userType);
+        parent::__construct($accountID, $password, $emailAddress, $firstName, $middleName, $lastName, $NICNumber, $DOB, $gender, $district, $province, $MOHDivision, $address, $phoneNumber, $bloodType, $userType);
         $accountStateFactory=new AccountStateFactory();
         $vaccinationStateFactory=new VaccinationStateFactory();
         $userStateFactory=new UserStateFactory();

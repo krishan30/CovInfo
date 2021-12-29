@@ -12,7 +12,6 @@ interface Iperson
     public function getGender();
     public function getMiddleName();
     public function getAddress();
-    public function getStatus();
     public function getFullName(): string;
 
 

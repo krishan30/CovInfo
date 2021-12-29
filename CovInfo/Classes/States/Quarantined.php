@@ -1,14 +1,14 @@
 <?php
 
 require_once("UserState.php");
-
+require_once("IUser.php");
 class Quarantined extends UserState{
 
     public function __construct(){
         parent::__construct(2);
     }
 
-    public function addPatient(User $user)
+    public function addPatient(IUser $user)
     {
         $user->setUserState(new Infected());
     }
@@ -16,17 +16,17 @@ class Quarantined extends UserState{
     /**
      * @throws Exception
      */
-    public function startQuarantine(User $user)
+    public function startQuarantine(IUser $user)
     {
         throw new Exception("Invalid state transition request");
     }
 
-    public function endQuarantine(User $user)
+    public function endQuarantine(IUser $user)
     {
         $user->setUserState(new Healthy());
     }
 
-    public function reportDeath(User $user)
+    public function reportDeath(IUser $user)
     {
         $user->setUserState(new Deceased());
     }
