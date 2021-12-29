@@ -1,5 +1,5 @@
 <?php
-
+require_once ("Classes/classes.php");
 session_start();
 
 $logged_user = isset($_SESSION["LogIn"]);
