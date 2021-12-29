@@ -2,9 +2,9 @@
 
 
 require_once("Person.php");
-require_once ("classes.php");
+require_once ("States/IUser.php");
 
-class User extends Person
+class User extends Person implements IUser
 {
     private UserState $userState;
     private AccountState $accountState;

@@ -2,7 +2,6 @@
 
 require_once ("State.php");
 
-
 abstract class AccountState implements State {
     private int $accountTypeID;
 
@@ -14,6 +13,6 @@ abstract class AccountState implements State {
     {
         return $this->accountTypeID;
     }
-    public abstract function activate(User  $user);
+    public abstract function activate(User $user);
     public abstract function deactivate(User  $user);
 }

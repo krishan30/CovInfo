@@ -1,7 +1,7 @@
 <?php
 
 require_once("UserState.php");
-
+require_once("IUser.php");
 class Deceased extends UserState{
 
     public function __construct(){
@@ -11,7 +11,7 @@ class Deceased extends UserState{
     /**
      * @throws Exception
      */
-    public function addPatient(User $user)
+    public function addPatient(IUser $user)
     {
         throw new Exception("Invalid state transition request");
     }
@@ -19,7 +19,7 @@ class Deceased extends UserState{
     /**
      * @throws Exception
      */
-    public function startQuarantine(User $user)
+    public function startQuarantine(IUser $user)
     {
         throw new Exception("Invalid state transition request");
     }
@@ -27,7 +27,7 @@ class Deceased extends UserState{
     /**
      * @throws Exception
      */
-    public function endQuarantine(User $user)
+    public function endQuarantine(IUser $user)
     {
         throw new Exception("Invalid state transition request");
     }
@@ -35,7 +35,7 @@ class Deceased extends UserState{
     /**
      * @throws Exception
      */
-    public function reportDeath(User $user)
+    public function reportDeath(IUser $user)
     {
         throw new Exception("Invalid state transition request");
     }

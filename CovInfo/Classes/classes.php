@@ -42,6 +42,6 @@ require_once("States/Unread.php");
 
 require_once("States/State.php");
 require_once("States/StateFactory.php");
-
+require_once("States/IUser.php");
 ?>
 

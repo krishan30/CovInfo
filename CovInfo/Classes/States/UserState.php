@@ -1,7 +1,7 @@
 <?php
 
 require_once ("State.php");
-
+require_once("IUser.php");
 
 abstract class UserState implements State {
     private int $statusID;
@@ -14,9 +14,9 @@ abstract class UserState implements State {
     {
         return $this->statusID;
     }
-    public abstract function addPatient(User  $user);
-    public abstract function startQuarantine(User  $user);
-    public abstract function endQuarantine(User  $user);
-    public abstract function reportDeath(User  $user);
+    public abstract function addPatient(IUser  $user);
+    public abstract function startQuarantine(IUser  $user);
+    public abstract function endQuarantine(IUser $user);
+    public abstract function reportDeath(IUser  $user);
 }
 

@@ -16,7 +16,6 @@ abstract class PersonProxy implements Iperson
     private $gender;
     private $address;
     private $userType;
-    private UserState $userState;
 
     /**
      * @param $accountID
@@ -41,49 +40,7 @@ abstract class PersonProxy implements Iperson
         $this->gender = $gender;
         $this->address = $address;
         $this->userType = $userType;
-        $userStateFactory=new UserStateFactory();
-        $this->userState=$userStateFactory->createState($status);
-    }
 
-    public function setUserState(UserState $userState)
-    {
-        $connection = PDOSingleton::getInstance();
-        $sql = "UPDATE user set status_id=:status_id  where user_id=:user_id";
-        $stmt = $connection->prepare($sql);
-        $stmt->execute(array(':user_id'=>$this->getUserID(),':status_id'=>$userState->getStatusID()));
-        $this->userState=$userState;
-    }
-
-    public function getUserState(): UserState
-    {
-        return $this->userState;
-    }
-
-    /**
-     * @throws Exception
-     */
-    public  function addAsPatient(){
-        $this->userState->addPatient($this);
-    }
-    /**
-     * @throws Exception
-     */
-    public  function startQuarantine(){
-        $this->userState->startQuarantine($this);
-    }
-
-    /**
-     * @throws Exception
-     */
-    public  function endQuarantine(){
-        $this->userState->endQuarantine($this);
-    }
-
-    /**
-     * @throws Exception
-     */
-    public  function reportAsDeath(){
-        $this->userState->reportDeath($this);
     }
 
     /**
