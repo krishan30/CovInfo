@@ -11,9 +11,9 @@ class User extends Person implements IUser
     private VaccinationState $vaccinationState;
     private int $userID;
 
-         public function __construct($accountID, $password, $emailAddress, $firstName, $middleName, $lastName, $NICNumber, $DOB, $gender, $district, $province, $MOHDivision, $address, $phoneNumber,int $userStatus, int $vaccinationStatus, $bloodType, $userType,int $userID,int $accountTypeID)
+         public function __construct($accountID, $password, $emailAddress, $firstName, $middleName, $lastName, $NICNumber, $DOB, $gender, $district, $province, $MOHDivision, $address, $phoneNumber,int $userStatus, int $vaccinationStatus, $bloodType, $userType,$medical ,int $userID,int $accountTypeID)
     {
-        parent::__construct($accountID, $password, $emailAddress, $firstName, $middleName, $lastName, $NICNumber, $DOB, $gender, $district, $province, $MOHDivision, $address, $phoneNumber, $bloodType, $userType);
+        parent::__construct($accountID, $password, $emailAddress, $firstName, $middleName, $lastName, $NICNumber, $DOB, $gender, $district, $province, $MOHDivision, $address, $phoneNumber, $bloodType, $userType,$medical);
         $accountStateFactory=new AccountStateFactory();
         $vaccinationStateFactory=new VaccinationStateFactory();
         $userStateFactory=new UserStateFactory();
@@ -21,6 +21,10 @@ class User extends Person implements IUser
         $this->accountState=$accountStateFactory->createState($accountTypeID);
         $this->vaccinationState=$vaccinationStateFactory->createState($vaccinationStatus);
         $this->userID=$userID;
+    }
+
+    public function updateProfile($medicalRemarks){
+             $this->setMedicalRemarks($medicalRemarks,$this->userID);
     }
 
     public function getUserID(): int

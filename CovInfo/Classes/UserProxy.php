@@ -11,7 +11,7 @@ class UserProxy extends PersonProxy implements IUser
     {
         parent::__construct($accountID, $emailAddress, $firstName, $middleName, $lastName, $NICNumber, $gender, $address, $status, $userType, $user_id);
         $userStateFactory=new UserStateFactory();
-        $this->userState=$userStateFactory->createState($user_id);
+        $this->userState=$userStateFactory->createState($status);
     }
 
     public function getUser()

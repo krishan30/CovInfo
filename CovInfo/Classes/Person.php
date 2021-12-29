@@ -1,5 +1,7 @@
 <?php
 
+require_once ("PDOSingleton.php");
+
 class Person
 {
     private $accountID;
@@ -22,6 +24,7 @@ class Person
     private $deathRecord;
     private $bloodType;
     private $userType;
+    private $medicalRemarks;
 
     /**
      * @param $accountID
@@ -42,8 +45,9 @@ class Person
      * @param $infectionRecord
      * @param $deathRecord
      */
-    public function __construct($accountID, $password, $emailAddress, $firstName, $middleName, $lastName, $NICNumber, $DOB, $gender, $district, $province, $MOHDivision, $address, $phoneNumber,$bloodType,$userType)
+    public function __construct($accountID, $password, $emailAddress, $firstName, $middleName, $lastName, $NICNumber, $DOB, $gender, $district, $province, $MOHDivision, $address, $phoneNumber,$bloodType,$userType,$medical)
     {
+        $this->medicalRemarks = $medical;
         $this->accountID = $accountID;
         $this->password = $password;
         $this->emailAddress = $emailAddress;
@@ -61,6 +65,28 @@ class Person
         $this->bloodType = $bloodType;
         $this->userType = $userType;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getMedicalRemarks()
+    {
+        return $this->medicalRemarks;
+    }
+
+    /**
+     * @param mixed $medicalRemarks
+     */
+    public function setMedicalRemarks($medicalRemarks,$user_id): void
+    {
+        $this->medicalRemarks = $medicalRemarks;
+        $connection = PDOSingleton::getInstance();
+        $sql = "UPDATE user set medical_remarks=:medical_remarks where user_id=:user_id";
+        $stmt = $connection->prepare($sql);
+        $stmt->execute(array(":user_id"=>$user_id,":medical_remarks"=>$medicalRemarks));
+    }
+
+
 
     /**
      * @return mixed
@@ -91,9 +117,13 @@ class Person
     /**
      * @param mixed $bloodType
      */
-    public function setBloodType($bloodType): void
+    public function setBloodType($bloodType,$user_id): void
     {
         $this->bloodType = $bloodType;
+        $connection = PDOSingleton::getInstance();
+        $sql = "UPDATE user set blood_type_id=:blood_type_id where user_id=:user_id";
+        $stmt = $connection->prepare($sql);
+        $stmt->execute(array(":user_id"=>$user_id,":blood_type_id"=>$bloodType));
     }
 
     /**
@@ -142,6 +172,7 @@ class Person
     public function setEmailAddress($emailAddress)
     {
         $this->emailAddress = $emailAddress;
+
     }
 
     /**
