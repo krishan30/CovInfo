@@ -342,6 +342,7 @@ $quarantineRecords = $connection->query("SELECT quarantine_record.start_date,qua
                                     <?php
                                     $i += 1;
                                     ?>
+                                    <p><?php echo $i ?></p>
                                     <tr>
                                         <th scope="row"><?php echo $i ?></th>
                                         <!-- <td><?php /*echo $row["test_report_id"]*/?></td> -->

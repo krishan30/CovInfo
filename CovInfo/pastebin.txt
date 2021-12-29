@@ -1,0 +1,20 @@
+$infectionRecords = $connection->query("SELECT infection_record.test_report_id,infection_record.admitted_date,infection_record.release_date,medical_centre.name,infection_record.remarks 
+                                                    FROM infection_record,medical_centre 
+                                                    WHERE infection_record.user_id = $user_id AND medical_centre.medical_centre_id = infection_record.medical_centre_id 
+                                                    ORDER BY infection_record.admitted_date");
+
+$contactRecords = $connection->query("SELECT contact_record.contact_id,contact_record.trace_date,contact_record.contact_first-name,contact_record.contact_middle_name,contact_record.contact_last_name 
+                                                    FROM contact_record 
+                                                    WHERE contact_record.user_id = $current_user  
+                                                    ORDER BY contact_record.trace_date");
+
+
+$sql = "INSERT INTO infection_record (user_id,medical_officer_id,admitted_date,medical_centre_id,remarks) VALUES (:user_id,:medical_officer_id,:admitted_date,:medical_centre_id,:remarks)";
+$stmt = $connection->prepare($sql);
+$stmt->execute(array('user_id'=>$_POST['user_id'],'medical_officer_id'=>$medical_officer_id,'admitted_date'=>$_POST['admission-date'],'medical_centre_id'=>$_POST["medical_centre_id"],'remarks'=>$_POST["remarks"]));
+        
+$sql = "INSERT INTO contact_record (contact_id,trace_date,user_id) VALUES (:contact_id,:trace_date,:user_id)";
+$stmt = $connection->prepare($sql);
+$stmt->execute(array('contact_id'=>$add_contact_id,'trace_date'=>$today,'user_id'=>$current_user));
+        
+        

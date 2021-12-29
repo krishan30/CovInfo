@@ -126,11 +126,16 @@ https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css
             <div class="search">
                 <div class="row">
                     <div class="col-md-6">
-                        <div class="search-1"> <i class='bx bx-search-alt'></i> <input type="text" name="account_id" placeholder="Enter Account ID"> </div>
+                        <div class="search-1"> 
+                            <i class='bx bx-search-alt'></i> <input type="text" name="account_id" placeholder="Enter Account ID"> 
+                        </div>
                     </div>
                     <div class="col-md-6">
                         <div>
-                            <div class="search-2"> <i class='bx bxs-map'></i> <input type="text" name="nic_number" placeholder="Enter NIC"><button type="submit" name="search">Search</button> </div>
+                            <div class="search-2"> 
+                                <i class='bx bxs-map'></i> <input type="text" name="nic_number" placeholder="Enter NIC">
+                                <button type="submit" name="search">Search</button>
+                            </div>
                         </div>
                     </div>
                 </div>
