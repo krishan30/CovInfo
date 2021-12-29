@@ -42,7 +42,9 @@ if(isset($_SESSION["ep-needUpdate"])){
         "last_name"=>$_SESSION["ep-lastName"],"nic_number"=>$_SESSION["ep-nic"], "birth_day"=>$_SESSION["ep-dob"],"gender_id"=>$_SESSION["ep-gender"],"district_id"=>$_SESSION["ep-district"],"province_id"=>$_SESSION["ep-province"], "moh_division_id"=>$_SESSION["ep-moh"],
         "address"=>$_SESSION["ep-address"],"phone_number"=>$_SESSION["ep-phoneNumber"],"blood_type_id"=>$_SESSION["ep-bloodType"],"medical_remarks"=>$_SESSION["ep-medical"], "user_id"=>$_SESSION["ep-id"]));
     */
-    $searchProfile->updateProfile($_SESSION["ep-medical"]);
+    $searchProfile->updateProfile($_SESSION["ep-email"],$_SESSION["ep-firstName"],$_SESSION["ep-middleName"],$_SESSION["ep-lastName"],$_SESSION["ep-nic"],
+        $_SESSION["ep-dob"],$_SESSION["ep-gender"],$_SESSION["ep-district"],$_SESSION["ep-province"],$_SESSION["ep-moh"],$_SESSION["ep-address"],
+        $_SESSION["ep-phoneNumber"],$_SESSION["ep-bloodType"],$_SESSION["ep-medical"]);
     unset($_SESSION["ep-needUpdate"]);
     $goto = $_SESSION["ep-id"];
     header("Location:profile-view.php?id=$goto");

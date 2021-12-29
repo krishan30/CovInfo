@@ -169,9 +169,13 @@ class Person
     /**
      * @param mixed $emailAddress
      */
-    public function setEmailAddress($emailAddress)
+    public function setEmailAddress($emailAddress,$user_id)
     {
         $this->emailAddress = $emailAddress;
+        $connection = PDOSingleton::getInstance();
+        $sql = "UPDATE user set email_address=:email_address where user_id=:user_id";
+        $stmt = $connection->prepare($sql);
+        $stmt->execute(array(":user_id"=>$user_id,":email_address"=>$emailAddress));
 
     }
 
@@ -186,9 +190,13 @@ class Person
     /**
      * @param mixed $firstName
      */
-    public function setFirstName($firstName)
+    public function setFirstName($firstName,$user_id)
     {
         $this->firstName = $firstName;
+        $connection = PDOSingleton::getInstance();
+        $sql = "UPDATE user set first_name=:first_name where user_id=:user_id";
+        $stmt = $connection->prepare($sql);
+        $stmt->execute(array(":user_id"=>$user_id,":first_name"=>$firstName));
     }
 
     /**
@@ -202,9 +210,13 @@ class Person
     /**
      * @param mixed $lastName
      */
-    public function setLastName($lastName)
+    public function setLastName($lastName,$user_id)
     {
         $this->lastName = $lastName;
+        $connection = PDOSingleton::getInstance();
+        $sql = "UPDATE user set last_name=:last_name where user_id=:user_id";
+        $stmt = $connection->prepare($sql);
+        $stmt->execute(array(":user_id"=>$user_id,":last_name"=>$lastName));
     }
 
     /**
@@ -218,9 +230,13 @@ class Person
     /**
      * @param mixed $NICNumber
      */
-    public function setNICNumber($NICNumber)
+    public function setNICNumber($NICNumber,$user_id)
     {
         $this->NICNumber = $NICNumber;
+        $connection = PDOSingleton::getInstance();
+        $sql = "UPDATE user set nic_number=:nic_number where user_id=:user_id";
+        $stmt = $connection->prepare($sql);
+        $stmt->execute(array(":user_id"=>$user_id,":nic_number"=>$NICNumber));
     }
 
     /**
@@ -243,9 +259,14 @@ class Person
     /**
      * @param mixed $DOB
      */
-    public function setDOB($DOB)
+    public function setDOB($DOB,$user_id)
     {
         $this->DOB = $DOB;
+        $connection = PDOSingleton::getInstance();
+        $sql = "UPDATE user set birth_day=:birth_day where user_id=:user_id";
+        $stmt = $connection->prepare($sql);
+        $stmt->execute(array(":user_id"=>$user_id,":birth_day"=>$DOB));
+
     }
 
     /**
@@ -259,9 +280,16 @@ class Person
     /**
      * @param mixed $gender
      */
-    public function setGender($gender)
+    public function setGender($gender,$user_id)
     {
-        $this->gender = $gender;
+        $connection = PDOSingleton::getInstance();
+        $gQ = $connection->query("SELECT gender FROM gender WHERE gender_id = $gender");
+        while ($row = $gQ->fetch(PDO::FETCH_ASSOC)){
+            $this->gender = $row["gender"];
+        }
+        $sql = "UPDATE user set gender_id=:gender_id where user_id=:user_id";
+        $stmt = $connection->prepare($sql);
+        $stmt->execute(array(":user_id"=>$user_id,":gender_id"=>$gender));
     }
 
     /**
@@ -275,9 +303,14 @@ class Person
     /**
      * @param mixed $middleName
      */
-    public function setMiddleName($middleName): void
+    public function setMiddleName($middleName,$user_id): void
     {
         $this->middleName = $middleName;
+        $connection = PDOSingleton::getInstance();
+        $sql = "UPDATE user set middle_name=:middle_name where user_id=:user_id";
+        $stmt = $connection->prepare($sql);
+        $stmt->execute(array(":user_id"=>$user_id,":middle_name"=>$middleName));
+
     }
 
     /**
@@ -291,9 +324,16 @@ class Person
     /**
      * @param mixed $district
      */
-    public function setDistrict($district)
+    public function setDistrict($district,$user_id)
     {
-        $this->district = $district;
+        $connection = PDOSingleton::getInstance();
+        $gQ = $connection->query("SELECT name FROM district WHERE district_id = $district");
+        while ($row = $gQ->fetch(PDO::FETCH_ASSOC)){
+            $this->district = $row["name"];
+        }
+        $sql = "UPDATE user set district_id=:district_id where user_id=:user_id";
+        $stmt = $connection->prepare($sql);
+        $stmt->execute(array(":user_id"=>$user_id,":district_id"=>$district));
     }
 
     /**
@@ -307,9 +347,16 @@ class Person
     /**
      * @param mixed $province
      */
-    public function setProvince($province)
+    public function setProvince($province,$user_id)
     {
-        $this->province = $province;
+        $connection = PDOSingleton::getInstance();
+        $gQ = $connection->query("SELECT prov_name FROM province WHERE province_id = $province");
+        while ($row = $gQ->fetch(PDO::FETCH_ASSOC)){
+            $this->province = $row["prov_name"];
+        }
+        $sql = "UPDATE user set province_id=:province_id where user_id=:user_id";
+        $stmt = $connection->prepare($sql);
+        $stmt->execute(array(":user_id"=>$user_id,":province_id"=>$province));
     }
 
     /**
@@ -323,9 +370,16 @@ class Person
     /**
      * @param mixed $MOHDivision
      */
-    public function setMOHDivision($MOHDivision)
+    public function setMOHDivision($MOHDivision,$user_id)
     {
-        $this->MOHDivision = $MOHDivision;
+        $connection = PDOSingleton::getInstance();
+        $gQ = $connection->query("SELECT moh_name FROM moh_division WHERE moh_division_id = $MOHDivision");
+        while ($row = $gQ->fetch(PDO::FETCH_ASSOC)){
+            $this->MOHDivision = $row["moh_name"];
+        }
+        $sql = "UPDATE user set moh_division_id=:moh_division_id where user_id=:user_id";
+        $stmt = $connection->prepare($sql);
+        $stmt->execute(array(":user_id"=>$user_id,":moh_division_id"=>$MOHDivision));
     }
 
     /**
@@ -339,9 +393,13 @@ class Person
     /**
      * @param mixed $address
      */
-    public function setAddress($address)
+    public function setAddress($address,$user_id)
     {
         $this->address = $address;
+        $connection = PDOSingleton::getInstance();
+        $sql = "UPDATE user set address=:address where user_id=:user_id";
+        $stmt = $connection->prepare($sql);
+        $stmt->execute(array(":user_id"=>$user_id,":address"=>$address));
     }
 
     /**
@@ -355,9 +413,13 @@ class Person
     /**
      * @param mixed $phoneNumber
      */
-    public function setPhoneNumber($phoneNumber)
+    public function setPhoneNumber($phoneNumber,$user_id)
     {
         $this->phoneNumber = $phoneNumber;
+        $connection = PDOSingleton::getInstance();
+        $sql = "UPDATE user set phone_number=:phone_number where user_id=:user_id";
+        $stmt = $connection->prepare($sql);
+        $stmt->execute(array(":user_id"=>$user_id,":phone_number"=>$phoneNumber));
     }
 
     /**

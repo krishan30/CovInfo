@@ -23,7 +23,20 @@ class User extends Person implements IUser
         $this->userID=$userID;
     }
 
-    public function updateProfile($medicalRemarks){
+    public function updateProfile($emailAddress,$firstName,$middleName,$lastName,$nicNo,$dob,$gender,$district,$province,$mohDiv,$address,$phoneNo,$bloodType,$medicalRemarks){
+             $this->setEmailAddress($emailAddress,$this->userID);
+             $this->setFirstName($firstName,$this->userID);
+             $this->setMiddleName($middleName,$this->userID);
+             $this->setLastName($lastName,$this->userID);
+             $this->setNICNumber($nicNo,$this->userID);
+             $this->setDOB($dob,$this->userID);
+             $this->setGender($gender,$this->userID);
+             $this->setDistrict($district,$this->userID);
+             $this->setProvince($province,$this->userID);
+             $this->setMOHDivision($mohDiv,$this->userID);
+             $this->setAddress($address,$this->userID);
+             $this->setPhoneNumber($phoneNo,$this->userID);
+             $this->setBloodType($bloodType,$this->userID);
              $this->setMedicalRemarks($medicalRemarks,$this->userID);
     }
 
