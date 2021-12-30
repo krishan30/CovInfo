@@ -11,9 +11,9 @@ class User extends Person implements IUser
     private VaccinationState $vaccinationState;
     private int $userID;
 
-         public function __construct($accountID, $password, $emailAddress, $firstName, $middleName, $lastName, $NICNumber, $DOB, $gender, $district, $province, $MOHDivision, $address, $phoneNumber,int $userStatus, int $vaccinationStatus, $bloodType, $userType,int $userID,int $accountTypeID)
+         public function __construct($accountID, $password, $emailAddress, $firstName, $middleName, $lastName, $NICNumber, $DOB, $gender, $district, $province, $MOHDivision, $address, $phoneNumber,int $userStatus, int $vaccinationStatus, $bloodType, $userType,$medical ,int $userID,int $accountTypeID)
     {
-        parent::__construct($accountID, $password, $emailAddress, $firstName, $middleName, $lastName, $NICNumber, $DOB, $gender, $district, $province, $MOHDivision, $address, $phoneNumber, $bloodType, $userType);
+        parent::__construct($accountID, $password, $emailAddress, $firstName, $middleName, $lastName, $NICNumber, $DOB, $gender, $district, $province, $MOHDivision, $address, $phoneNumber, $bloodType, $userType,$medical);
         $accountStateFactory=new AccountStateFactory();
         $vaccinationStateFactory=new VaccinationStateFactory();
         $userStateFactory=new UserStateFactory();
@@ -21,6 +21,23 @@ class User extends Person implements IUser
         $this->accountState=$accountStateFactory->createState($accountTypeID);
         $this->vaccinationState=$vaccinationStateFactory->createState($vaccinationStatus);
         $this->userID=$userID;
+    }
+
+    public function updateProfile($emailAddress,$firstName,$middleName,$lastName,$nicNo,$dob,$gender,$district,$province,$mohDiv,$address,$phoneNo,$bloodType,$medicalRemarks){
+             $this->setEmailAddress($emailAddress,$this->userID);
+             $this->setFirstName($firstName,$this->userID);
+             $this->setMiddleName($middleName,$this->userID);
+             $this->setLastName($lastName,$this->userID);
+             $this->setNICNumber($nicNo,$this->userID);
+             $this->setDOB($dob,$this->userID);
+             $this->setGender($gender,$this->userID);
+             $this->setDistrict($district,$this->userID);
+             $this->setProvince($province,$this->userID);
+             $this->setMOHDivision($mohDiv,$this->userID);
+             $this->setAddress($address,$this->userID);
+             $this->setPhoneNumber($phoneNo,$this->userID);
+             $this->setBloodType($bloodType,$this->userID);
+             $this->setMedicalRemarks($medicalRemarks,$this->userID);
     }
 
     public function getUserID(): int
