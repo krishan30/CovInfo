@@ -120,11 +120,11 @@
     <div class="container bg-white boxy-blue p-4 mb-4 rounded-3">
     <div class=" container d-grid gap-3 bg-white p-3">
         <div class="row ">
-            <p class=" fs-5 text-center fw-bold">Vaccination Register Form</p>
+            <p class=" fs-3 text-center fw-bold">Vaccination Register Form</p>
         </div>
         <?php if(!isset($_SESSION['VRegistration'])){?>
         <div class="row border-bottom border-primary">
-            <p class=" fs-5 text-justify">Profile Details</p>
+            <p class=" fs-5 text-justify text-primary">Profile Details</p>
         </div>
         <div class="row">
             <div class="col-sm">
@@ -158,7 +158,7 @@
         <br>
     <div class=" container d-grid gap-3 bg-white p-3">
         <div class="row border-bottom border-primary ">
-            <p class="fs-5 text-justify">Vaccination Details</p>
+            <p class="fs-5 text-justify text-primary">Vaccination Details</p>
         </div>
         <form action="VaccinationRegisterForm.php" method="post">
             <div class="row">

@@ -66,11 +66,8 @@ if(isset($_POST["medical_centre_id"]) && isset($_POST["register"])){
         $medical_centre_id = $_POST["medical_centre_id"];
         $med_centre = "";
         $gQ = $connection->query("SELECT name FROM medical_centre WHERE medical_centre_id = $medical_centre_id");
-        while ($row = $gQ->fetch(PDO::FETCH_ASSOC)){
-            $med_centre = $row["name"];
-        }
-
-
+        $row = $gQ->fetch(PDO::FETCH_ASSOC);
+        $med_centre = $row["name"];
         MailWrapper::sendMail($userProxyFactory->build($searchedId),"Informing Covid-19 Test Result","
 You are identified as a covid 19 positive person. You had assigned to $med_centre for treatments. Relevant authorities will contact you immediately. Stay alone and follow all health guidelines. 
 ");
@@ -143,11 +140,11 @@ You are identified as a covid 19 positive person. You had assigned to $med_centr
 <div class="container bg-white boxy-blue p-4 mb-4 rounded-3">
     <div class=" container d-grid gap-3 bg-white p-3">
         <div class="row ">
-            <p class=" fs-5 text-center fw-bold">New Patient Admission Form</p>
+            <p class=" fs-3 text-center fw-bold">New Patient Admission Form</p>
         </div>
         <?php if(!isset($_SESSION['PRegistration'])){?>
         <div class="row border-bottom border-primary">
-            <p class=" fs-5 text-justify">Patient Details</p>
+            <p class=" fs-5 text-justify text-primary">Patient Details</p>
         </div>
         <div class="row">
             <div class="col-sm">
@@ -173,7 +170,7 @@ You are identified as a covid 19 positive person. You had assigned to $med_centr
     <br>
     <div class=" container d-grid gap-3 bg-white p-3">
         <div class="row border-bottom border-primary ">
-            <p class="fs-5 text-justify">Admission Details</p>
+            <p class="fs-5 text-justify text-primary">Admission Details</p>
         </div>
         <form action="NewPatientReport.php" method="post">
             <div class="row">

@@ -1,7 +1,6 @@
 <?php
 
 require_once ("Authority.php");
-require_once ("DataBaseAdapter.php");
 require_once ("IAdministrator.php");
 require_once ("IFactory.php");
 require_once ("Iperson.php");

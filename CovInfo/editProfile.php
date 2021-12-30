@@ -153,7 +153,7 @@ https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css
                                 <label class="-label" for="file">
                                     <span>Change Image</span>
                                 </label>
-                                <input id="file" type="file" <!--onchange="loadFile(event)"-->/>
+                                <input id="file" type="file" ><!--onchange="loadFile(event)"-->
                                 <?php if($searchProfile->getGender() == "Male"){?>
                                     <img src="images/User-big.png" id="output" width="200" />
                                 <?php }else{ ?>

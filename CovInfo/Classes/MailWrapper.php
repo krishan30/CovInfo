@@ -8,10 +8,13 @@ require_once ("mailer/src/Exception.php");
 require_once ("mailer/src/PHPMailer.php");
 require_once ("mailer/src/SMTP.php");
 require_once ("UserProxy.php");
+require_once ("States/IUser.php");
+
 
 
 class MailWrapper
 {
+
     public static function sendMail($userProxy,$subject,$message){
         $mail = new PHPMailer();
         try{
@@ -39,11 +42,7 @@ class MailWrapper
         } catch (Exception $e) {
 
         }
-
     }
-
-
-
 }
 
 
