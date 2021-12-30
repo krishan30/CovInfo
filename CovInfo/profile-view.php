@@ -489,6 +489,13 @@ $quarantineRecords = $connection->query("SELECT quarantine_record.start_date,qua
 
         <?php } ?>
 
+        <!-- Test stuff comment out. -->
+        <div>
+            <p> 
+        <a href="deathReport.php" class="hiddenLink">  Death Report </a>
+            </p>
+    </div>
+
 
     </div>
 </div>
