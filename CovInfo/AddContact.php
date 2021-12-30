@@ -34,7 +34,7 @@
     $current_user = $searchedId ; //testing setting.
     $results = [];
     $contactRecords = null ;
-    $contactRecords = $connection->query("SELECT contact_record.contact_id,contact_record.trace_date,contact_record.contact_name 
+    $contactRecords = $connection->query("SELECT contact_record.contact_id,contact_record.trace_date,contact_record.contact_user_id
                                                         FROM contact_record 
                                                         WHERE contact_record.user_id = $current_user  
                                                         ORDER BY contact_record.trace_date");
@@ -54,15 +54,19 @@
             $add_contact_id = $_GET["id"] ;
             $contact = $userFactory->build($add_contact_id);
             $today = date("Y-m-d");
-            $contact_name = $contact->getFirstName()." ".$contact->getMiddleName()." ".$contact->getLastName();
-            $sql = "INSERT INTO contact_record (contact_name,trace_date,user_id) VALUES (:contact_name,:trace_date,:user_id)";
+            echo ($contact->getFirstName());
+            $sql = "INSERT INTO contact_record (contact_user_id,trace_date,user_id) VALUES (:contact_user_id,:trace_date,:user_id)";
             $stmt = $connection->prepare($sql);
-            $stmt->execute(array('contact_name'=>$contact_name,'trace_date'=>$today,'user_id'=>$current_user));
+            $stmt->execute(array(':contact_user_id'=>$contact->getUserID(),'trace_date'=>$today,'user_id'=>$current_user));
+            try {
+                $contact->startQuarantine();
+            } catch (Exception $e) {
+            }
             header("Location:AddContact.php");
             return;
         }
     }
-
+    $result = false;
     if(isset($_SESSION["search_account_id"]) || isset($_SESSION["search_nic_number"])){
         $result = true;
         $searchSql = "SELECT user.user_id FROM user WHERE user.account_id=:account_id OR user.nic_number=:nic_number ORDER BY account_id";
@@ -162,11 +166,13 @@
                 $i = 0 ;
                 while ($row = $contactRecords -> fetch(PDO::FETCH_ASSOC)) {
                     $i += 1 ;
+                    $currentContact=$userProxyFactory->build($row["contact_user_id"]);
+                    $fullName=$currentContact->getFullName();
                     ?>
 
                     <tr>
                         <th scope="row"><?php echo $i?></th>
-                        <td><?php echo $row["contact_name"]?></td>
+                        <td><?php echo $fullName?></td>
                         <td> <?php echo $row["trace_date"]?></td>
                     </tr>
                     <?php

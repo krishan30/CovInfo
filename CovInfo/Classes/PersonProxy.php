@@ -104,7 +104,7 @@ abstract class PersonProxy implements Iperson
 
     public function getFullName(): string
     {
-        return $this->firstName." ".$this->middleName." ".$this->$this->lastName;
+        return $this->firstName." ".$this->middleName." ".$this->lastName;
     }
 
     public function getUserType()
