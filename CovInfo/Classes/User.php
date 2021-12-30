@@ -40,6 +40,14 @@ class User extends Person implements IUser
              $this->setMedicalRemarks($medicalRemarks,$this->userID);
     }
 
+    public function updateMyProfile($emailAddress,$address,$phoneNo,$bloodType,$medicalRemarks){
+        $this->setEmailAddress($emailAddress,$this->userID);
+        $this->setAddress($address,$this->userID);
+        $this->setPhoneNumber($phoneNo,$this->userID);
+        $this->setBloodType($bloodType,$this->userID);
+        $this->setMedicalRemarks($medicalRemarks,$this->userID);
+    }
+
     public function getUserID(): int
     {
              return $this->userID;

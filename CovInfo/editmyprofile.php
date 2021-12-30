@@ -15,12 +15,13 @@ if($logged_user){
     header("Location:Login.php");
     return;
 }
-$searchProfile = $user->getUser();
+$userFactory = new UserFactory();
+$searchProfile = $userFactory->build($user_id);
 $selfEdit = true;
 
 if(isset($_SESSION["ep-needUpdate"])){
-    $searchProfile->updateProfile($_SESSION["ep-email"],$_SESSION["ep-firstName"],$_SESSION["ep-middleName"],$_SESSION["ep-lastName"],$_SESSION["ep-nic"],
-        $_SESSION["ep-dob"],$_SESSION["ep-gender"],$_SESSION["ep-district"],$_SESSION["ep-province"],$_SESSION["ep-moh"],$_SESSION["ep-address"],
+    $searchProfile->updateMyProfile($_SESSION["ep-email"],
+        $_SESSION["ep-address"],
         $_SESSION["ep-phoneNumber"],$_SESSION["ep-bloodType"],$_SESSION["ep-medical"]);
     unset($_SESSION["ep-needUpdate"]);
     $goto = $_SESSION["ep-id"];
@@ -29,23 +30,10 @@ if(isset($_SESSION["ep-needUpdate"])){
 }
 
 if(isset($_POST["update"])){
-    $_SESSION["ep-firstName"] = $_POST["firstName"];
-    $_SESSION["ep-middleName"] = $_POST["middleName"];
-    $_SESSION["ep-lastName"] = $_POST["lastName"];
-    $_SESSION["ep-nic"] = $_POST["nic"];
-    $_SESSION["ep-dob"] = $_POST["dob"];
-    $_SESSION["ep-gender"] = $_POST["gender"];
     $_SESSION["ep-phoneNumber"] = $_POST["phoneNumber"];
     $_SESSION["ep-email"] = $_POST["email"];
     $_SESSION["ep-address"] = $_POST["address"];
-    $_SESSION["ep-district"] = $_POST["district"];
-    $districtId = $_POST["district"];
-    $province = $connection->query("SELECT province_id FROM district WHERE district_id = $districtId");
-    while ($row = $province->fetch(PDO::FETCH_ASSOC)){
-        $_SESSION["ep-province"] = $row["province_id"];
-    }
     $_SESSION["ep-bloodType"] = $_POST["bloodType"];
-    $_SESSION["ep-moh"] = $_POST["moh"];
     $_SESSION["ep-medical"] = $_POST["medical"];
     $_SESSION["ep-id"] = $_SESSION["user_id"];
     $_SESSION["ep-needUpdate"] = true;
@@ -189,14 +177,7 @@ $mohDivisionList = $connection->query("SELECT moh_name FROM moh_division");
                             <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-2">
                                 <div class="form-group">
                                     <label for="gender" class="mx-1">Gender</label>
-                                    <select readonly class="form-select" id="gender" name="gender" required>
-                                        <option value="" <?php echo $searchProfile->getGender() == "" ? "selected" : "" ?> hidden>Select Gender</option>
-
-                                        <?php $i = 1;
-                                        while ($row = $genderList->fetch(PDO::FETCH_ASSOC)){?>
-                                            <option value="<?php echo $i++ ?>" <?php echo $searchProfile->getGender() == $row["gender"] ? "selected" : "" ?>><?php echo $row["gender"] ?></option>
-                                        <?php } ?>
-                                    </select>
+                                    <input type="text" readonly value="<?php echo $searchProfile->getGender();?>" class="form-control" id="gender" name="gender" placeholder="" required>
                                 </div>
                             </div>
                         </div>
@@ -226,14 +207,7 @@ $mohDivisionList = $connection->query("SELECT moh_name FROM moh_division");
                             <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4">
                                 <div class="form-group">
                                     <label for="district" class="mx-1">District</label>
-                                    <select readonly class="form-select" id="district" required name="district">
-                                        <option value="" <?php echo $searchProfile->getDistrict() == "" ? "selected" : "" ?> hidden>Select District</option>
-
-                                        <?php $i = 1;
-                                        while ($row = $districtList->fetch(PDO::FETCH_ASSOC)){?>
-                                            <option value="<?php echo $i++ ?>" <?php echo $searchProfile->getDistrict() == $row["name"] ? "selected" : "" ?>><?php echo $row["name"] ?></option>
-                                        <?php } ?>
-                                    </select>
+                                    <input type="text" readonly value="<?php echo $searchProfile->getDistrict();?>" class="form-control" id="district" name="district" placeholder="" required>
                                 </div>
                             </div>
 
@@ -259,14 +233,7 @@ $mohDivisionList = $connection->query("SELECT moh_name FROM moh_division");
                             <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4">
                                 <div class="form-group">
                                     <label for="moh" class="mx-1">MOH Division</label>
-                                    <select readonly class="form-select" id="moh"  required name="moh">
-                                        <option value="" <?php echo $searchProfile->getMOHDivision() == "" ? "selected" : "" ?> hidden>Select MOH division</option>
-
-                                        <?php $i = 1;
-                                        while ($row = $mohDivisionList->fetch(PDO::FETCH_ASSOC)){?>
-                                            <option value="<?php echo $i++ ?>" <?php echo $searchProfile->getMOHDivision() == $row["moh_name"] ? "selected" : "" ?>><?php echo $row["moh_name"] ?></option>
-                                        <?php } ?>
-                                    </select>
+                                    <input type="text" readonly value="<?php echo $searchProfile->getMOHDivision();?>" class="form-control" id="moh" name="moh" placeholder="" required>
                                 </div>
                             </div>
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
@@ -280,7 +247,7 @@ $mohDivisionList = $connection->query("SELECT moh_name FROM moh_division");
                         <div class="row gutters">
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="text-end">
-                                    <a href="profile-view.php?id=<?php echo $_SESSION["searchedId"] ?>"><button type="button" id="cancel" name="cancel" class="btn btn-outline-secondary">Cancel</button></a>
+                                    <a href="profile.php?>"><button type="button" id="cancel" name="cancel" class="btn btn-outline-secondary">Cancel</button></a>
                                     <button type="submit" id="update" name="update" class="btn btn-outline-primary">Update</button>
                                 </div>
                             </div>

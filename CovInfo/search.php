@@ -1,52 +1,52 @@
 <?php
-    require_once ("Classes/classes.php");
+require_once ("Classes/classes.php");
 
-    session_start();
+session_start();
 
-    $logged_user = isset($_SESSION["LogIn"]);
-    $connection = PDOSingleton::getInstance();
-    $user = null;
-    $result = false;
-    $results = [];
-    if($logged_user){
-        $user_id = $_SESSION["user_id"];
-        $userProxyFactory = new UserProxyFactory();
-        $user = $userProxyFactory->build($user_id);
-        if($user->getUserType() == "Public"){
-            header("Location:index.php");
-            return;
-        }
-    }else{
-        header("Location:Login.php");
+$logged_user = isset($_SESSION["LogIn"]);
+$connection = PDOSingleton::getInstance();
+$user = null;
+$result = false;
+$results = [];
+if($logged_user){
+    $user_id = $_SESSION["user_id"];
+    $userProxyFactory = new UserProxyFactory();
+    $user = $userProxyFactory->build($user_id);
+    if($user->getUserType() == "Public"){
+        header("Location:index.php");
         return;
     }
+}else{
+    header("Location:Login.php");
+    return;
+}
 
-    if(isset($_POST["account_id"]) || isset($_POST["nic_number"])){
-        if($_POST["account_id"] != null || $_POST["nic_number"] != null){
-            $_SESSION["search_account_id"] = $_POST["account_id"];
-            $_SESSION["search_nic_number"] = $_POST["nic_number"];
-        }
-
-        header("Location:search.php");
-        return;
-
+if(isset($_POST["account_id"]) || isset($_POST["nic_number"])){
+    if($_POST["account_id"] != null || $_POST["nic_number"] != null){
+        $_SESSION["search_account_id"] = $_POST["account_id"];
+        $_SESSION["search_nic_number"] = $_POST["nic_number"];
     }
 
-    if(isset($_GET["findPage"])){
-        if($_GET["id"] != ""){
-            header("Location:profile-view.php?id=".$_GET["id"]);
-        }
-    }
+    header("Location:search.php");
+    return;
 
-    if(isset($_SESSION["search_account_id"]) || isset($_SESSION["search_nic_number"])){
-        $result = true;
-        $searchSql = "SELECT user.user_id FROM user WHERE user.account_id=:account_id OR user.nic_number=:nic_number ORDER BY account_id";
-        $searchstmt = $connection->prepare($searchSql);
-        $searchstmt->execute(array(':account_id' => $_SESSION["search_account_id"], ':nic_number'=>$_SESSION["search_nic_number"]));
+}
 
-        unset($_SESSION["search_account_id"]);
-        unset($_SESSION["search_nic_number"]);
+if(isset($_GET["findPage"])){
+    if($_GET["id"] != ""){
+        header("Location:profile-view.php?id=".$_GET["id"]);
     }
+}
+
+if(isset($_SESSION["search_account_id"]) || isset($_SESSION["search_nic_number"])){
+    $result = true;
+    $searchSql = "SELECT user.user_id FROM user WHERE user.account_id=:account_id OR user.nic_number=:nic_number ORDER BY account_id";
+    $searchstmt = $connection->prepare($searchSql);
+    $searchstmt->execute(array(':account_id' => $_SESSION["search_account_id"], ':nic_number'=>$_SESSION["search_nic_number"]));
+
+    unset($_SESSION["search_account_id"]);
+    unset($_SESSION["search_nic_number"]);
+}
 
 
 
@@ -66,7 +66,6 @@
     <script src="https://code.jquery.com/jquery-1.8.2.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
-
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="styles/styles.css">
     <link rel = "icon" href = "logos/logo_icon.png"
@@ -119,117 +118,109 @@
 <br>
 <p class="container justify-content-center">
 
-    <form method="post" action="search.php">
-        <div class="container">
-            <div class="search">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="search-1"> <i class='bx bx-search-alt'></i> <input type="text" name="account_id" placeholder="Enter Account ID"> </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div>
-                            <div class="search-2"> <i class='bx bxs-map'></i> <input type="text" name="nic_number" placeholder="Enter NIC"><button type="submit" name="search">Search</button> </div>
-                        </div>
+<form method="post" action="search.php">
+    <div class="container">
+        <div class="search boxy-blue">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="search-1"> <i class='bx bx-search-alt'></i> <input type="text" name="account_id" placeholder="Enter Account ID"> </div>
+                </div>
+                <div class="col-md-6">
+                    <div>
+                        <div class="search-2"> <i class='bx bxs-map'></i> <input type="text" name="nic_number" placeholder="Enter NIC"> <button style="background-color: #0d6efd" type="submit" name="search">Search</button></div>
                     </div>
                 </div>
             </div>
         </div>
-    </form>
+    </div>
+</form>
 
 
-    <?php
-        if($result){
-            $i = 0;
-            while ($row = $searchstmt->fetch(PDO::FETCH_ASSOC)){
-                $i += 1;
-                if($i == 1){?>
-                    <div class="container">
-                        <div class="table-wrap">
-                            <table class="table table-borderless table-responsive">
-                                <thead>
-                                <tr>
-                                    <th class="text-muted fw-600">No</th>
-                                    <th class="text-muted fw-600">Email</th>
-                                    <th class="text-muted fw-600">NIC Number</th>
-                                    <th class="text-muted fw-600">Name</th>
-                                    <th class="text-muted fw-600">Address</th>
-                                    <th class="text-muted fw-600">Status</th>
-                                    <th></th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                <?php }
-                $newResult = $userProxyFactory->build($row["user_id"]);
-                $name = $newResult->getFirstName()." ".$newResult->getMiddleName()." ".$newResult->getLastName();
-                $nic = $newResult->getNICNumber();
-                $sex = $newResult->getGender();
-                $status = get_class($newResult->getUserState());
-                $address = $newResult->getAddress();
-                $email = $newResult->getEmailAddress();
-                $accountId = $newResult->getAccountId();
-                ?>
-                <tr class="align-middle alert" role="alert">
-                    <td> <?php echo $i ?></td>
-                    <td>
-                        <div class="d-flex align-items-center">
-                            <div class="img-container">
-                                <?php if($sex == "Male"){?>
-                                    <img src="images/User-big.png" alt="">
-                                <?php } else{ ?>
-                                    <img src="images/User-female.png" alt="">
-                                <?php } ?>
-                                 </div>
-                            <div class="ps-3">
-                                <div class="fw-600 pb-1"><?php echo $email ?></div>
-                                <p class="m-0 text-grey fs-09"><?php echo $accountId ?></p>
-                            </div>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="fw-600"><?php echo $nic ?></div>
-                    </td>
-                    <td>
-                        <div class="fw-600"><?php echo $name ?></div>
-                    </td>
-                    <td>
-                        <div class="fw-600"><?php echo $address ?></div>
-                    </td>
-                    <td>
-                        <div class="d-inline-flex align-items-center active">
-                            <div class="circle"></div>
-                            <div class="ps-2"><?php echo $status ?></div>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="fw-600">
-                            <form method="get">
-                                <input type="text" name="id" value="<?php echo $row["user_id"]?>" hidden>
-                                <button type="submit" name="findPage">Select</button>
-                            </form>
-                        </div>
-                    </td>
-                </tr>
-
-            <?php }
-            if($i == 0){ ?>
-                <div class="container boxy-blue text-center">
-                    <div class="h1">Result not found!</div>
-                </div>
-            <?php }else{ ?>
-                </tbody>
-                    </table>
-                </div>
-            </div>
-           <?php }
+<?php
+if($result){
+    $i = 0;
+    while ($row = $searchstmt->fetch(PDO::FETCH_ASSOC)){
+        $i += 1;
+        if($i == 1){?>
+            <div class="container">
+            <div class="table-wrap">
+            <table class="table table-hover table-responsive border-primary">
+            <thead>
+            <tr>
+                <th class="text-muted fw-600 text-center">No</th>
+                <th class="text-muted fw-600 text-center">Email</th>
+                <th class="text-muted fw-600 text-center">NIC Number</th>
+                <th class="text-muted fw-600 text-center">Name</th>
+                <th class="text-muted fw-600 text-center">Address</th>
+                <th class="text-muted fw-600 text-center">Status</th>
+            </tr>
+            </thead>
+            <tbody>
+        <?php }
+        $newResult = $userProxyFactory->build($row["user_id"]);
+        $name = $newResult->getFirstName()." ".$newResult->getMiddleName()." ".$newResult->getLastName();
+        $nic = $newResult->getNICNumber();
+        $sex = $newResult->getGender();
+        $status = get_class($newResult->getUserState());
+        $address = $newResult->getAddress();
+        $email = $newResult->getEmailAddress();
+        $accountId = $newResult->getAccountId();
+        ?>
+        <tr class="<?php
+        if($status=="Infected"){
+            echo 'table-danger';
+        }elseif ($status=="Quarantined"){
+            echo 'table-warning';
+        }else{
+            echo '';
         }
-    ?>
+        ?> align-middle alert clickable" onclick="window.location='profile-view.php?id=<?= $row["user_id"] ?>'" role="alert">
+            <td> <?php echo $i ?></td>
+            <td>
+                <div class="d-flex align-items-center">
+                    <div class="img-container">
+                        <?php if($sex == "Male"){?>
+                            <img src="images/User-big.png" alt="">
+                        <?php } else{ ?>
+                            <img src="images/User-female.png" alt="">
+                        <?php } ?>
+                    </div>
+                    <div class="ps-3">
+                        <div class="fw-600 pb-1"><?php echo $email ?></div>
+                        <p class="m-0 text-grey fs-09"><?php echo $accountId ?></p>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="fw-600"><?php echo $nic ?></div>
+            </td>
+            <td>
+                <div class="fw-600"><?php echo $name ?></div>
+            </td>
+            <td>
+                <div class="fw-600"><?php echo $address ?></div>
+            </td>
+            <td>
+                <div class="d-inline-flex align-items-center active">
+                    <div class="circle"></div>
+                    <div class="ps-2"><?php echo $status ?></div>
+                </div>
+            </td>
+        </tr>
 
-
-
-
-
-
-
+    <?php }
+    if($i == 0){ ?>
+        <div class="container boxy-blue text-center">
+            <div class="h1">Result not found!</div>
+        </div>
+    <?php }else{ ?>
+        </tbody>
+        </table>
+        </div>
+        </div>
+    <?php }
+}
+?>
 </div>
 
 <script src="js/bootstrap.js"></script>
