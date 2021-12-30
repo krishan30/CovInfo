@@ -12,9 +12,9 @@ class PDOSingleton
         if(self::$instance == null){
             $serverName = 'localhost';
             $username = 'root';
-            $password = 'root';
+            $password = '';
             try{
-                self::$instance = new PDO("mysql: host=$serverName;port=3307;dbname=CovInfo",$username,$password);
+                self::$instance = new PDO("mysql: host=$serverName;dbname=CovInfo",$username,$password);
                 self::$instance->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
             }catch (PDOException $e){
                 echo $e->getMessage();

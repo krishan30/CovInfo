@@ -67,6 +67,9 @@ $connection=PDOSingleton::getInstance();
         $updatesql = "UPDATE report SET total_recovered = $count where report_id = 1";
         $updatestmt = $connection->prepare($updatesql);
         $updatestmt->execute();
+        MailWrapper::sendMail($userProxyFactory->build($searchedId),"Releasing as a Covid Patient and informing about quarantining","
+Congratulations! you are fully recovered. You should home quarantine until ".$_POST["end-date"]." Stay alone and follow all health guidelines. 
+");
         $_SESSION['PRelease']=true;
         header("Location:PatientReleaseForm.php");
         return;

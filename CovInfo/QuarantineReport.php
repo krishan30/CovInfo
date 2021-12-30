@@ -39,8 +39,10 @@ if (isset($_POST["end-date"]) && isset($_POST["place-of-quarantine"])) {
             $searchedPerson->startQuarantine();
         } catch (Exception $e) {
         }
-
-    $_SESSION["QRegistration"]=true;
+        MailWrapper::sendMail($userProxyFactory->build($searchedId),"Informing quarantine period","
+    You should quarantine until ".$_POST["new_end_date"]." Stay alone and follow all health guidelines. 
+    ");
+        $_SESSION["QRegistration"]=true;
         header("Location:QuarantineReport.php");
         return;
     }

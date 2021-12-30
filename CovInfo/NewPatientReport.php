@@ -63,8 +63,16 @@ if(isset($_POST["medical_centre_id"]) && isset($_POST["register"])){
         $updatesql = "UPDATE report SET total_cases = $count where report_id = 1";
         $updatestmt = $connection->prepare($updatesql);
         $updatestmt->execute();
+        $medical_centre_id = $_POST["medical_centre_id"];
+        $med_centre = "";
+        $gQ = $connection->query("SELECT name FROM medical_centre WHERE medical_centre_id = $medical_centre_id");
+        while ($row = $gQ->fetch(PDO::FETCH_ASSOC)){
+            $med_centre = $row["name"];
+        }
+
+
         MailWrapper::sendMail($userProxyFactory->build($searchedId),"Informing Covid-19 Test Result","
-You are identified as a covid 19 positive person. Relevant authorities will contact you immediately. Stay alone and follow all health guidelines. 
+You are identified as a covid 19 positive person. You had assigned to $med_centre for treatments. Relevant authorities will contact you immediately. Stay alone and follow all health guidelines. 
 ");
         $_SESSION["PRegistration"]=true;
         header("Location:NewPatientReport.php");
