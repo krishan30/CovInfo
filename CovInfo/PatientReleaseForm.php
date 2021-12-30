@@ -143,11 +143,11 @@ Congratulations! you are fully recovered. You should home quarantine until ".$_P
 <div class="container bg-white boxy-blue p-4 mb-4 rounded-3">
     <div class=" container d-grid gap-3 bg-white p-3">
         <div class="row ">
-            <p class=" fs-5 text-center fw-bold">Patient Release Form</p>
+            <p class=" fs-3 text-center fw-bold">Patient Release Form</p>
         </div>
         <?php if(!isset($_SESSION['PRelease'])){?>
             <div class="row border-bottom border-primary">
-                <p class=" fs-5 text-justify">Latest Infection History</p>
+                <p class=" fs-5 text-justify text-primary">Latest Infection History</p>
             </div>
             <div class="row">
                 <div class="col-sm">
@@ -172,7 +172,7 @@ Congratulations! you are fully recovered. You should home quarantine until ".$_P
             <br>
             <div class=" container d-grid gap-3 bg-white p-3">
                 <div class="row border-bottom border-primary ">
-                    <p class="fs-5 text-justify">Quarantine Registration</p>
+                    <p class="fs-5 text-justify text-primary">Quarantine Registration</p>
                 </div>
                 <form action="PatientReleaseForm.php" method="post">
                     <div class="row">

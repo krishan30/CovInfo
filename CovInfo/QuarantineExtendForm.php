@@ -107,11 +107,11 @@ Your quarantine period has extended until ".$_POST["new_end_date"]." Stay alone 
 <div class="container bg-white boxy-blue p-4 mb-4 rounded-3">
     <div class=" container d-grid gap-3 bg-white p-3">
         <div class="row ">
-            <p class=" fs-5 text-center fw-bold">Quarantine Extend Form</p>
+            <p class="fs-3 text-center  fw-bold ">Quarantine Extend Form</p>
         </div>
         <?php if(!isset($_SESSION['QExtend'])){?>
             <div class="row border-bottom border-primary">
-                <p class=" fs-5 text-justify">Latest Quarantined History</p>
+                <p class=" fs-5 text-justify text-primary">Latest Quarantined History</p>
             </div>
             <div class="row">
                 <div class="col-sm">
@@ -130,7 +130,7 @@ Your quarantine period has extended until ".$_POST["new_end_date"]." Stay alone 
             <br>
             <div class=" container d-grid gap-3 bg-white p-3">
                 <div class="row border-bottom border-primary ">
-                    <p class="fs-5 text-justify">Extend Quarantine Period</p>
+                    <p class="fs-5 text-justify text-primary ">Extend Quarantine Period</p>
                 </div>
                 <form action="QuarantineExtendForm.php" method="post">
                     <div class="row">

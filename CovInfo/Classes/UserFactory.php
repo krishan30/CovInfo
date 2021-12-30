@@ -2,7 +2,6 @@
 
 require_once ("User.php");
 require_once ("PDOSingleton.php");
-require_once ("DataBaseAdapter.php");
 require_once ("IFactory.php");
 class UserFactory implements IFactory{
     private $user;

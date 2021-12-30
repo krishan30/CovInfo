@@ -108,11 +108,11 @@ if (isset($_POST["end-date"]) && isset($_POST["place-of-quarantine"])) {
 <div class="container bg-white boxy-blue p-4 mb-4 rounded-3">
     <div class="container d-grid gap-3 bg-white p-3  ">
         <div class="row ">
-            <p class="fs-5 text-center fw-bold">Quarantine Registration Form</p>
+            <p class="fs-3 text-center fw-bold">Quarantine Registration Form</p>
         </div>
         <?php if(!isset($_SESSION['QRegistration'])){?>
         <div class="row border-bottom border-primary">
-            <p class="fs-5 text-justify">Personal Details</p>
+            <p class="fs-5 text-justify text-primary">Personal Details</p>
         </div>
         <div class="row">
             <div class="col-sm">
@@ -146,7 +146,7 @@ if (isset($_POST["end-date"]) && isset($_POST["place-of-quarantine"])) {
 
     <div class="container d-grid gap-3 bg-white p-3">
         <div class="row border-bottom border-primary">
-            <p class="fs-5 text-justify">Quarantine Details</p>
+            <p class="fs-5 text-justify text-primary">Quarantine Details</p>
         </div>
         <form action="QuarantineReport.php" method="post" id="quarantine-form">
             <div class="row">
