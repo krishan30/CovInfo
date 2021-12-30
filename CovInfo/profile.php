@@ -146,6 +146,8 @@
                                                 echo '<h3 class="h4 mb-0" style="color: #bf1919; text-align: center">Infected!</h3>';}
                                             elseif ($status=="Quarantined"){
                                                 echo '<h3 class="h4 mb-0" style="color: #bf8b19; text-align: center">Quarantined</h3>';}
+                                            elseif ($status=="Deceased"){
+                                                echo '<h3 class="h4 mb-0" style="color: #bf8b19; text-align: center">Deceased</h3>';}
                                             else{
                                                 echo '<h3 class="h4 mb-0" style="color: #27bf19; text-align: center">Healthy</h3>';}
                                             ?>

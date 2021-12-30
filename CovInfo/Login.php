@@ -10,19 +10,29 @@ require_once "Classes/classes.php";
     if(isset($_POST["account_id"]) && isset($_POST["password"])) {
         unset($_SESSION["user_id"]); //Logout current user
         $pwd = md5($_POST["password"]);
-        $sql = "SELECT user.user_id,status.status_name FROM user join status ON user.status_id=status.status_id  WHERE user.password=:password and user.account_id=:account_id";
+        $sql = "SELECT user.user_id FROM user  WHERE user.password=:password and user.account_id=:account_id";
         $stmt = $connection->prepare($sql);
         $stmt->execute(array(':password' => $pwd, ':account_id' => $_POST["account_id"]));
         $row = $stmt->fetch(PDO:: FETCH_ASSOC);
-        if ($row !== false && $row["status_name"] !== "Deceased") {
-            $_SESSION["user_id"] = $row["user_id"];
-            $_SESSION["LogIn"] = true;
-            header("Location:index.php");
-        } elseif ($row["status_name"] == "Deceased") {
-            $_SESSION["Deceased"] = true;
-            header("Location:Login.php");
-        } else {
-            $_SESSION["UnsucessLogIn"] = true;
+        if ($row !== false) {
+            $userFactory = new UserFactory();
+            $user=$userFactory->build($row['user_id']);
+            if(!is_a($user->getAccountState(),'InactiveUser')){
+                $_SESSION["user_id"] = $row["user_id"];
+                $_SESSION["LogIn"] = true;
+                if(is_a($user->getAccountState(),'PreUser')){
+                    try {
+                        $user->activateAccount();
+                    } catch (Exception $e) {
+                    }
+                }
+                header("Location:index.php");
+            } else {
+                $_SESSION["Deceased"] = true;
+                header("Location:Login.php");
+            }
+        }else{
+            $_SESSION['UnsucessLogIn'] = true;
             header("Location:Login.php");
         }
         return;
@@ -68,15 +78,10 @@ require_once "Classes/classes.php";
                     }
                     if(isset($_SESSION["Deceased"])){
                         unset($_SESSION["Deceased"]);
-                        echo ('<div class="invalid-feedback">Couldn\'t find your account</div>');
+                        echo ('<div class="invalid-feedback">Unable to find your account</div>');
                     }
                     ?>
                 </div>
-                <!--<div class="form-check mb-4">
-                    <label class="form-check-label">
-                        <input class="form-check-input " type="checkbox" name="remember"> Remember me
-                    </label>
-                </div>-->
                 <div class="text-center mt-5">
                     <button type="submit" name="sign-in" class="btn btn-outline-primary bg-gradient btn-lg ">Sign In</button>
                 </div>

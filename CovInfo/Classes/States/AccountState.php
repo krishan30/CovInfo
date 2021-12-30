@@ -6,7 +6,7 @@ abstract class AccountState implements State {
     private int $accountTypeID;
 
     public function __construct(int $accountTypeID){
-        $this->$accountTypeID=$accountTypeID;
+        $this->accountTypeID=$accountTypeID;
     }
 
     public function getAccountTypeID(): int

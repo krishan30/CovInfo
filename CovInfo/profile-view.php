@@ -161,6 +161,8 @@ $quarantineRecords = $connection->query("SELECT quarantine_record.start_date,qua
                                                 echo '<h3 class="h4 mb-0" style="color: #bf1919; text-align: center">Infected!</h3>';}
                                             elseif ($status=="Quarantined"){
                                                 echo '<h3 class="h4 mb-0" style="color: #bf8b19; text-align: center">Quarantined</h3>';}
+                                            elseif ($status=="Deceased"){
+                                                echo '<h3 class="h4 mb-0" style="color: #bf1919; text-align: center">Deceased</h3>';}
                                             else{
                                                 echo '<h3 class="h4 mb-0" style="color: #27bf19; text-align: center">Healthy</h3>';}
                                             ?>
@@ -502,6 +504,15 @@ $quarantineRecords = $connection->query("SELECT quarantine_record.start_date,qua
                 <div class="d-flex flex-row align-items-center"> <span class="circle-3"> <i class="fa fa-bank"> <img src="images\addQ.png" width="80%"> </i> </span>
                     <div class="d-flex flex-column ms-3">
                         <h6 class="fw-bold">Add to Contact Details</h6> <span>To mark the profile owner's contacts as a quarantining person</span>
+                    </div>
+                </div>
+            </div>
+        </a>
+        <a href="DeathReportForm.php" class="hiddenLink">
+            <div class="p-3 card-child mt-4">
+                <div class="d-flex flex-row align-items-center"> <span class="circle-3"> <i class="fa fa-bank"> <img src="images\addQ.png" width="80%"> </i> </span>
+                    <div class="d-flex flex-column ms-3">
+                        <h6 class="fw-bold">Report As Death</h6> <span>To mark the profile owner's contacts as a quarantining person</span>
                     </div>
                 </div>
             </div>
