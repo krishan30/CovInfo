@@ -40,6 +40,31 @@ class User extends Person implements IUser
              $this->setMedicalRemarks($medicalRemarks,$this->userID);
     }
 
+    public static function createNewUser($emailAddress,$firstName,$middleName,$lastName,$nicNo,$dob,$gender,$district,$province,$mohDiv,$address,$phoneNo,$bloodType,$medicalRemarks){
+             $connection = PDOSingleton::getInstance();
+             $accountId = mb_substr($dob,0,4).mb_substr($dob,5,2).mb_substr($dob,8,2);
+             $countSql = "SELECT COUNT(user_id) FROM user WHERE(birth_day =:birth_day)";
+             $countstmt = $connection->prepare($countSql);
+             $countstmt->execute(array(':birth_day'=>$dob));
+             $count = $countstmt->fetchColumn();
+             if($count<10){
+                 $accountId = $accountId."000".$count;
+             }elseif ($count < 100){
+                 $accountId = $accountId."00".$count;
+             }elseif($count < 1000){
+                 $accountId = $accountId."0".$count;
+             }else{
+                 $accountId = $accountId.$count;
+             }
+             $sql = "INSERT INTO `user` (`account_id`, `password`, `email_address`, `first_name`, `middle_name`, `last_name`, `nic_number`, `birth_day`, `gender_id`, `district_id`, `province_id`, `moh_division_id`, `address`, `phone_number`, `user_type_id`, `status_id`, `vaccine_status_id`, `blood_type_id`, `account_type`, `medical_remarks`) VALUES (:account_id, '0a7e3fd172f123df0bed7a8fafa11f75', :email_address, :first_name, :middle_name, :last_name, :nic_number, :birth_day, :gender_id, :district_id, :province_id, :moh_division_id, :address, :phone_number, 1, 1, 1, :blood_type_id, 1, :medical_remarks)";
+             $stmt = $connection->prepare($sql);
+             $stmt->execute(array("account_id"=>$accountId, "email_address"=>$emailAddress, "first_name"=>$firstName, "middle_name"=>$middleName, "last_name"=>$lastName, "nic_number"=>$nicNo, "birth_day"=>$dob, "gender_id"=>$gender, "district_id"=>$district, "province_id"=>$province, "moh_division_id"=>$mohDiv, "address"=>$address, "phone_number"=>$phoneNo, "blood_type_id"=>$bloodType, "medical_remarks"=>$medicalRemarks));
+
+             $userIdSql = $connection->query("SELECT user_id FROM user WHERE account_id = $accountId");
+             $row = $userIdSql->fetch(PDO::FETCH_ASSOC);
+             return $row["user_id"];
+    }
+
     public function updateMyProfile($emailAddress,$address,$phoneNo,$bloodType,$medicalRemarks){
         $this->setEmailAddress($emailAddress,$this->userID);
         $this->setAddress($address,$this->userID);

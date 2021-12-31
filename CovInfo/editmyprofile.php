@@ -9,7 +9,7 @@ $logged_user = isset($_SESSION["LogIn"]);
 $user = null;
 if($logged_user){
     $user_id = $_SESSION["user_id"];
-    $userProxyFactory = new UserProxyFactory();
+    $userProxyFactory = new UserFactory();
     $user = $userProxyFactory->build($user_id);
 }else{
     header("Location:Login.php");
@@ -30,6 +30,12 @@ if(isset($_SESSION["ep-needUpdate"])){
 }
 
 if(isset($_POST["update"])){
+    if(is_a($user->getAccountState(),'PreUser')){
+        try {
+            $user->activateAccount();
+        } catch (Exception $e) {
+        }
+    }
     $_SESSION["ep-phoneNumber"] = $_POST["phoneNumber"];
     $_SESSION["ep-email"] = $_POST["email"];
     $_SESSION["ep-address"] = $_POST["address"];
@@ -90,6 +96,9 @@ $mohDivisionList = $connection->query("SELECT moh_name FROM moh_division");
                     if($user->getUserType() != "Public"){?>
                         <li class="nav-item">
                             <a class="nav-link" aria-current="page" href="search.php">Search</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="user-create.php">Add New User</a>
                         </li>
                     <?php }
                 }
