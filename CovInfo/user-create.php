@@ -49,6 +49,9 @@ if(isset($_POST["register"])){
         $_SESSION["ep-province"] = $row["province_id"];
     }
     $_SESSION["ep-bloodType"] = $_POST["bloodType"];
+    if($_POST["bloodType"] == ""){
+        $_SESSION["ep-bloodType"] = 9;
+    }
     $_SESSION["ep-moh"] = $_POST["moh"];
     $_SESSION["ep-medical"] = $_POST["medical"];
     $_SESSION["ep-needInsert"] = true;
@@ -226,8 +229,7 @@ https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css
                             <div class="form-group">
                                 <label for="bloodtype" class="mx-1">Blood Type</label>
                                 <select class="form-select" id="bloodtype" name="bloodType">
-                                    <option value="" selected hidden>Select Blood type</option>
-
+                                    <option value=9 selected hidden>Select Blood type</option>
                                     <?php $i = 1;
                                     while ($row = $bloodTypeList->fetch(PDO::FETCH_ASSOC)){?>
                                         <option value="<?php echo $i++ ?>" ><?php echo $row["blood_type_name"] ?></option>
