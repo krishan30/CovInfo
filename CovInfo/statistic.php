@@ -63,6 +63,9 @@ if($logged_user){
                         <li class="nav-item">
                             <a class="nav-link" aria-current="page" href="search.php">Search</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="user-create.php">Add New User</a>
+                        </li>
                     <?php }
                 }
                 ?>
