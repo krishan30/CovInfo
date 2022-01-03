@@ -24,6 +24,7 @@
 
     $name = $user->getFirstName()." ".$user->getMiddleName()." ".$user->getLastName();
     $nic = $user->getNICNumber();
+    $accountId = $user->getAccountID();
     $age = $user->getAge();
     $dob = $user->getDOBString();
     $sex = $user->getGender();
@@ -88,6 +89,9 @@
                     if($user->getUserType() != "Public"){?>
                         <li class="nav-item">
                             <a class="nav-link" aria-current="page" href="search.php">Search</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="user-create.php">Add New User</a>
                         </li>
                     <?php }
                 }
@@ -182,6 +186,14 @@
                                 </div>:
                                 <div class="col-6 text-start">
                                     <?php echo $nic ?>
+                                </div>
+                            </div>
+                            <div class="row p-3">
+                                <div class="col-5 text-end" style="font-weight: bold">
+                                    Account ID
+                                </div>:
+                                <div class="col-6 text-start">
+                                    <?php echo $accountId ?>
                                 </div>
                             </div>
                             <div class="row p-3">
@@ -403,7 +415,7 @@
 
 
     <div class="p-3 card-2">
-        <a href="editProfile.php" class="hiddenLink">
+        <a href="editmyprofile.php" class="hiddenLink">
             <div class="p-3 card-child">
                 <div class="d-flex flex-row align-items-center"> <span class="circle"> <i class="fa fa-home"> <img src="images\edit.png" width="80%"></i>  </span>
                     <div class="d-flex flex-column ms-3">

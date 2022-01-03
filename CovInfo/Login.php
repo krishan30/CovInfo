@@ -22,7 +22,9 @@ require_once "Classes/classes.php";
                 $_SESSION["LogIn"] = true;
                 if(is_a($user->getAccountState(),'PreUser')){
                     try {
-                        $user->activateAccount();
+                        //$user->activateAccount();
+                        header("Location:editmyprofile.php");
+                        return;
                     } catch (Exception $e) {
                     }
                 }

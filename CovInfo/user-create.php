@@ -3,47 +3,36 @@
 require_once ("Classes/classes.php");
 
 session_start();
-$connection = PDOSingleton::getInstance();
 
 $logged_user = isset($_SESSION["LogIn"]);
 $user = null;
 if($logged_user){
     $user_id = $_SESSION["user_id"];
-    $userProxyFactory = new UserProxyFactory();
-    $user = $userProxyFactory->build($user_id);
-}else{
-    header("Location:Login.php");
-    return;
-}
-$searchProfile = null;
-$selfEdit = false;
-
-if($user->getUserType() == "public"){
-    header("Location:index.php");
-    return;
-}else{
-    if(isset($_SESSION["searchedId"])){
-        $userFactory = new UserFactory();
-        $searchProfile = $userFactory->build($_SESSION["searchedId"]);
-        if($_SESSION["user_id"] == $_SESSION["searchedId"]){
-            $selfEdit = true;
-        }
-    }else{
-        header("Location:search.php");
+    $userFactory = new UserProxyFactory();
+    $user = $userFactory->build($_SESSION["user_id"]);
+    if($user->getUserType() == "public"){
+        header("Location:index.php");
         return;
     }
-}
-if(isset($_SESSION["ep-needUpdate"])){
-    $searchProfile->updateProfile($_SESSION["ep-email"],$_SESSION["ep-firstName"],$_SESSION["ep-middleName"],$_SESSION["ep-lastName"],$_SESSION["ep-nic"],
-        $_SESSION["ep-dob"],$_SESSION["ep-gender"],$_SESSION["ep-district"],$_SESSION["ep-province"],$_SESSION["ep-moh"],$_SESSION["ep-address"],
-        $_SESSION["ep-phoneNumber"],$_SESSION["ep-bloodType"],$_SESSION["ep-medical"]);
-    unset($_SESSION["ep-needUpdate"]);
-    $goto = $_SESSION["ep-id"];
-    header("Location:profile-view.php?id=$goto");
+}else{
+    header("Location:login.php");
     return;
 }
 
-if(isset($_POST["update"])){
+
+
+$connection = PDOSingleton::getInstance();
+
+if(isset($_SESSION["ep-needInsert"])){
+    $new_user_id = User::createNewUser($_SESSION["ep-email"],$_SESSION["ep-firstName"],$_SESSION["ep-middleName"],$_SESSION["ep-lastName"],$_SESSION["ep-nic"],
+        $_SESSION["ep-dob"],$_SESSION["ep-gender"],$_SESSION["ep-district"],$_SESSION["ep-province"],$_SESSION["ep-moh"],$_SESSION["ep-address"],
+        $_SESSION["ep-phoneNumber"],$_SESSION["ep-bloodType"],$_SESSION["ep-medical"]);
+    unset($_SESSION["ep-needInsert"]);
+    header("Location:profile-view.php?id=$new_user_id");
+    return;
+}
+
+if(isset($_POST["register"])){
     $_SESSION["ep-firstName"] = $_POST["firstName"];
     $_SESSION["ep-middleName"] = $_POST["middleName"];
     $_SESSION["ep-lastName"] = $_POST["lastName"];
@@ -65,11 +54,11 @@ if(isset($_POST["update"])){
     }
     $_SESSION["ep-moh"] = $_POST["moh"];
     $_SESSION["ep-medical"] = $_POST["medical"];
-    $_SESSION["ep-id"] = $_SESSION["searchedId"];
-    $_SESSION["ep-needUpdate"] = true;
-    header("Location:editProfile.php");
+    $_SESSION["ep-needInsert"] = true;
+    header("Location:user-create.php");
     return;
 }
+
 
 $genderList = $connection->query("SELECT gender FROM gender");
 $districtList = $connection->query("SELECT name FROM district");
@@ -91,8 +80,8 @@ $mohDivisionList = $connection->query("SELECT moh_name FROM moh_division");
     <script src="https://code.jquery.com/jquery-1.8.2.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
- <!--   <script src="scripts\profilepic.js"></script>
-       <link href="
+    <script src="scripts\profilepic.js"></script>
+    <!--    <link href="
 https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css
 " rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
  --><link rel="stylesheet" href="css\bootstrap.css">
@@ -110,7 +99,7 @@ https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css
         <div class="collapse navbar-collapse" id="navbarText">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" href="index.php">Home</a>
+                    <a class="nav-link" href="index.php">Home</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" aria-current="page" href="statistic.php">Statistics</a>
@@ -122,7 +111,7 @@ https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css
                             <a class="nav-link" aria-current="page" href="search.php">Search</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="user-create.php">Add New User</a>
+                            <a class="nav-link active" aria-current="page" href="#">Add New User</a>
                         </li>
                     <?php }
                 }
@@ -137,38 +126,11 @@ https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css
     </div>
 </nav>
 <br><br>
-<p class="h-4 m-3 p-3 row justify-content-center border border-2 rounded-3 boxy" style="font-weight: bold">Update User</p>
+<p class="h-4 m-3 p-3 row justify-content-center border border-2 rounded-3 boxy" style="font-weight: bold">Create User</p>
 <br>
 <div class="container">
     <div class="row gutters">
-        <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
-            <div class="card h-100 boxy-blue">
-                <div class="card-body">
-                    <br><br>
-                    <div class="account-settings">
-                        <div class="user-profile">
-                            <div class="profile-pic">
-                                <label class="-label" for="file">
-                                    <span>Change Image</span>
-                                </label>
-                                <input id="file" type="file" ><!--onchange="loadFile(event)"-->
-                                <?php if($searchProfile->getGender() == "Male"){?>
-                                    <img src="images/User-big.png" id="output" width="200" />
-                                <?php }else{ ?>
-                                    <img src=images/User-female.png" id="output" width="200" />
-                                <?php } ?>
-
-                            </div>
-                            <br>
-                            <h5 class="user-name"><?php echo $searchProfile->getFirstName()." ".$searchProfile->getLastName() ?></h5>
-                            <h6 class="user-email"></h6>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
             <form method="post">
             <div class="card h-100 boxy-blue">
                 <div class="card-body">
@@ -179,45 +141,45 @@ https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css
                         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4">
                             <div class="form-group">
                                 <label for="firstName" class="mx-1">First Name</label>
-                                <input type="text" value="<?php echo $searchProfile->getFirstName();?>" class="form-control" id="firstName"  name="firstName" placeholder="Enter first name" required>
+                                <input type="text" class="form-control" required id="firstName" name="firstName" placeholder="Enter first name">
                             </div>
                         </div>
                         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4">
                             <div class="form-group">
                                 <label for="middleName" class="mx-1">Middle Name</label>
-                                <input type="text" value="<?php echo $searchProfile->getMiddleName();?>" class="form-control" id="middleName" name="middleName" placeholder="Enter middle name" required>
+                                <input type="text" class="form-control" required id="middleName" name="middleName" placeholder="Enter middle name">
                             </div>
                         </div>
                         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4">
                             <div class="form-group">
                                 <label for="lastName" class="mx-1">Last Name</label>
-                                <input type="text" value="<?php echo $searchProfile->getLastName();?>" class="form-control" id="lastName" name="lastName" placeholder="Enter last name" required>
+                                <input type="text" class="form-control" required id="lastName" name="lastName" placeholder="Enter last name">
                             </div>
                         </div>
                         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4">
                             <div class="form-group">
                                 <label for="nic" class="mx-1">NIC</label>
-                                <input type="text" value="<?php echo $searchProfile->getNICNumber();?>" class="form-control" id="nic" name="nic" placeholder="Enter NIC no.">
+                                <input type="text" class="form-control" id="nic" name="nic" placeholder="Enter NIC no.">
                             </div>
                         </div>
                         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4">
                             <div class="form-group">
                                 <label for="dob" class="mx-1">Date of Birth</label>
-                                <input type="date" value="<?php echo $searchProfile->getDOBString();?>" class="form-control" id="dob" name="dob" placeholder="Enter date of birth" required>
+                                <input type="date" required class="form-control" id="dob" name="dob" placeholder="Enter date of birth">
                             </div>
                         </div>
-
-                        <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-2">
+                        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4">
                             <div class="form-group">
                                 <label for="gender" class="mx-1">Gender</label>
                                 <select class="form-select" id="gender" name="gender" required>
-                                    <option value="" <?php echo $searchProfile->getGender() == "" ? "selected" : "" ?> hidden>Select Gender</option>
+                                    <option value="" selected hidden>Select Gender</option>
 
                                     <?php $i = 1;
                                     while ($row = $genderList->fetch(PDO::FETCH_ASSOC)){?>
-                                        <option value="<?php echo $i++ ?>" <?php echo $searchProfile->getGender() == $row["gender"] ? "selected" : "" ?>><?php echo $row["gender"] ?></option>
+                                        <option value="<?php echo $i++ ?>"><?php echo $row["gender"] ?></option>
                                     <?php } ?>
                                 </select>
+
                             </div>
                         </div>
                     </div>
@@ -229,43 +191,34 @@ https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                             <div class="form-group">
                                 <label for="phone" class="mx-1">Phone</label>
-                                <input type="text" class="form-control" value="<?php echo $searchProfile->getPhoneNumber();?>" id="phone" name="phoneNumber" placeholder="Enter phone number">
+                                <input type="text" class="form-control" id="phone" name="phoneNumber" placeholder="Enter phone number">
                             </div>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                             <div class="form-group">
                                 <label for="email" class="mx-1">Email</label>
-                                <input type="email" class="form-control" value="<?php echo $searchProfile->getEmailAddress();?>" id="email" name="email" placeholder="Enter email ID">
+                                <input type="email" class="form-control" id="email"  name="email" placeholder="Enter email ID">
                             </div>
                         </div>
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="address" class="mx-1">Address</label>
-                                <textarea type="text" class="form-control" required value="<?php echo $searchProfile->getAddress();?>" id="address" name="address" rows="3" placeholder=""Enter address"><?php echo $searchProfile->getAddress() ?> </textarea>
+                                <textarea type="text" class="form-control" id="address" name="address" rows="3" placeholder="Enter address"></textarea>
                             </div>
                         </div>
                         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4">
                             <div class="form-group">
                                 <label for="district" class="mx-1">District</label>
                                 <select class="form-select" id="district" required name="district">
-                                    <option value="" <?php echo $searchProfile->getDistrict() == "" ? "selected" : "" ?> hidden>Select District</option>
+                                    <option value="" selected hidden>Select District</option>
 
                                     <?php $i = 1;
                                     while ($row = $districtList->fetch(PDO::FETCH_ASSOC)){?>
-                                        <option value="<?php echo $i++ ?>" <?php echo $searchProfile->getDistrict() == $row["name"] ? "selected" : "" ?>><?php echo $row["name"] ?></option>
+                                        <option value="<?php echo $i++ ?>" ><?php echo $row["name"] ?></option>
                                     <?php } ?>
                                 </select>
                             </div>
                         </div>
-                        <!--<div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4">
-                            <div class="form-group">
-                                <label for="province" class="mx-1">Province</label>
-                                <select class="form-select" id="province">
-                                    <option value="" selected hidden>Select province</option>
-                                    <option value="1" <?php //echo $province == "Western province" ? "selected" : "" ?>>Western</option>
-                                </select>
-                            </div>
-                        </div> -->
                     </div>
                     <br>
                     <div class="row gutters">
@@ -276,16 +229,10 @@ https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css
                             <div class="form-group">
                                 <label for="bloodtype" class="mx-1">Blood Type</label>
                                 <select class="form-select" id="bloodtype" name="bloodType">
-                                    <option value="" <?php echo $searchProfile->getBloodType() == "" ? "selected" : "" ?> hidden>Select Blood type</option>
-
+                                    <option value=9 selected hidden>Select Blood type</option>
                                     <?php $i = 1;
-                                    while ($row = $bloodTypeList->fetch(PDO::FETCH_ASSOC)){
-                                        if($i == 9){
-                                            $i++;
-                                            continue;
-                                        }
-                                        ?>
-                                        <option value="<?php echo $i++ ?>" <?php echo $searchProfile->getBloodType() == $row["blood_type_name"] ? "selected" : "" ?>><?php echo $row["blood_type_name"] ?></option>
+                                    while ($row = $bloodTypeList->fetch(PDO::FETCH_ASSOC)){?>
+                                        <option value="<?php echo $i++ ?>" ><?php echo $row["blood_type_name"] ?></option>
                                     <?php } ?>
                                 </select>
                             </div>
@@ -294,11 +241,11 @@ https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css
                             <div class="form-group">
                                 <label for="moh" class="mx-1">MOH Division</label>
                                 <select class="form-select" id="moh"  required name="moh">
-                                    <option value="" <?php echo $searchProfile->getMOHDivision() == "" ? "selected" : "" ?> hidden>Select MOH division</option>
+                                    <option value="" selected hidden>Select MOH division</option>
 
                                     <?php $i = 1;
                                     while ($row = $mohDivisionList->fetch(PDO::FETCH_ASSOC)){?>
-                                        <option value="<?php echo $i++ ?>" <?php echo $searchProfile->getMOHDivision() == $row["moh_name"] ? "selected" : "" ?>><?php echo $row["moh_name"] ?></option>
+                                        <option value="<?php echo $i++ ?>" ><?php echo $row["moh_name"] ?></option>
                                     <?php } ?>
                                 </select>
                             </div>
@@ -306,7 +253,7 @@ https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="medical" class="mx-1">Special Medical Conditions</label>
-                                <textarea type="text" class="form-control" value="<?php echo $searchProfile->getMedicalRemarks()?>" id="medical" name="medical" rows="3" placeholder="Enter any chronic health problems or allergies"><?php echo $searchProfile->getMedicalRemarks() ?></textarea>
+                                <textarea type="text" class="form-control" id="medical" name="medical" rows="3" placeholder="Enter any chronic health problems or allergies"></textarea>
                             </div>
                         </div>
                     </div>
@@ -314,8 +261,8 @@ https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css
                     <div class="row gutters">
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="text-end">
-                                <a href="profile-view.php?id=<?php echo $_SESSION["searchedId"] ?>"><button type="button" id="cancel" name="cancel" class="btn btn-outline-secondary">Cancel</button></a>
-                                <button type="submit" id="update" name="update" class="btn btn-outline-primary">Update</button>
+                                <a href="index.php"><button type="button" id="cancel" name="cancel" class="btn btn-outline-secondary">Cancel</button></a>
+                                <button type="submit" id="register" name="register" class="btn btn-outline-primary">Register</button>
                             </div>
                         </div>
                     </div>
@@ -323,7 +270,6 @@ https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css
             </div>
             </form>
         </div>
-
     </div>
 </div>
 <br>

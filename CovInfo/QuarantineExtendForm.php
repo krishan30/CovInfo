@@ -74,13 +74,16 @@ Your quarantine period has extended until ".$_POST["new_end_date"]." Stay alone 
                     <a class="nav-link" href="index.php">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="statistic.php">Statistics</a>
+                    <a class="nav-link" aria-current="page" href="statistic.php">Statistics</a>
                 </li>
                 <?php
                 if($logged_user){
                     if($user->getUserType() != "Public"){?>
                         <li class="nav-item">
                             <a class="nav-link" aria-current="page" href="search.php">Search</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="user-create.php">Add New User</a>
                         </li>
                     <?php }
                 }

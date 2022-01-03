@@ -104,7 +104,7 @@ You are identified as a covid 19 positive person. You had assigned to $med_centr
                     <a class="nav-link" href="index.php">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="statistic.php">Statistics</a>
+                    <a class="nav-link" aria-current="page" href="statistic.php">Statistics</a>
                 </li>
 
                 <?php
@@ -112,6 +112,9 @@ You are identified as a covid 19 positive person. You had assigned to $med_centr
                     if($user->getUserType() != "Public"){?>
                         <li class="nav-item">
                             <a class="nav-link" aria-current="page" href="search.php">Search</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="user-create.php">Add New User</a>
                         </li>
                     <?php }
                 }

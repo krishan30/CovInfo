@@ -39,6 +39,7 @@ if (isset($_GET["id"])){
 
 $name = $user->getFirstName()." ".$user->getMiddleName()." ".$user->getLastName();
 $nic = $user->getNICNumber();
+$accountId = $user->getAccountID();
 $age = $user->getAge();
 $dob = $user->getDOBString();
 $sex = $user->getGender();
@@ -103,6 +104,9 @@ $quarantineRecords = $connection->query("SELECT quarantine_record.start_date,qua
                     if($authority->getUserType() != "Public"){?>
                         <li class="nav-item">
                             <a class="nav-link" aria-current="page" href="search.php">Search</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="user-create.php">Add New User</a>
                         </li>
                     <?php }
                 }
@@ -197,6 +201,14 @@ $quarantineRecords = $connection->query("SELECT quarantine_record.start_date,qua
                                 </div>:
                                 <div class="col-6 text-start">
                                     <?php echo $nic ?>
+                                </div>
+                            </div>
+                            <div class="row p-3">
+                                <div class="col-5 text-end" style="font-weight: bold">
+                                    Account ID
+                                </div>:
+                                <div class="col-6 text-start">
+                                    <?php echo $accountId ?>
                                 </div>
                             </div>
                             <div class="row p-3">
