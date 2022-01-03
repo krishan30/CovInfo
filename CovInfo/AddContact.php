@@ -38,9 +38,9 @@
     $results = [];
     $contactRecords = null ;
     $contactRecords = $connection->query("SELECT contact_record.contact_id,contact_record.trace_date,contact_record.contact_user_id
-                                                        FROM contact_record 
-                                                        WHERE contact_record.user_id = $current_user  
-                                                        ORDER BY contact_record.trace_date");
+                                                            FROM contact_record join infection_record ON infection_record.infection_record_id=contact_record.infection_record_id AND infection_record.release_date IS NULL
+                                                            WHERE contact_record.user_id = $current_user
+                                                            ORDER BY contact_record.trace_date");
 
 
     if(isset($_POST["account_id"]) || isset($_POST["nic_number"])){
@@ -57,9 +57,10 @@
             $add_contact_id = $_GET["id"] ;
             $contact = $userFactory->build($add_contact_id);
             $today = date("Y-m-d");
-            $sql = "INSERT INTO contact_record (contact_user_id,trace_date,user_id) VALUES (:contact_user_id,:trace_date,:user_id)";
+            $infectionRecordID= $connection->query("SELECT infection_record_id FROM infection_record WHERE infection_record.user_id=$searchedId && infection_record.release_date IS NULL")->fetch(PDO::FETCH_ASSOC)['infection_record_id'];
+            $sql = "INSERT INTO contact_record (contact_user_id,trace_date,user_id,infection_record_id) VALUES (:contact_user_id,:trace_date,:user_id,:infection_record_id)";
             $stmt = $connection->prepare($sql);
-            $stmt->execute(array(':contact_user_id'=>$contact->getUserID(),'trace_date'=>$today,'user_id'=>$current_user));
+            $stmt->execute(array(':contact_user_id'=>$contact->getUserID(),':trace_date'=>$today,':user_id'=>$current_user,':infection_record_id'=>$infectionRecordID));
             try {
                 $contact->startQuarantine();
             } catch (Exception $e) {
@@ -240,6 +241,9 @@
                     $address = $newResult->getAddress();
                     $email = $newResult->getEmailAddress();
                     $accountId = $newResult->getAccountId();
+                    if($row["user_id"] == $searchedId){
+                        continue;
+                    }
                     ?>
                     <tr class="align-middle alert" role="alert">
                         <td> <?php echo $i ?></td>
