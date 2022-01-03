@@ -33,9 +33,9 @@ $connection=PDOSingleton::getInstance();
 
     if(isset($_POST["end-date"])){
         $todayDate=date('Y-m-d');
-        $sql = "UPDATE infection_record  set release_date=:release_date  where user_id=:user_id && admitted_date=:admitted_date";
+        $sql = "UPDATE infection_record  set release_date=:release_date,release_medical_officer_id=:release_medical_officer_id  where user_id=:user_id && admitted_date=:admitted_date";
         $stmt = $connection->prepare($sql);
-        $stmt->execute(array(":user_id"=>$searchedId,":release_date"=>$todayDate,":admitted_date"=>$_POST["admitted_date"]));
+        $stmt->execute(array(":user_id"=>$searchedId,":release_date"=>$todayDate,":admitted_date"=>$_POST["admitted_date"],":release_medical_officer_id"=>$medical_officer_id));
         $sql = "INSERT INTO  quarantine_record (user_id, start_date, end_date, administrator_id,place_id) VALUES (:user_id,:start_date,:end_date,:administrator_id,:place_id)";
         $stmt = $connection->prepare($sql);
         $administrator_id = $connection->query("SELECT administrator_id FROM administrator WHERE user_id=".$medical_officer_id)->fetch(PDO:: FETCH_ASSOC);
@@ -74,14 +74,14 @@ Congratulations! you are fully recovered. You should home quarantine until ".$_P
         header("Location:PatientReleaseForm.php");
         return;
     }else if(!isset($_SESSION["PRelease"])) {
-        $sql = "SELECT infection_record.admitted_date,infection_record.remarks,medical_centre.name,user.first_name,user.middle_name,user.last_name FROM infection_record join medical_centre ON medical_centre.medical_centre_id=infection_record.medical_centre_id JOIN user ON user.user_id=infection_record.medical_officer_id WHERE infection_record.user_id=:user_id && infection_record.release_date IS NULL LIMIT 1";
+        $sql = "SELECT infection_record.admitted_date,infection_record.remarks,medical_centre.name,administrator.user_id FROM infection_record join medical_centre ON medical_centre.medical_centre_id=infection_record.medical_centre_id JOIN administrator ON infection_record.admission_administrator_id=administrator.administrator_id  WHERE infection_record.user_id=:user_id && infection_record.release_date IS NULL LIMIT 1";
         $stmt = $connection->prepare($sql);
         $stmt->execute(array(":user_id"=>$searchedId));
         $result=$stmt->fetch(PDO::FETCH_ASSOC);
         $admitted_date = $result["admitted_date"];
         $remark=$result["remarks"];
         $medicalCentreName=$result["name"];
-        $admissionOfficerFullName=$result["first_name"].' '.$result["middle_name"].' '.$result["last_name"];
+        $admissionOfficer=$userProxyFactory->build($result['user_id']);
     }
 ?>
 
@@ -160,7 +160,7 @@ Congratulations! you are fully recovered. You should home quarantine until ".$_P
                 </div>
                 <div class="col-sm">
                     <label  class="form-label" >Admission Officer</label>
-                    <input class="form-control" type="text"  value="<?=$admissionOfficerFullName ?>" readonly>
+                    <input class="form-control" type="text"  value="<?=$admissionOfficer->getFullName() ?>" readonly>
                 </div>
             </div>
             <div class="row">

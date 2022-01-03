@@ -40,12 +40,12 @@
                                                     WHERE vaccination_record.user_id = $user_id AND vaccination_record.vaccine_id = vaccine.vaccine_id 
                                                     ORDER BY vaccination_record.dose");
 
-    $infectionRecords = $connection->query("SELECT infection_record.test_report_id,infection_record.admitted_date,infection_record.release_date,medical_centre.name,infection_record.remarks 
+    $infectionRecords = $connection->query("SELECT infection_record.admitted_date,infection_record.release_date,medical_centre.name,infection_record.remarks 
                                                     FROM infection_record,medical_centre 
                                                     WHERE infection_record.user_id = $user_id AND medical_centre.medical_centre_id = infection_record.medical_centre_id 
                                                     ORDER BY infection_record.admitted_date");
 
-    $quarantineRecords = $connection->query("SELECT quarantine_record.start_date,quarantine_record.end_date,quarantine_place.quarantine_place_name,quarantine_record.remarks 
+    $quarantineRecords = $connection->query("SELECT quarantine_record.start_date,quarantine_record.end_date,quarantine_place.quarantine_place_name 
                                                     FROM quarantine_record,quarantine_place 
                                                     WHERE quarantine_record.user_id = $user_id AND quarantine_place.quarantine_place_id = quarantine_record.place_id 
                                                     ORDER BY quarantine_record.start_date");
@@ -353,7 +353,6 @@
                                     <th scope="col">Date of Quarantine Start</th>
                                     <th scope="col">Date of Quarantine End</th>
                                     <th scope="col">Quarantined Center</th>
-                                    <th scope="col">Remarks</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -368,7 +367,6 @@
                                     <td><?php echo $row["start_date"]?></td>
                                     <td><?php echo $row["end_date"]?></td>
                                     <td><?php echo $row["quarantine_place_name"]?></td>
-                                    <td><?php echo $row["remarks"]?></td>
                                 </tr>
                                 <?php
                                 }

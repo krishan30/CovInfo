@@ -11,9 +11,9 @@
         header("Location:search.php");
         return;
     }
-    $medical_officer_id=$_SESSION["user_id"];
+    $autority_officer_id=$_SESSION["user_id"];
     $userProxyFactory = new UserProxyFactory();
-    $user = $userProxyFactory->build($medical_officer_id);
+    $user = $userProxyFactory->build($autority_officer_id);
 
     if($user->getUserType() == "Public"){
         header("Location:index.php");
@@ -27,8 +27,11 @@
     $searchedId=$_SESSION["searchedId"];
     $userFactory = new UserFactory();
     $searchedPerson = $userFactory->build($searchedId);
-    if(!$is_page_refreshed ){
-        unset($_SESSION["ContactR"]);
+    if(!isset($_SESSION["ContactR"])){
+        $sql = "UPDATE infection_record  set autority_id=:autority_id  where user_id=:user_id && autority_id IS NULL && release_date IS NULL ";
+        $stmt = $connection->prepare($sql);
+        $stmt->execute(array(":autority_id"=> $autority_officer_id,":user_id"=>$searchedId));
+        $_SESSION["ContactR"]=true;
     }
 
     $current_user = $searchedId ; //testing setting.
@@ -54,7 +57,6 @@
             $add_contact_id = $_GET["id"] ;
             $contact = $userFactory->build($add_contact_id);
             $today = date("Y-m-d");
-            echo ($contact->getFirstName());
             $sql = "INSERT INTO contact_record (contact_user_id,trace_date,user_id) VALUES (:contact_user_id,:trace_date,:user_id)";
             $stmt = $connection->prepare($sql);
             $stmt->execute(array(':contact_user_id'=>$contact->getUserID(),'trace_date'=>$today,'user_id'=>$current_user));

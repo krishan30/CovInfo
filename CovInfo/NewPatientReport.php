@@ -11,9 +11,9 @@
         header("Location:search.php");
         return;
     }
-    $medical_officer_id=$_SESSION["user_id"];
+    $officer_id=$_SESSION["user_id"];
     $userProxyFactory = new UserProxyFactory();
-    $user = $userProxyFactory->build($medical_officer_id);
+    $user = $userProxyFactory->build($officer_id);
 
     if($user->getUserType() == "Public"){
         header("Location:index.php");
@@ -33,9 +33,10 @@
 
 if(isset($_POST["medical_centre_id"]) && isset($_POST["register"])){
         unset($_SESSION["PRegistration"]);
-        $sql = "INSERT INTO infection_record (user_id,medical_officer_id,admitted_date,medical_centre_id,remarks) VALUES (:user_id,:medical_officer_id,:admitted_date,:medical_centre_id,:remarks)";
+        $admission_officer_id= $connection->query("SELECT administrator_id FROM administrator WHERE user_id=".$officer_id)->fetch(PDO:: FETCH_ASSOC);
+        $sql = "INSERT INTO infection_record (user_id,admission_administrator_id,admitted_date,medical_centre_id,remarks) VALUES (:user_id,:admission_administrator_id,:admitted_date,:medical_centre_id,:remarks)";
         $stmt = $connection->prepare($sql);
-        $stmt->execute(array('user_id'=>$searchedId,'medical_officer_id'=>$medical_officer_id,'admitted_date'=>$_POST['admission-date'],'medical_centre_id'=>$_POST["medical_centre_id"],'remarks'=>$_POST["remarks"]));
+        $stmt->execute(array(':user_id'=>$searchedId,':admission_administrator_id'=>$admission_officer_id["administrator_id"],':admitted_date'=>$_POST['admission-date'],':medical_centre_id'=>$_POST["medical_centre_id"],':remarks'=>$_POST["remarks"]));
         try {
             $searchedPerson->addAsPatient();
         } catch (Exception $e) {
@@ -175,8 +176,7 @@ You are identified as a covid 19 positive person. You had assigned to $med_centr
         <form action="NewPatientReport.php" method="post">
             <div class="row">
                 <div class="col-sm">
-                    <input type="text" name="user_id" value="<?=$_SESSION["searchedId"]?>" style="display: none" readonly>
-                    <label class="form-label" for="doc-name">Medical Officer</label>
+                    <label class="form-label" for="doc-name">Admission Officer</label>
                     <input class="form-control" type="text" name="doc-name" id="doc-name" value="<?= $user->getFirstName()." ".$user->getLastName()?>" readonly>
                 </div>
                 <div class="col-sm">
