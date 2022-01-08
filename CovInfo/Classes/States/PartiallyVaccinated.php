@@ -10,7 +10,9 @@ class PartiallyVaccinated extends VaccinationState{
 
     public function getDose(User $user)
     {
+        if($user->getVaccinatedDoseCount()===self::getRequiredVaccinationDoseCount()){
             $user->setVaccinationState(new FullyVaccinated());
+        }
     }
 
 }

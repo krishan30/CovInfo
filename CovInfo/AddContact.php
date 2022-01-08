@@ -61,6 +61,10 @@
             $sql = "INSERT INTO contact_record (contact_user_id,trace_date,user_id,infection_record_id) VALUES (:contact_user_id,:trace_date,:user_id,:infection_record_id)";
             $stmt = $connection->prepare($sql);
             $stmt->execute(array(':contact_user_id'=>$contact->getUserID(),':trace_date'=>$today,':user_id'=>$current_user,':infection_record_id'=>$infectionRecordID));
+            $sql = "INSERT INTO  quarantine_record (user_id, start_date, end_date, administrator_id,place_id) VALUES (:user_id,:start_date,:end_date,:administrator_id,:place_id)";
+            $stmt = $connection->prepare($sql);
+            $administrator_id = $connection->query("SELECT administrator_id FROM administrator WHERE user_id=".$autority_officer_id)->fetch(PDO:: FETCH_ASSOC);
+            $stmt->execute(array(':user_id' =>$add_contact_id, ':start_date' => date('y-m-d'), ':end_date' => date('Y-m-d', strtotime(' +7 day')), ':administrator_id' => $administrator_id["administrator_id"],':place_id'=>1));
             try {
                 $contact->startQuarantine();
             } catch (Exception $e) {
@@ -156,12 +160,11 @@
 <div class="container p-1">
     <div class="row justify-content-center">
         <div class="col-lg-8">
-            <div class="h3 p-3 px-5" style="border-bottom: solid #0d6efd">Covid-19 Quarantined History</div>
+            <div class="h3 p-3 px-5" style="border-bottom: solid #0d6efd">Contact Details</div>
             <br>
             <table class="table table-striped table-hover">
                 <thead>
                 <tr>
-                    <th scope="col">#</th>
                     <th scope="col">Contact Name</th>
                     <th scope="col">Date Added as a Contact</th>
 
@@ -188,7 +191,7 @@
             </table>
             <br>
 
-            <div class="h4 p-3 px-5" style="border-bottom: solid #0d6efd"> Extend Quarantine Period</div>
+            <div class="h4 p-3 px-5" style="border-bottom: solid #0d6efd">Add New Contacts</div>
             <br>
             <form method="post" action="AddContact.php">
                 <div class="row">
@@ -300,6 +303,9 @@
                 <?php }
             }
             ?>
+        </div>
+        <div class="text-center pb-5 mt-5">
+            <a href="profile-view.php?id=<?=$_SESSION["searchedId"]?>" ><button type="button" class="btn btn-outline-secondary">Back To Profile</button></a>
         </div>
 
 

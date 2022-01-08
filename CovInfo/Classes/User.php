@@ -102,6 +102,33 @@ class User extends Person implements IUser
         $this->vaccinationState=$vaccinationState;
     }
 
+    public function getVaccinatedDoseCount() :int{
+        $connection = PDOSingleton::getInstance();
+        $sql = "SELECT vaccination_record.dose FROM vaccination_record where user_id=:user_id ORDER BY dose DESC LIMIT 1";
+        $stmt = $connection->prepare($sql);
+        $stmt->execute(array(':user_id'=>$this->getUserID()));
+        $result=$stmt->fetch(PDO::FETCH_ASSOC);
+        if($result) {
+            $dose_count = $result["dose"];
+        }else{
+            $dose_count=0;
+        }
+        return $dose_count;
+    }
+
+    public function isNewNotificationsAvailable() :bool{
+        $connection = PDOSingleton::getInstance();
+        $sql = "SELECT read_status_id FROM notification where receiver_id=:receiver_id AND read_status_id=1 ";
+        $stmt = $connection->prepare($sql);
+        $stmt->execute(array(':receiver_id'=>$this->getUserID()));
+        $result=$stmt->fetch(PDO::FETCH_ASSOC);
+        if($result){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     public function getUserState(): UserState
     {
            return $this->userState;

@@ -44,26 +44,13 @@ if(isset($_POST["medical_centre_id"]) && isset($_POST["register"])){
 
 
 
-        $today = date("Y-m-d");
-        $casesCount = $connection->query("SELECT new_cases FROM daily_report WHERE date = '$today'");
-        $count = 0;
-        while ($row = $casesCount->fetch(PDO::FETCH_ASSOC)){
-            $count = $row["new_cases"];
-        }
-        $count += 1;
-        $updatesql = "UPDATE daily_report SET new_cases = $count where date = '$today'";
-        $updatestmt = $connection->prepare($updatesql);
+        $updateQuery = "UPDATE daily_report SET new_cases= new_cases + 1 WHERE date=CURRENT_DATE()";
+        $updatestmt = $connection->prepare( $updateQuery);
+        $updatestmt->execute();
+        $updateQuery="UPDATE report SET total_cases = total_cases + 1 WHERE report_id=1";
+        $updatestmt = $connection->prepare($updateQuery);
         $updatestmt->execute();
 
-        $casesCount = $connection->query("SELECT total_cases FROM report WHERE report_id = 1");
-        $count = 0;
-        while ($row = $casesCount->fetch(PDO::FETCH_ASSOC)){
-            $count = $row["total_cases"];
-        }
-        $count += 1;
-        $updatesql = "UPDATE report SET total_cases = $count where report_id = 1";
-        $updatestmt = $connection->prepare($updatesql);
-        $updatestmt->execute();
         $medical_centre_id = $_POST["medical_centre_id"];
         $med_centre = "";
         $gQ = $connection->query("SELECT name FROM medical_centre WHERE medical_centre_id = $medical_centre_id");

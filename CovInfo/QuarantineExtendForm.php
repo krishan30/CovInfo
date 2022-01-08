@@ -140,7 +140,7 @@ Your quarantine period has extended until ".$_POST["new_end_date"]." Stay alone 
                         <div class="col-sm-4">
                             <input type="date" name="prev_end_date" value="<?=$result['end_date']?>" hidden>
                             <label class="form-label" for="new_end_date">Enter new ending date</label>
-                            <input type="date" class="form-control col-3" id="new_end_date" name="new_end_date" min="<?=$result['end_date']?>" required>
+                            <input type="date" class="form-control col-3" id="new_end_date" name="new_end_date" min="<?=date_format(date_create($result['end_date'])->modify("+1 days"),"Y-m-d")?>" required>
                         </div>
                     </div>
                     <br> <br>

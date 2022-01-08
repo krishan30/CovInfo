@@ -30,10 +30,7 @@
     if(!$is_page_refreshed && !is_a($searchedPerson->getUserState(),'Deceased')){
         unset($_SESSION["DRegistration"]);
     }
-    /*if(isset($_POST["cancel"])){
-        header("Location:profile-view.php?id=".$_SESSION["searchedId"]);
-        return;
-    }*/
+
 
     if(isset($_POST["death-location"]) && isset($_POST["register"])){
         unset($_SESSION["DRegistration"]);
@@ -45,6 +42,14 @@
             $searchedPerson->deactivateAccount();
         } catch (Exception $e) {
         }
+
+        $updateQuery = "UPDATE daily_report SET deaths =deaths + 1 WHERE date=CURRENT_DATE()";
+        $updatestmt = $connection->prepare( $updateQuery);
+        $updatestmt->execute();
+        $updateQuery="UPDATE report SET total_deaths = total_deaths + 1 WHERE report_id=1";
+        $updatestmt = $connection->prepare($updateQuery);
+        $updatestmt->execute();
+
         $_SESSION["DRegistration"]=true;
         header("Location:DeathReportForm.php");
         return;

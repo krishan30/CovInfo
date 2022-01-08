@@ -47,26 +47,13 @@ $connection=PDOSingleton::getInstance();
         }
 
 
-
-        $casesCount = $connection->query("SELECT new_cases FROM daily_report WHERE date = '$todayDate'");
-        $count = 0;
-        while ($row = $casesCount->fetch(PDO::FETCH_ASSOC)){
-            $count = $row["recovered"];
-        }
-        $count += 1;
-        $updatesql = "UPDATE daily_report SET new_cases = $count where date = '$todayDate'";
-        $updatestmt = $connection->prepare($updatesql);
+        $updateQuery = "UPDATE daily_report SET recovered = recovered + 1 WHERE date=CURRENT_DATE()";
+        $updatestmt = $connection->prepare( $updateQuery);
+        $updatestmt->execute();
+        $updateQuery="UPDATE report SET total_recovered = total_recovered + 1 WHERE report_id=1";
+        $updatestmt = $connection->prepare($updateQuery);
         $updatestmt->execute();
 
-        $casesCount = $connection->query("SELECT total_recovered FROM report WHERE report_id = 1");
-        $count = 0;
-        while ($row = $casesCount->fetch(PDO::FETCH_ASSOC)){
-            $count = $row["total_recovered"];
-        }
-        $count += 1;
-        $updatesql = "UPDATE report SET total_recovered = $count where report_id = 1";
-        $updatestmt = $connection->prepare($updatesql);
-        $updatestmt->execute();
         MailWrapper::sendMail($userProxyFactory->build($searchedId),"Releasing as a Covid Patient and informing about quarantining","
 Congratulations! you are fully recovered. You should home quarantine until ".$_POST["end-date"]." Stay alone and follow all health guidelines. 
 ");

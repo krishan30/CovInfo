@@ -32,7 +32,12 @@
         $administrator_id = $connection->query("SELECT administrator_id FROM administrator WHERE user_id=".$medical_officer_id)->fetch(PDO:: FETCH_ASSOC);
         $sql = "INSERT INTO vaccination_record (user_id,date,vaccine_id,administrator_id,place,dose,batch_number,next_appointment,remarks) VALUES (:user_id,:registration_date,:vaccine_id,:administrator_id,:place,:dose,:batch_number,:next_appointment,:remarks)";
         $stmt = $connection->prepare($sql);
-        $stmt->execute(array(':user_id' => $searchedId, ':registration_date' => date('y-m-d'), ':vaccine_id' => $_POST["vaccine-id"], ':administrator_id' => $administrator_id["administrator_id"], ':place' => $_POST["vaccination-place"],':dose' =>++$dose_count,':batch_number' => $_POST["batch-number"],':next_appointment' => $_POST["next-appointment-date"],'remarks' => $_POST["remarks"]));
+        if($_POST["next-appointment-date"]===null){
+            $nextAppointmentDate=$_POST["next-appointment-date"];
+        }else{
+            $nextAppointmentDate=null;
+        }
+        $stmt->execute(array(':user_id' => $searchedId, ':registration_date' => date('Y-m-d'), ':vaccine_id' => $_POST["vaccine-id"], ':administrator_id' => $administrator_id["administrator_id"], ':place' => $_POST["vaccination-place"],':dose' =>++$dose_count,':batch_number' => $_POST["batch-number"],':next_appointment' => $nextAppointmentDate,'remarks' => $_POST["remarks"]));
 
         try {
             $searchedPerson->getDose();
@@ -45,7 +50,7 @@
         header("Location:VaccinationRegisterForm.php");
         return;
     }else if(!isset($_SESSION["VRegistration"])){
-        $sql = "SELECT vaccination_record.dose FROM vaccination_record where user_id=:user_id ORDER BY dose DESC LIMIT 1";
+        /*$sql = "SELECT vaccination_record.dose FROM vaccination_record where user_id=:user_id ORDER BY dose DESC LIMIT 1";
         $stmt = $connection->prepare($sql);
         $stmt->execute(array(':user_id'=>$searchedId));
         $result=$stmt->fetch(PDO::FETCH_ASSOC);
@@ -53,7 +58,8 @@
             $dose_count = $result["dose"];
         }else{
             $dose_count=0;
-        }
+        }*/
+        $dose_count=$searchedPerson->getVaccinatedDoseCount();
     }
 
 ?>
