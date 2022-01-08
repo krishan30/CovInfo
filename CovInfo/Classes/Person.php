@@ -94,14 +94,39 @@ class Person
     public function getUserType()
     {
         return $this->userType;
+
     }
 
     /**
      * @param mixed $userType
      */
-    public function setUserType($userType): void
+    public function setUserType($userType,$user_id): void
     {
-        $this->userType = $userType;
+        $connection = PDOSingleton::getInstance();
+
+        $gQ = $connection->query("SELECT user_type_name FROM user_type WHERE user_type_id = $userType");
+        while ($row = $gQ->fetch(PDO::FETCH_ASSOC)){
+            $this->userType = $row["user_type_name"];
+        }
+
+        $sql = "UPDATE user set user_type_id=:user_type_id where user_id=:user_id";
+        $stmt = $connection->prepare($sql);
+        $stmt->execute(array(":user_id"=>$user_id,":user_type_id"=>$userType));
+
+        if($userType != 1){
+            $isFound = false;
+            $adsql = $connection->query("SELECT administrator_id FROM administrator WHERE user_id = $user_id");
+            while ($row = $adsql->fetch(PDO::FETCH_ASSOC)){
+                $isFound = true;
+                break;
+            }
+
+            if(!$isFound){
+                $adSql = "INSERT INTO administrator(user_id) VALUES(:user_id)";
+                $adStmt = $connection->prepare($adSql);
+                $adStmt->execute(array("user_id"=>$user_id));
+            }
+        }
     }
 
 

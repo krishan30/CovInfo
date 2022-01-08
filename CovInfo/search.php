@@ -88,12 +88,18 @@ if(isset($_SESSION["search_account_id"]) || isset($_SESSION["search_nic_number"]
                 </li>
                 <?php
                 if($logged_user){
-                    if($user->getUserType() != "Public"){?>
+                    if($user->getUserType() == "Authority" || $user->getUserType() == "Medical"){?>
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="search.php">Search</a>
+                            <a class="nav-link active" aria-current="page" href="#">Search</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" aria-current="page" href="user-create.php">Add New User</a>
+                        </li>
+                    <?php }
+
+                    if($user->getUserType() == "Admin"){?>
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="settings.php">Settings</a>
                         </li>
                     <?php }
                 }

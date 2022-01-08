@@ -52,16 +52,22 @@ https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css
                     <a class="nav-link" aria-current="page" href="statistic.php">Statistics</a>
                 </li>
                 <?php
-                    if($logged_user){
-                        if($user->getUserType() != "Public"){?>
-                            <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="search.php">Search</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="user-create.php">Add New User</a>
-                            </li>
-                        <?php }
-                    }
+                if($logged_user){
+                    if($user->getUserType() == "Authority" || $user->getUserType() == "Medical"){?>
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="search.php">Search</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="user-create.php">Add New User</a>
+                        </li>
+                    <?php }
+
+                    if($user->getUserType() == "Admin"){?>
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="settings.php">Settings</a>
+                        </li>
+                    <?php }
+                }
                 ?>
 
             </ul>
