@@ -46,17 +46,19 @@ body{
 
 .navbar.navbar-light .navbar-nav .nav-link.active,
 .navbar.navbar-light .navbar-nav .show>.nav-link {
-    color: #0d6efd;
+    color: rgba(13, 110, 253,0.8);
 }
 
 .navbar.navbar-light .navbar-nav .nav-link {
     color: rgba(13, 110, 253,0.7);
+    margin: 0 10px;
 }
 
 .navbar.navbar-light .navbar-nav .nav-link:hover{
     color: rgba(13, 110, 253,1);
-    font-weight: 500;
-    border-bottom: 3px solid darkblue;
+    padding: 5px 10px;
+    font-weight: 450;
+    border-bottom: 2px solid darkblue;
 }
 
 .morris-hover {
@@ -93,4 +95,75 @@ body{
 .table-striped>tbody>tr:nth-child(odd)>td,
 .table-striped>tbody>tr:nth-child(odd)>th {
     background-color: rgba(13, 110, 253,0.1);
+}
+
+@import url(https://fonts.googleapis.com/css?family=Lato:300,400,700);
+@import url(https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css);
+*, *:before, *:after {
+    box-sizing: border-box;
+}
+
+
+.lighter-text {
+    color: #ABB0BE;
+}
+
+.main-color-text {
+    color: #6394F8;
+}
+
+
+.notif {
+    margin: 5px 0 0 0;
+    float: right;
+    background: white;
+    width: 320px;
+    position: relative;
+    border-radius: 3px;
+    padding: 0 20px;
+}
+.notif .notif-header {
+    border-bottom: 1px solid #E8E8E8;
+    padding-bottom: 10px;
+}
+
+.notif .notif-items {
+    padding-top: 10px;
+}
+.notif .notif-items li {
+    margin-bottom: 10px;
+}
+
+.notif .notif-items .item-name {
+    display: block;
+    padding-top: 5px;
+    font-size: 16px;
+}
+
+.notif .notif-items .item-quantity {
+    color: #ABB0BE;
+}
+
+.navbar .dropdown-menu:after {
+    content: "";
+    width: 0;
+    height: 0;
+    position: absolute;
+    bottom: 100%;
+    right: 24px;
+    border-width: 0 6px 6px 6px;
+    border-style: solid;
+    border-color: #fff transparent;
+}
+
+.navbar .dropdown-menu:before {
+    content: "";
+    width: 0;
+    height: 0;
+    position: absolute;
+    bottom: 100%;
+    right: 22px;
+    border-width: 0 8px 8px 8px;
+    border-style: solid;
+    border-color: rgba(0,0,0,0.1) transparent;
 }
