@@ -175,8 +175,10 @@
                 </thead>
                 <tbody>
                 <?php
+                $contactsIdList = array();
                 $i = 0 ;
                 while ($row = $contactRecords -> fetch(PDO::FETCH_ASSOC)) {
+                    array_push($contactsIdList,$row["contact_user_id"]);
                     $i += 1 ;
                     $currentContact=$userProxyFactory->build($row["contact_user_id"]);
                     $fullName=$currentContact->getFullName();
@@ -189,6 +191,7 @@
                     </tr>
                     <?php
                 }
+                $numberOfContacts = $i + 0;
                 ?>
                 </tbody>
             </table>
@@ -219,25 +222,8 @@
             <?php
             if($result){
                 $i = 0;
-                while ($row = $searchstmt->fetch(PDO::FETCH_ASSOC)){
-                    $i += 1;
-                    if($i == 1){?>
-                        <div class="container">
-                        <div class="table-wrap">
-                        <table class="table table-borderless table-responsive">
-                        <thead>
-                        <tr>
-                            <th class="text-muted fw-600">No</th>
-                            <th class="text-muted fw-600">Email</th>
-                            <th class="text-muted fw-600">NIC Number</th>
-                            <th class="text-muted fw-600">Name</th>
-                            <th class="text-muted fw-600">Address</th>
-                            <th class="text-muted fw-600">Status</th>
-                            <th></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                    <?php }
+                while ($row = $searchstmt->fetch(PDO::FETCH_ASSOC)){ ?>
+                    <?php
                     $newResult = $userFactory->build($row["user_id"]);
                     $name = $newResult->getFirstName()." ".$newResult->getMiddleName()." ".$newResult->getLastName();
                     $nic = $newResult->getNICNumber();
@@ -250,7 +236,37 @@
                     if($row["user_id"] == $searchedId){
                         continue;
                     }
+
+                    $needCont = false;
+                    for($j = 0 ; $j < $numberOfContacts; $j++){
+                        if($contactsIdList[$j] == $row["user_id"] || $status = "Quarantined"){
+                            $needCont = true;
+                            break;
+                        }
+                    }
+                    if($needCont){
+                        continue;
+                    }
                     ?>
+
+                    <?php $i += 1;
+                    if($i == 1){?>
+                    <div class="container">
+                        <div class="table-wrap">
+                            <table class="table table-borderless table-responsive">
+                                <thead>
+                                <tr>
+                                    <th class="text-muted fw-600">No</th>
+                                    <th class="text-muted fw-600">Email</th>
+                                    <th class="text-muted fw-600">NIC Number</th>
+                                    <th class="text-muted fw-600">Name</th>
+                                    <th class="text-muted fw-600">Address</th>
+                                    <th class="text-muted fw-600">Status</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                            <?php } ?>
                     <tr class="align-middle alert" role="alert">
                         <td> <?php echo $i ?></td>
                         <td>
