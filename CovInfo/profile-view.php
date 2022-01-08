@@ -25,6 +25,10 @@ if (isset($_SESSION["user_id"])){
 
 if (isset($_GET["id"])){
     $user_id = $_GET["id"];
+    if($user_id == $_SESSION["user_id"]){
+        header("Location:profile.php");
+        return;
+    }
     $user = $userFactory->build($_GET["id"]);
     $_SESSION["searchedId"] = $user_id;
 }else{
@@ -101,12 +105,18 @@ $quarantineRecords = $connection->query("SELECT quarantine_record.start_date,qua
 
                 <?php
                 if($logged_user){
-                    if($authority->getUserType() != "Public"){?>
+                    if($authority->getUserType() == "Authority" || $authority->getUserType() == "Medical"){?>
                         <li class="nav-item">
                             <a class="nav-link" aria-current="page" href="search.php">Search</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" aria-current="page" href="user-create.php">Add New User</a>
+                        </li>
+                    <?php }
+
+                    if($authority->getUserType() == "Admin"){?>
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="settings.php">Settings</a>
                         </li>
                     <?php }
                 }
@@ -509,25 +519,32 @@ $quarantineRecords = $connection->query("SELECT quarantine_record.start_date,qua
             </a>
 
         <?php } ?>
-        <a href="AddContact.php" class="hiddenLink">
+
+
+        <?php if($status =="Infected" && $authority->getUserType() == "Authority"){?>
             <?php unset($_SESSION["ContactR"]) ?>
-            <div class="p-3 card-child mt-4">
-                <div class="d-flex flex-row align-items-center"> <span class="circle-3"> <i class="fa fa-bank"> <img src="images\addQ.png" width="80%"> </i> </span>
-                    <div class="d-flex flex-column ms-3">
-                        <h6 class="fw-bold">Add to Contact Details</h6> <span>To mark the profile owner's contacts as a quarantining person</span>
+                <a href="AddContact.php" class="hiddenLink">
+                <div class="p-3 card-child mt-4">
+                    <div class="d-flex flex-row align-items-center"> <span class="circle-2"> <i class="fa fa-bank"> <img src="images\addContact.png" width="80%"> </i> </span>
+                        <div class="d-flex flex-column ms-3">
+                            <h6 class="fw-bold">Add to Contact Details</h6> <span>To mark the profile owner's contacts as a quarantining person</span>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </a>
-        <a href="DeathReportForm.php" class="hiddenLink">
-            <div class="p-3 card-child mt-4">
-                <div class="d-flex flex-row align-items-center"> <span class="circle-3"> <i class="fa fa-bank"> <img src="images\addQ.png" width="80%"> </i> </span>
-                    <div class="d-flex flex-column ms-3">
-                        <h6 class="fw-bold">Report As Death</h6> <span>To mark the profile owner's contacts as a quarantining person</span>
+                </a>
+        <?php } ?>
+
+        <?php if($authority->getUserType() == "Medical"){?>
+            <a href="DeathReportForm.php" class="hiddenLink">
+                <div class="p-3 card-child mt-4">
+                    <div class="d-flex flex-row align-items-center"> <span class="circle-3"> <i class="fa fa-bank"> <img src="images\death.png" width="80%"> </i> </span>
+                        <div class="d-flex flex-column ms-3">
+                            <h6 class="fw-bold">Report As Death</h6> <span>To report the death of profile owner</span>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </a>
+            </a>
+        <?php } ?>
 
 
     </div>

@@ -26,7 +26,7 @@ $connection = PDOSingleton::getInstance();
 if(isset($_SESSION["ep-needInsert"])){
     $new_user_id = User::createNewUser($_SESSION["ep-email"],$_SESSION["ep-firstName"],$_SESSION["ep-middleName"],$_SESSION["ep-lastName"],$_SESSION["ep-nic"],
         $_SESSION["ep-dob"],$_SESSION["ep-gender"],$_SESSION["ep-district"],$_SESSION["ep-province"],$_SESSION["ep-moh"],$_SESSION["ep-address"],
-        $_SESSION["ep-phoneNumber"],$_SESSION["ep-bloodType"],$_SESSION["ep-medical"]);
+        $_SESSION["ep-phoneNumber"],$_SESSION["ep-bloodType"],$_SESSION["ep-medical"],$_SESSION["ep-userType"]);
     unset($_SESSION["ep-needInsert"]);
     header("Location:profile-view.php?id=$new_user_id");
     return;
@@ -54,6 +54,7 @@ if(isset($_POST["register"])){
     }
     $_SESSION["ep-moh"] = $_POST["moh"];
     $_SESSION["ep-medical"] = $_POST["medical"];
+    $_SESSION["ep-userType"] = $_POST["userType"];
     $_SESSION["ep-needInsert"] = true;
     header("Location:user-create.php");
     return;
@@ -64,7 +65,7 @@ $genderList = $connection->query("SELECT gender FROM gender");
 $districtList = $connection->query("SELECT name FROM district");
 $bloodTypeList = $connection->query("SELECT blood_type_name FROM blood_type");
 $mohDivisionList = $connection->query("SELECT moh_name FROM moh_division");
-
+$userTypesList = $connection->query("SELECT user_type_name FROM user_type");
 
 
 
@@ -106,12 +107,18 @@ https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css
                 </li>
                 <?php
                 if($logged_user){
-                    if($user->getUserType() != "Public"){?>
+                    if($user->getUserType() == "Authority" || $user->getUserType() == "Medical"){?>
                         <li class="nav-item">
                             <a class="nav-link" aria-current="page" href="search.php">Search</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">Add New User</a>
+                            <a class="nav-link" aria-current="page" href="user-create.php">Add New User</a>
+                        </li>
+                    <?php }
+
+                    if($user->getUserType() == "Admin"){?>
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="settings.php">Settings</a>
                         </li>
                     <?php }
                 }
@@ -254,6 +261,34 @@ https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css
                             <div class="form-group">
                                 <label for="medical" class="mx-1">Special Medical Conditions</label>
                                 <textarea type="text" class="form-control" id="medical" name="medical" rows="3" placeholder="Enter any chronic health problems or allergies"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <br>
+                    <div class="row gutters">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <h6 class="mt-3 mb-2 text-primary">Other Details</h6>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4">
+                            <div class="form-group">
+                                <label for="userType" class="mx-1">User Type</label>
+                                <select class="form-select" id="userType"  required name="userType">
+                                    <option value=9 selected hidden>Select User type</option>
+                                    <?php $i = 1;
+                                    while ($row = $userTypesList->fetch(PDO::FETCH_ASSOC)){
+                                        if($row["user_type_name"] == "Admin"){
+                                            $i++;
+                                            continue;
+                                        }
+                                        ?>
+                                        <option value="<?php echo $i?>" ><?php echo $row["user_type_name"] ?></option>
+                                        <?php
+
+                                        $i++; ?>
+
+                                    <?php } ?>
+                                </select>
                             </div>
                         </div>
                     </div>

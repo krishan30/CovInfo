@@ -74,6 +74,18 @@
     font-size: 20px
 }
 
+.circle-6 {
+    background-color: #919191;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    display: flex;
+    color: #9f9f9f;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px
+}
+
 a:link {
     text-decoration: none;
     color: black;
