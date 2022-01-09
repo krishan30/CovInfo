@@ -149,8 +149,8 @@ $mohDivisionList = $connection->query("SELECT moh_name FROM moh_division");
                                     echo("<li style='cursor: pointer' class='dropdown-item'>
                                         <span  class='item-name fw-bold'> $notificationMessage</span>
                                         <br>
-                                        <span class='fw-lighter me-5 '>$notificationReceivedDate</span>
-                                        <span class='fw-lighter ms-5 '>$notificationReceivedTime</span>
+                                        <span class='fw-lighter '>$notificationReceivedDate</span>
+                                        <span style='padding-left:60%' class='fw-lighter  '>$notificationReceivedTime</span>
                                         </li>");
                                 }
                                 ?>
