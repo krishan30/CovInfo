@@ -169,7 +169,7 @@ if(isset($_SESSION["search_account_id"]) || isset($_SESSION["search_nic_number"]
                             <?php  if($user->isNewNotificationsAvailable()) {?>    <!--   have_notifications-->
                             <img src="images/notification.svg" alt="" width="24" height="24">
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notify" style="list-style-type: none;">
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notify" style="list-style-type: none;overflow-y:scroll;height:50vh">
                             <div class="notif">
                                 <li class="notif-header">
                                     <div class="d-flex">
