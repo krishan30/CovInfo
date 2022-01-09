@@ -14,6 +14,8 @@ require_once ("UserProxy.php");
 require_once ("UserProxyFactory.php");
 require_once ("VaccineRecord.php");
 require_once ("MailWrapper.php");
+require_once ("Notification.php");
+require_once("NotificationFactory.php");
 
 require_once("States/AccountState.php");
 require_once("States/AccountStateFactory.php");
