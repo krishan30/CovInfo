@@ -50,15 +50,6 @@
         header("Location:VaccinationRegisterForm.php");
         return;
     }else if(!isset($_SESSION["VRegistration"])){
-        /*$sql = "SELECT vaccination_record.dose FROM vaccination_record where user_id=:user_id ORDER BY dose DESC LIMIT 1";
-        $stmt = $connection->prepare($sql);
-        $stmt->execute(array(':user_id'=>$searchedId));
-        $result=$stmt->fetch(PDO::FETCH_ASSOC);
-        if($result) {
-            $dose_count = $result["dose"];
-        }else{
-            $dose_count=0;
-        }*/
         $dose_count=$searchedPerson->getVaccinatedDoseCount();
     }
 
