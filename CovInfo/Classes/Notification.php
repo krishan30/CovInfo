@@ -7,17 +7,17 @@ class Notification{
     private NotificationState $currentNotificationState;
     private String $receivedDate;
     private String $receivedTime;
-    private String $receivedMessage;
+    private String $notificationTypeHeading;
 
-    public function __construct(int $notificationRecordID,int $readStatus,int $receiverID,String $receivedDate,String $receivedTime,String $receivedMessage)
+    public function __construct(int $notificationRecordID,int $readStatus,int $receiverID,String $receivedDate,String $receivedTime,String $notificationTypeHeading)
     {
         $this->notificationRecordID=$notificationRecordID;
         $this->receiverID=$receiverID;
         $this->receivedDate=$receivedDate;
-        $this->receivedMessage=$receivedMessage;
+        $this->notificationTypeHeading=$notificationTypeHeading;
         $this->receivedTime=$receivedTime;
-        $notificationFactory=new NotificationStateFactory();
-        $this->currentNotificationState=$notificationFactory->createState($readStatus);
+        $notificationStateFactory=new NotificationStateFactory();
+        $this->currentNotificationState=$notificationStateFactory->createState($readStatus);
     }
 
     public function getReceiverID(): int
@@ -30,14 +30,14 @@ class Notification{
        return $this->receivedDate;
     }
 
-    public function getReceivedTIme(): string
+    public function getReceivedTime(): string
     {
         return $this->receivedTime;
     }
 
-    public function getReceivedMessage(): string
+    public function getNotificationTypeHeading(): string
     {
-        return $this->receivedMessage;
+        return $this->notificationTypeHeading;
     }
 
     public function  getCurrentNotificationState(): NotificationState

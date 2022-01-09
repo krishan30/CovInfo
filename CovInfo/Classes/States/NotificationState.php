@@ -7,7 +7,7 @@ abstract class NotificationState implements State {
     private int $notificationID;
 
     public function __construct(int $notificationID){
-        $this->$notificationID=$notificationID;
+        $this->notificationID=$notificationID;
     }
 
     public function getNotificationID(): int

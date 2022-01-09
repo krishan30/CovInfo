@@ -25,6 +25,20 @@ class UserProxy extends PersonProxy implements IUser
         return $this->getUser();
 
     }
+
+    public function isNewNotificationsAvailable() :bool{
+        $connection = PDOSingleton::getInstance();
+        $sql = "SELECT read_status_id FROM notification where receiver_id=:receiver_id AND read_status_id=1 ";
+        $stmt = $connection->prepare($sql);
+        $stmt->execute(array(':receiver_id'=>$this->getUserID()));
+        $result=$stmt->fetch(PDO::FETCH_ASSOC);
+        if($result){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     public function setUserState(UserState $userState)
     {
         $connection = PDOSingleton::getInstance();
