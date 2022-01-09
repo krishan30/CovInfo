@@ -82,7 +82,7 @@ $mohDivisionList = $connection->query("SELECT moh_name FROM moh_division");
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow fixed-top bg-light">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#"><img src="logos\brand.png" alt="Site logo" width="110px" height="auto"> </a>
+        <a class="navbar-brand" href="index.php"><img src="logos\brand.png" alt="Site logo" width="110px" height="auto"> </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -133,10 +133,10 @@ $mohDivisionList = $connection->query("SELECT moh_name FROM moh_division");
                     <div class="account-settings">
                         <div class="user-profile">
                             <div class="profile-pic">
-                                <label class="-label" for="file">
-                                    <span>Change Image</span>
-                                </label>
-                                <input id="file" type="file" ><!--onchange="loadFile(event)"-->
+                                <br>
+                                <br>
+                                <br>
+                                <!--onchange="loadFile(event)"-->
                                 <?php if($searchProfile->getGender() == "Male"){?>
                                     <img src="images/User-big.png" id="output" width="200" />
                                 <?php }else{ ?>
@@ -145,6 +145,13 @@ $mohDivisionList = $connection->query("SELECT moh_name FROM moh_division");
 
                             </div>
                             <br>
+                            <br>
+
+                        </div>
+                    </div>
+
+                    <div class="account-settings">
+                        <div class="user-profile">
                             <h5 class="user-name"><?php echo $searchProfile->getFirstName()." ".$searchProfile->getLastName() ?></h5>
                             <h6 class="user-email"></h6>
                         </div>

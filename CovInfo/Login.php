@@ -59,7 +59,7 @@ require_once "Classes/classes.php";
     <div class="row p-0  vh-100 " >
         <div class="container-fluid col-4 px-5 pb-0 m-0" >
             <div class="container mb-3">
-                <a href="statistic.php">
+                <a href="index.php">
                     <img  class="img-fluid" src="logos/brand.png" alt="Logo">
                 </a>
             </div>
