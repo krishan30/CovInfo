@@ -69,6 +69,22 @@ if(isset($_GET["findPage"])){
             $contact->startQuarantine();
         } catch (Exception $e) {
         }
+
+        $sender = $contact;
+        if($sender->getGender() == "Male"){
+            $temp = "sir";
+        }else{
+            $temp = "madam";
+        }
+        MailWrapper::sendMail($sender,"CoVID-19 Contact Alert",
+            "<p>Dear ".$temp." , </p>
+<p>
+    We are sorry to inform you that you have been in contact with a covid infected individual within the last fourteen days. 
+Confine yourself at your residence and isolate yourself from other family members if possible. If you or a family member develop symptoms of cold or fever, please visit the nearest government hospital.</p>
+<p>
+    An automated message via Covinfo CoVID Information System. Do not reply.
+</p>");
+
         header("Location:AddContact.php");
         return;
     }
