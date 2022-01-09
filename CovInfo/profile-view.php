@@ -75,7 +75,7 @@ $quarantineRecords = $connection->query("SELECT quarantine_record.start_date,qua
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>CovInfo-My Profile</title>
+    <title>CovInfo | Profile View</title>
     <link rel="stylesheet" href="https://www.cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
     <script src="https://code.jquery.com/jquery-1.8.2.min.js"></script>
@@ -121,12 +121,48 @@ $quarantineRecords = $connection->query("SELECT quarantine_record.start_date,qua
                     <?php }
                 }
                 ?>
-
-
             </ul>
+
             <ul class="nav navbar-nav ">
-                <li class="nav-item active"><a class="nav-link active" href="profile.php" title=""><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M12 2.5a5.5 5.5 0 00-3.096 10.047 9.005 9.005 0 00-5.9 8.18.75.75 0 001.5.045 7.5 7.5 0 0114.993 0 .75.75 0 101.499-.044 9.005 9.005 0 00-5.9-8.181A5.5 5.5 0 0012 2.5zM8 8a4 4 0 118 0 4 4 0 01-8 0z"></path></svg><?php echo $authority->getFirstName()." ".$authority->getLastName()?></a></li>
-                <li class="nav-item"><a class="nav-link" href="logout.php" title=""><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M3 3.25c0-.966.784-1.75 1.75-1.75h5.5a.75.75 0 010 1.5h-5.5a.25.25 0 00-.25.25v17.5c0 .138.112.25.25.25h5.5a.75.75 0 010 1.5h-5.5A1.75 1.75 0 013 20.75V3.25zm16.006 9.5l-3.3 3.484a.75.75 0 001.088 1.032l4.5-4.75a.75.75 0 000-1.032l-4.5-4.75a.75.75 0 00-1.088 1.032l3.3 3.484H10.75a.75.75 0 000 1.5h8.256z"></path></svg>Logout</a></li>
+                <li class="dropdown">
+                    <a href="#" class="nav-link" style="border-bottom: none" role="button" data-bs-toggle="dropdown" id="notify" aria-expanded="false">
+                        <?php  if(true) {?>    <!--   have_notifications-->
+                        <img src="images/notification.svg" alt="" width="24" height="24">
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notify" style="list-style-type: none;">
+                        <div class="notif">
+                            <li class="notif-header">
+                                <div class="d-flex">
+                                    <div class="me-auto" style="font-weight: 500; color: #0C91E6;font-size: 20px">Notifications
+                                    </div><div class=""><a href="#" class="btn btn-primary btn-sm rounded-0" style="color: white">Read all</a>
+                                    </div></div>
+                            </li>
+                            <div class="notif-items">
+                                <li class="dropdown-item">
+                                    <span class="item-name">You've been Infected!</span>
+                                </li>
+                            </div>
+                        </div>
+                    </ul>
+                    <?php } else { ?>
+                        <img src="images/bell.svg" alt="" width="24" height="24">
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notify" style="list-style-type: none;">
+                            <div class="notif">
+                                <li class="notif-header">
+                                    <div class="d-flex"><div class="me-auto" style="font-weight: 500; color: #0C91E6;font-size: 20px">Notifications</div></div>
+                                </li>
+                                <div class="notif-items">
+                                    <li class="dropdown-item">
+                                        <span class="item-name">No new Notifications!</span>
+                                    </li>
+                                </div>
+                            </div>
+                        </ul>
+                    <?php } ?>
+                </li>
+                <li class="nav-item active"><a class="nav-link active" href="profile.php" title=""><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M12 2.5a5.5 5.5 0 00-3.096 10.047 9.005 9.005 0 00-5.9 8.18.75.75 0 001.5.045 7.5 7.5 0 0114.993 0 .75.75 0 101.499-.044 9.005 9.005 0 00-5.9-8.181A5.5 5.5 0 0012 2.5zM8 8a4 4 0 118 0 4 4 0 01-8 0z"></path></svg>&nbsp;<?php echo $authority->getFirstName()." ".$authority->getLastName()?></a></li>
+                <li class="nav-item"><a class="nav-link" href="logout.php" title=""><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M3 3.25c0-.966.784-1.75 1.75-1.75h5.5a.75.75 0 010 1.5h-5.5a.25.25 0 00-.25.25v17.5c0 .138.112.25.25.25h5.5a.75.75 0 010 1.5h-5.5A1.75 1.75 0 013 20.75V3.25zm16.006 9.5l-3.3 3.484a.75.75 0 001.088 1.032l4.5-4.75a.75.75 0 000-1.032l-4.5-4.75a.75.75 0 00-1.088 1.032l3.3 3.484H10.75a.75.75 0 000 1.5h8.256z"></path></svg>&nbsp;Logout</a></li>
             </ul>
         </div>
     </div>
@@ -435,121 +471,129 @@ $quarantineRecords = $connection->query("SELECT quarantine_record.start_date,qua
 </div>
 
 
-
-
-
-<div class="card p-3 py-3 mt-3 card-1 text-center">
-    <h4></h4>
-
-
-    <div class="p-3 card-2">
-        <a href="editProfile.php" class="hiddenLink">
-        <div class="p-3 card-child">
-            <div class="d-flex flex-row align-items-center"> <span class="circle"> <i class="fa fa-home"> <img src="images\edit.png" width="80%"></i>  </span>
-                <div class="d-flex flex-column ms-3">
-                    <h6 class="fw-bold">Edit Profile</h6> <span>change the profile details</span>
-                </div>
-            </div>
-        </div>
-        </a>
-
-        <?php if($status!="Infected"){?>
-            <a href="NewPatientReport.php" class="hiddenLink">
-                <div class="p-3 card-child mt-4">
-                    <div class="d-flex flex-row align-items-center"> <span class="circle-2"> <i class="fa fa-bank"> <img src="images\addPatient.png" width="80%"> </i> </span>
-                        <div class="d-flex flex-column ms-3">
-                                <h6 class="fw-bold">Add as a Covid Patient</h6> <span>To mark the profile owner as a covid patient</span>
+<div class="container justify-content-center">
+    <div class="container px-2 mx-3 ">
+        <div class="row">
+            <div class="col-3">
+                <a href="editProfile.php" class="hiddenLink">
+                    <div class="p-3 card-child text-center btn-outline-primary d-inline-flex col-12 rounded-3">
+                        <div class="d-flex flex-row align-items-center"> <span class="circle"><img src="images\edit.png" width="80%"></i>  </span>
+                            <div class="d-flex flex-column ms-3">
+                                <h5 class="fw-bold">Edit Profile</h5>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </a>
-        <?php } ?>
-
-        <?php if($status =="Infected" && $authority->getUserType() == "Medical"){?>
-        <a href="PatientReleaseForm.php" class="hiddenLink">
-            <div class="p-3 card-child mt-4">
-                <div class="d-flex flex-row align-items-center"> <span class="circle-4"> <i class="fa fa-bank"> <img src="images\releaseP.png" width="80%"> </i> </span>
-                    <div class="d-flex flex-column ms-3">
-                        <h6 class="fw-bold">Release Patient</h6> <span>To release the patient from the medical centre</span>
-                    </div>
-                </div>
-            </div>
-        </a>
-
-        <?php } ?>
-
-
-        <?php if($status =="Healthy" && $authority->getUserType() == "Authority"){?>
-            <a href="QuarantineReport.php" class="hiddenLink">
-                <div class="p-3 card-child mt-4">
-                    <div class="d-flex flex-row align-items-center"> <span class="circle-3"> <i class="fa fa-bank"> <img src="images\addQ.png" width="80%"> </i> </span>
-                        <div class="d-flex flex-column ms-3">
-                            <h6 class="fw-bold">Add to Quarantine</h6> <span>To mark the profile owner as a quarantining person</span>
-                        </div>
-                    </div>
-                </div>
-            </a>
-
-        <?php } ?>
-
-        <?php if($status =="Quarantined" && $authority->getUserType() == "Authority"){?>
-            <?php unset($_SESSION["QExtend"]);?>
-            <a href="QuarantineExtendForm.php" class="hiddenLink">
-            <div class="p-3 card-child mt-4" >
-                <div class="d-flex flex-row align-items-center"> <span class="circle-3"> <i class="fa fa-bank"> <img src="images\extendQ.png" width="80%"> </i> </span>
-                    <div class="d-flex flex-column ms-3">
-                        <h6 class="fw-bold">Extend the Quarantine</h6> <span>Extend the quarantining period of the person</span>
-                    </div>
-                </div>
-            </div>
-            </a>
-
-        <?php } ?>
-
-        <?php if($vaccinated !="FullyVaccinated" && $authority->getUserType() == "Medical"){?>
-            <?php unset($_SESSION["VRegistration"]); ?>
-            <a href="VaccinationRegisterForm.php" class="hiddenLink">
-                <div class="p-3 card-child mt-4">
-                    <div class="d-flex flex-row align-items-center"> <span class="circle-5"> <i class="fa fa-bank"> <img src="images\vaccine.png" width="80%"> </i> </span>
-                        <div class="d-flex flex-column ms-3">
-                            <h6 class="fw-bold">Add vaccination record</h6> <span>To add record about vaccination dose for user</span>
-                        </div>
-                    </div>
-                </div>
-            </a>
-
-        <?php } ?>
-
-
-        <?php if($status =="Infected" && $authority->getUserType() == "Authority"){?>
-            <?php unset($_SESSION["ContactR"]) ?>
-                <a href="AddContact.php" class="hiddenLink">
-                <div class="p-3 card-child mt-4">
-                    <div class="d-flex flex-row align-items-center"> <span class="circle-2"> <i class="fa fa-bank"> <img src="images\addContact.png" width="80%"> </i> </span>
-                        <div class="d-flex flex-column ms-3">
-                            <h6 class="fw-bold">Add to Contact Details</h6> <span>To mark the profile owner's contacts as a quarantining person</span>
-                        </div>
-                    </div>
-                </div>
                 </a>
-        <?php } ?>
+            </div>
 
-        <?php if($authority->getUserType() == "Medical"){?>
-            <a href="DeathReportForm.php" class="hiddenLink">
-                <div class="p-3 card-child mt-4">
-                    <div class="d-flex flex-row align-items-center"> <span class="circle-3"> <i class="fa fa-bank"> <img src="images\death.png" width="80%"> </i> </span>
-                        <div class="d-flex flex-column ms-3">
-                            <h6 class="fw-bold">Report As Death</h6> <span>To report the death of profile owner</span>
+            <?php if($status!="Infected"){?>
+                <div class="col-3">
+                    <a href="NewPatientReport.php" class="hiddenLink">
+                        <div class="p-3 card-child text-center btn-outline-primary d-inline-flex rounded-3">
+                            <div class="d-flex flex-row align-items-center"> <span class="circle-2"><img src="images\addPatient.png" width="80%"> </i> </span>
+                                <div class="d-flex flex-column ms-3">
+                                    <h5 class="fw-bold">Add as a Covid Patient</h5>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
-            </a>
-        <?php } ?>
+            <?php } ?>
+
+            <?php if($status =="Infected" && $authority->getUserType() == "Medical"){?>
+                <div class="col-3">
+                    <a href="PatientReleaseForm.php" class="hiddenLink">
+                        <div class="p-3 card-child text-center btn-outline-primary d-inline-flex rounded-3">
+                            <div class="d-flex flex-row align-items-center"> <span class="circle-4">  <img src="images\releaseP.png" width="80%"> </i> </span>
+                                <div class="d-flex flex-column ms-3">
+                                    <h5 class="fw-bold">Release Patient</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            <?php } ?>
+
+            <?php if($status =="Healthy" && $authority->getUserType() == "Authority"){?>
+                <div class="col-3">
+                    <a href="QuarantineReport.php" class="hiddenLink">
+                        <div class="p-3 card-child text-center btn-outline-primary d-inline-flex rounded-3">
+                            <div class="d-flex flex-row align-items-center"> <span class="circle-3"><img src="images\addQ.png" width="80%"> </i> </span>
+                                <div class="d-flex flex-column ms-3">
+                                    <h5 class="fw-bold">Add to Quarantine</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+            <?php } ?>
+
+            <?php if($status =="Quarantined" && $authority->getUserType() == "Authority"){?>
+                <?php unset($_SESSION["QExtend"]);?>
+                <div class="col-3">
+                    <a href="QuarantineExtendForm.php" class="hiddenLink">
+                        <div class="p-3 card-child text-center btn-outline-primary d-inline-flex rounded-3" >
+                            <div class="d-flex flex-row align-items-center"> <span class="circle-3"> <img src="images\extendQ.png" width="80%"> </i> </span>
+                                <div class="d-flex flex-column ms-3">
+                                    <h5 class="fw-bold">Extend the Quarantine</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            <?php } ?>
+
+            <?php if($vaccinated !="FullyVaccinated" && $authority->getUserType() == "Medical"){?>
+                <?php unset($_SESSION["VRegistration"]); ?>
+                <div class="col-3">
+                    <a href="VaccinationRegisterForm.php" class="hiddenLink">
+                        <div class="p-3 card-child text-center btn-outline-primary d-inline-flex rounded-3">
+                            <div class="d-flex flex-row align-items-center"> <span class="circle-5"><img src="images\vaccine.png" width="80%"> </i> </span>
+                                <div class="d-flex flex-column ms-3">
+                                    <h5 class="fw-bold">Add vaccination record</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            <?php } ?>
 
 
+            <?php if($status =="Infected" && $authority->getUserType() == "Authority"){?>
+                <?php unset($_SESSION["ContactR"]) ?>
+                <div class="col-3">
+                    <a href="AddContact.php" class="hiddenLink">
+                        <div class="p-3 card-child text-center btn-outline-primary d-inline-flex rounded-3">
+                            <div class="d-flex flex-row align-items-center"> <span class="circle-2"><img src="images\addContact.png" width="80%"> </i> </span>
+                                <div class="d-flex flex-column ms-3">
+                                    <h5 class="fw-bold">Add to Contact Details</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            <?php } ?>
+
+            <?php if($authority->getUserType() == "Medical"){?>
+                <div class="col-3">
+                    <a href="DeathReportForm.php" class="hiddenLink">
+                        <div class="p-3 card-child text-center btn-outline-primary d-inline-flex rounded-3">
+                            <div class="d-flex flex-row align-items-center"> <span class="circle-3"><img src="images\death.png" width="80%"> </i> </span>
+                                <div class="d-flex flex-column ms-3">
+                                    <h5 class="fw-bold">Report As Death</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            <?php } ?>
+        </div>
     </div>
 </div>
 
+<br>
+<br>
 
 
 <script src="js/bootstrap.js"></script>

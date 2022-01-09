@@ -49,7 +49,7 @@ require_once "Classes/classes.php";
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="css/bootstrap.css" rel="stylesheet">
-    <title>CovInfo-Login</title>
+    <title>CovInfo | Login</title>
     <link rel = "icon" href = "logos/logo_icon.png"
           type = "image/x-icon">
 </head>

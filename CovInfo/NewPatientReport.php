@@ -44,26 +44,13 @@ if(isset($_POST["medical_centre_id"]) && isset($_POST["register"])){
 
 
 
-        $today = date("Y-m-d");
-        $casesCount = $connection->query("SELECT new_cases FROM daily_report WHERE date = '$today'");
-        $count = 0;
-        while ($row = $casesCount->fetch(PDO::FETCH_ASSOC)){
-            $count = $row["new_cases"];
-        }
-        $count += 1;
-        $updatesql = "UPDATE daily_report SET new_cases = $count where date = '$today'";
-        $updatestmt = $connection->prepare($updatesql);
+        $updateQuery = "UPDATE daily_report SET new_cases= new_cases + 1 WHERE date=CURRENT_DATE()";
+        $updatestmt = $connection->prepare( $updateQuery);
+        $updatestmt->execute();
+        $updateQuery="UPDATE report SET total_cases = total_cases + 1 WHERE report_id=1";
+        $updatestmt = $connection->prepare($updateQuery);
         $updatestmt->execute();
 
-        $casesCount = $connection->query("SELECT total_cases FROM report WHERE report_id = 1");
-        $count = 0;
-        while ($row = $casesCount->fetch(PDO::FETCH_ASSOC)){
-            $count = $row["total_cases"];
-        }
-        $count += 1;
-        $updatesql = "UPDATE report SET total_cases = $count where report_id = 1";
-        $updatestmt = $connection->prepare($updatesql);
-        $updatestmt->execute();
         $medical_centre_id = $_POST["medical_centre_id"];
         $med_centre = "";
         $gQ = $connection->query("SELECT name FROM medical_centre WHERE medical_centre_id = $medical_centre_id");
@@ -87,7 +74,7 @@ You are identified as a covid 19 positive person. You had assigned to $med_centr
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="css/bootstrap.css" rel="stylesheet">
     <link href="styles/styles.css" rel="stylesheet">
-    <title>CovInfo - New Patient Form</title>
+    <title>CovInfo | New Patient Form</title>
     <link rel = "icon" href = "logos/logo_icon.png"
           type = "image/x-icon">
 </head>
@@ -131,14 +118,51 @@ You are identified as a covid 19 positive person. You had assigned to $med_centr
 
             <?php if ($logged_user) { ?>
                 <ul class="nav navbar-nav ">
-                    <li class="nav-item"><a class="nav-link" href="profile.php" title=""><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M12 2.5a5.5 5.5 0 00-3.096 10.047 9.005 9.005 0 00-5.9 8.18.75.75 0 001.5.045 7.5 7.5 0 0114.993 0 .75.75 0 101.499-.044 9.005 9.005 0 00-5.9-8.181A5.5 5.5 0 0012 2.5zM8 8a4 4 0 118 0 4 4 0 01-8 0z"></path></svg><?php echo $user->getFirstName()." ".$user->getLastName()?></a></li>
-                    <li class="nav-item"><a class="nav-link" href="logout.php" title=""><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M3 3.25c0-.966.784-1.75 1.75-1.75h5.5a.75.75 0 010 1.5h-5.5a.25.25 0 00-.25.25v17.5c0 .138.112.25.25.25h5.5a.75.75 0 010 1.5h-5.5A1.75 1.75 0 013 20.75V3.25zm16.006 9.5l-3.3 3.484a.75.75 0 001.088 1.032l4.5-4.75a.75.75 0 000-1.032l-4.5-4.75a.75.75 0 00-1.088 1.032l3.3 3.484H10.75a.75.75 0 000 1.5h8.256z"></path></svg>Logout</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="nav-link" style="border-bottom: none" role="button" data-bs-toggle="dropdown" id="notify" aria-expanded="false">
+                            <?php  if(true) {?>    <!--   have_notifications-->
+                            <img src="images/notification.svg" alt="" width="24" height="24">
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notify" style="list-style-type: none;">
+                            <div class="notif">
+                                <li class="notif-header">
+                                    <div class="d-flex">
+                                        <div class="me-auto" style="font-weight: 500; color: #0C91E6;font-size: 20px">Notifications
+                                        </div><div class=""><a href="#" class="btn btn-primary btn-sm rounded-0" style="color: white">Read all</a>
+                                        </div></div>
+                                </li>
+                                <div class="notif-items">
+                                    <li class="dropdown-item">
+                                        <span class="item-name">You've been Infected!</span>
+                                    </li>
+                                </div>
+                            </div>
+                        </ul>
+                        <?php } else { ?>
+                            <img src="images/bell.svg" alt="" width="24" height="24">
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notify" style="list-style-type: none;">
+                                <div class="notif">
+                                    <li class="notif-header">
+                                        <div class="d-flex"><div class="me-auto" style="font-weight: 500; color: #0C91E6;font-size: 20px">Notifications</div></div>
+                                    </li>
+                                    <div class="notif-items">
+                                        <li class="dropdown-item">
+                                            <span class="item-name">No new Notifications!</span>
+                                        </li>
+                                    </div>
+                                </div>
+                            </ul>
+                        <?php } ?>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="profile.php" title=""><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M12 2.5a5.5 5.5 0 00-3.096 10.047 9.005 9.005 0 00-5.9 8.18.75.75 0 001.5.045 7.5 7.5 0 0114.993 0 .75.75 0 101.499-.044 9.005 9.005 0 00-5.9-8.181A5.5 5.5 0 0012 2.5zM8 8a4 4 0 118 0 4 4 0 01-8 0z"></path></svg>&nbsp;<?php echo $user->getFirstName()." ".$user->getLastName()?></a></li>
+                    <li class="nav-item"><a class="nav-link" href="logout.php" title=""><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M3 3.25c0-.966.784-1.75 1.75-1.75h5.5a.75.75 0 010 1.5h-5.5a.25.25 0 00-.25.25v17.5c0 .138.112.25.25.25h5.5a.75.75 0 010 1.5h-5.5A1.75 1.75 0 013 20.75V3.25zm16.006 9.5l-3.3 3.484a.75.75 0 001.088 1.032l4.5-4.75a.75.75 0 000-1.032l-4.5-4.75a.75.75 0 00-1.088 1.032l3.3 3.484H10.75a.75.75 0 000 1.5h8.256z"></path></svg>&nbsp;Logout</a></li>
                 </ul>
             <?php } else { ?>
-                <span class="navbar-text">Already have an account?</span>
+                <span class="navbar-text">Already have an account?&nbsp;&nbsp;&nbsp;</span>
                 <ul class="navbar-nav ">
                     <li class="nav-item">
-                        <a class="nav-link" role="button" aria-expanded="false" href="Login.php"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M3 3.25c0-.966.784-1.75 1.75-1.75h5.5a.75.75 0 010 1.5h-5.5a.25.25 0 00-.25.25v17.5c0 .138.112.25.25.25h5.5a.75.75 0 010 1.5h-5.5A1.75 1.75 0 013 20.75V3.25zm9.994 9.5l3.3 3.484a.75.75 0 01-1.088 1.032l-4.5-4.75a.75.75 0 010-1.032l4.5-4.75a.75.75 0 011.088 1.032l-3.3 3.484h8.256a.75.75 0 010 1.5h-8.256z"></path></svg>Login</a>
+                        <a class="nav-link" role="button" aria-expanded="false" href="Login.php"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M3 3.25c0-.966.784-1.75 1.75-1.75h5.5a.75.75 0 010 1.5h-5.5a.25.25 0 00-.25.25v17.5c0 .138.112.25.25.25h5.5a.75.75 0 010 1.5h-5.5A1.75 1.75 0 013 20.75V3.25zm9.994 9.5l3.3 3.484a.75.75 0 01-1.088 1.032l-4.5-4.75a.75.75 0 010-1.032l4.5-4.75a.75.75 0 011.088 1.032l-3.3 3.484h8.256a.75.75 0 010 1.5h-8.256z"></path></svg>&nbsp;Login</a>
                     </li>
                 </ul>
             <?php } ?>
@@ -220,7 +244,7 @@ You are identified as a covid 19 positive person. You had assigned to $med_centr
             <br> <br>
             <div class="row">
                 <div class="col-sm text-center">
-                    <a href="<?php echo $_SERVER['HTTP_REFERER']; ?>"> <button type="button" class="btn btn-outline-secondary btn-lg" name="cancel">Cancel</button></a>
+                    <a href="<?php echo $_SERVER['HTTP_REFERER']; ?>" class="hiddenLink"> <button type="button" class="btn btn-outline-secondary btn-lg" name="cancel">Cancel</button></a>
                 </div>
                 <div class="col-sm text-center">
                     <button type="submit" class="btn btn-outline-primary btn-lg" name="register" >Register</button>
@@ -236,7 +260,7 @@ You are identified as a covid 19 positive person. You had assigned to $med_centr
             <strong>Registration success!</strong>
         </div>
         <div class="text-center pb-5">
-            <a href="profile-view.php?id=<?=$_SESSION["searchedId"]?>"><button type="button" class="btn btn-outline-secondary">Back To Profile</button></a>
+            <a href="profile-view.php?id=<?=$_SESSION["searchedId"]?>" class="hiddenLink"><button type="button" class="btn btn-outline-secondary">Back To Profile</button></a>
         </div>
     <?php } ?>
 </div>
