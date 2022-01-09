@@ -178,9 +178,13 @@ class Person
     /**
      * @param mixed $password
      */
-    public function setPassword($password)
+    public function setPassword($password,$user_id)
     {
         $this->password = $password;
+        $connection = PDOSingleton::getInstance();
+        $sql = "UPDATE user set password=:password where user_id=:user_id";
+        $stmt = $connection->prepare($sql);
+        $stmt->execute(array(":user_id"=>$user_id,":password"=>$password));
     }
 
     /**

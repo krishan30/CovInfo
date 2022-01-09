@@ -21,6 +21,29 @@
     $userFactory = new UserFactory();
     $user = $userFactory->build($user_id);
 
+    if(isset($_SESSION["ch"])){
+        if($user->getPassword() == md5($_SESSION["ch-cPassword"])){
+            if($_SESSION["ch-conPassword"] == $_SESSION["ch-nPassword"]){
+                $user->setPassword(md5($_SESSION["ch-nPassword"]),$user->getUserID());
+                echo "password changed";
+            }else{
+                //new password not match
+                echo "new password not match";
+            }
+        }else{
+            echo "invalidPassword";
+        }
+        unset($_SESSION["ch"]);
+    }
+
+    if(isset($_POST["passwordChange"])){
+        $_SESSION["ch-cPassword"] = $_POST["currentPassword"];
+        $_SESSION["ch-conPassword"] = $_POST["confirmPassword"];
+        $_SESSION["ch-nPassword"] = $_POST["newPassword"];
+        $_SESSION["ch"] = true;
+        header("Location:profile.php");
+        return;
+    }
 
     $name = $user->getFirstName()." ".$user->getMiddleName()." ".$user->getLastName();
     $nic = $user->getNICNumber();
@@ -502,23 +525,23 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form>
+                        <form method="post">
                             <div class="form-floating mb-3">
-                                <input type="password" class="form-control" id="currentPassword" placeholder="Password">
+                                <input type="password" class="form-control" id="currentPassword" name="currentPassword"  required placeholder="Password">
                                 <label for="currentPassword"> Current password</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <input type="password" class="form-control" id="newPassword" placeholder="Password">
+                                <input type="password" class="form-control" id="newPassword" required name="newPassword" placeholder="Password">
                                 <label for="newPassword">New password</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <input type="password" class="form-control" id="confirmPassword" placeholder="Password">
+                                <input type="password" class="form-control" id="confirmPassword" required name="confirmPassword" placeholder="Password">
                                 <label for="confirmPassword">Re-enter new password</label>
                             </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save changes</button>
+                        <button type="submit" name="passwordChange" class="btn btn-primary">Save changes</button>
                     </div>
                     </form>
                 </div>

@@ -17,6 +17,11 @@ class MailWrapper
 
     public static function sendMail($userProxy,$subject,$message){
         $mail = new PHPMailer();
+
+        if($userProxy->getEmailAddress() == ""){
+            return;
+        }
+
         try{
             $mail->isSMTP();
             $mail->Host = 'smtp.gmail.com';

@@ -56,15 +56,30 @@ if(isset($_POST["medical_centre_id"]) && isset($_POST["register"])){
         $gQ = $connection->query("SELECT name FROM medical_centre WHERE medical_centre_id = $medical_centre_id");
         $row = $gQ->fetch(PDO::FETCH_ASSOC);
         $med_centre = $row["name"];
-        MailWrapper::sendMail($userProxyFactory->build($searchedId),"Informing Covid-19 Test Result","
-You are identified as a covid 19 positive person. You had assigned to $med_centre for treatments. Relevant authorities will contact you immediately. Stay alone and follow all health guidelines. 
-");
+        $sender = $userProxyFactory->build($searchedId);
+        if($sender->getGender() == "Male"){
+            $temp = "sir";
+        }else{
+            $temp = "madam";
+        }
+        MailWrapper::sendMail($sender,"CoVID-19 Infection Alert",
+            "<p>Dear ".$temp." , </p>
+<p>
+    We regret to inform you that according to recent PCR test results, you are now infected with CoVID-19.
+    Strictly isolate yourself from your family members and observe maximum vigilance on your condition.
+    Use a pulse oximeter if available and request immediate medical assistance if the Oxygen saturation drops below 94%. Also, be attentive to any shortness of breath, difficulty breathing, and heaviness in the chest. If any of these symptoms are present and worsening, visit the nearest government hospital as soon as possible.
+</p>
+<p>
+    An automated message via Covinfo CoVID Information System. Do not reply.
+</p>");
+
         $_SESSION["PRegistration"]=true;
         header("Location:NewPatientReport.php");
         return;
     }
 
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
