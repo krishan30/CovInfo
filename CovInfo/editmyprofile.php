@@ -24,18 +24,20 @@ if(isset($_SESSION["ep-needUpdate"])){
         $_SESSION["ep-address"],
         $_SESSION["ep-phoneNumber"],$_SESSION["ep-bloodType"],$_SESSION["ep-medical"]);
     unset($_SESSION["ep-needUpdate"]);
-    $goto = $_SESSION["ep-id"];
+
+    if(is_a($user->getAccountState(),'PreUser')){
+        try {
+            header("Location:change-password.php");
+            return;
+        } catch (Exception $e) {
+        }
+    }
+
     header("Location:profile.php");
     return;
 }
 
 if(isset($_POST["update"])){
-    if(is_a($user->getAccountState(),'PreUser')){
-        try {
-            $user->activateAccount();
-        } catch (Exception $e) {
-        }
-    }
     $_SESSION["ep-phoneNumber"] = $_POST["phoneNumber"];
     $_SESSION["ep-email"] = $_POST["email"];
     $_SESSION["ep-address"] = $_POST["address"];
@@ -82,7 +84,7 @@ $mohDivisionList = $connection->query("SELECT moh_name FROM moh_division");
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow fixed-top bg-light">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#"><img src="logos\brand.png" alt="Site logo" width="110px" height="auto"> </a>
+        <a class="navbar-brand" href="index.php"><img src="logos\brand.png" alt="Site logo" width="110px" height="auto"> </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -193,10 +195,10 @@ $mohDivisionList = $connection->query("SELECT moh_name FROM moh_division");
                     <div class="account-settings">
                         <div class="user-profile">
                             <div class="profile-pic">
-                                <label class="-label" for="file">
-                                    <span>Change Image</span>
-                                </label>
-                                <input id="file" type="file" ><!--onchange="loadFile(event)"-->
+                                <br>
+                                <br>
+                                <br>
+                                <!--onchange="loadFile(event)"-->
                                 <?php if($searchProfile->getGender() == "Male"){?>
                                     <img src="images/User-big.png" id="output" width="200" />
                                 <?php }else{ ?>
@@ -205,6 +207,13 @@ $mohDivisionList = $connection->query("SELECT moh_name FROM moh_division");
 
                             </div>
                             <br>
+                            <br>
+
+                        </div>
+                    </div>
+
+                    <div class="account-settings">
+                        <div class="user-profile">
                             <h5 class="user-name"><?php echo $searchProfile->getFirstName()." ".$searchProfile->getLastName() ?></h5>
                             <h6 class="user-email"></h6>
                         </div>

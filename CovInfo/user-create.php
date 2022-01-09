@@ -93,7 +93,7 @@ https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow fixed-top bg-light">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#"><img src="logos\brand.png" alt="Site logo" width="110px" height="auto"> </a>
+        <a class="navbar-brand" href="index.php"><img src="logos\brand.png" alt="Site logo" width="110px" height="auto"> </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>

@@ -39,9 +39,32 @@ if (isset($_POST["end-date"]) && isset($_POST["place-of-quarantine"])) {
             $searchedPerson->startQuarantine();
         } catch (Exception $e) {
         }
-        MailWrapper::sendMail($userProxyFactory->build($searchedId),"Informing quarantine period","
-    You should quarantine until ".$_POST["new_end_date"]." Stay alone and follow all health guidelines. 
-    ");
+
+    $sender = $userProxyFactory->build($searchedId);
+    if($sender->getGender() == "Male"){
+        $temp = "sir";
+    }else{
+        $temp = "madam";
+    }
+    $placeId = $_POST['place-of-quarantine'];
+    $placeSQL = "SELECT quarantine_place.quarantine_place_name FROM quarantine_place WHERE quarantine_place.quarantine_place_id =:qurantine_place_id";
+    $placeStmt = $connection->prepare($placeSQL);
+    $placeStmt->execute(array('qurantine_place_id'=>$placeId));
+    while ($row = $placeStmt->fetch(PDO::FETCH_ASSOC)){
+        $place = $row["quarantine_place_name"];
+        break;
+    }
+    MailWrapper::sendMail($sender,"CoVID-19 Quarantine Alert",
+        "<p>Dear ".$temp." , </p>
+<p>
+    We are sorry to inform you that you are now placed under quarantine starting from ".$_POST["start-date"]." until ".$_POST["end-date"]." at $place. 
+The relevant authorities are notified, and the Public Health Inspector of your area will get in touch with you soon. 
+</p>
+<p>
+    An automated message via Covinfo CoVID Information System. Do not reply.
+</p>");
+
+
         $_SESSION["QRegistration"]=true;
         header("Location:QuarantineReport.php");
         return;

@@ -69,6 +69,22 @@ if(isset($_GET["findPage"])){
             $contact->startQuarantine();
         } catch (Exception $e) {
         }
+
+        $sender = $contact;
+        if($sender->getGender() == "Male"){
+            $temp = "sir";
+        }else{
+            $temp = "madam";
+        }
+        MailWrapper::sendMail($sender,"CoVID-19 Contact Alert",
+            "<p>Dear ".$temp." , </p>
+<p>
+    We are sorry to inform you that you have been in contact with a covid infected individual within the last fourteen days. 
+Confine yourself at your residence and isolate yourself from other family members if possible. If you or a family member develop symptoms of cold or fever, please visit the nearest government hospital.</p>
+<p>
+    An automated message via Covinfo CoVID Information System. Do not reply.
+</p>");
+
         header("Location:AddContact.php");
         return;
     }
@@ -114,7 +130,7 @@ if(isset($_SESSION["search_account_id"]) || isset($_SESSION["search_nic_number"]
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow fixed-top bg-light">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#"><img src="logos/brand.png" alt="Site logo" width="110px" height="auto"> </a>
+        <a class="navbar-brand" href="index.php"><img src="logos/brand.png" alt="Site logo" width="110px" height="auto"> </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
