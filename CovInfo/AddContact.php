@@ -1,88 +1,88 @@
 <?php
-    require_once "Classes/classes.php";
-    session_start();
+require_once "Classes/classes.php";
+session_start();
 
-    if(!isset($_SESSION["user_id"])){
-        header("Location:Login.php");
-        return;
-    }
+if(!isset($_SESSION["user_id"])){
+    header("Location:Login.php");
+    return;
+}
 
-    if(!isset($_SESSION["searchedId"])){
-        header("Location:search.php");
-        return;
-    }
-    $autority_officer_id=$_SESSION["user_id"];
-    $userProxyFactory = new UserProxyFactory();
-    $user = $userProxyFactory->build($autority_officer_id);
+if(!isset($_SESSION["searchedId"])){
+    header("Location:search.php");
+    return;
+}
+$autority_officer_id=$_SESSION["user_id"];
+$userProxyFactory = new UserProxyFactory();
+$user = $userProxyFactory->build($autority_officer_id);
 
-    if($user->getUserType() == "Public"){
-        header("Location:index.php");
-        return;
-    }else{
-        $logged_user = true ;
-    }
+if($user->getUserType() == "Public"){
+    header("Location:index.php");
+    return;
+}else{
+    $logged_user = true ;
+}
 
-    $connection = PDOSingleton::getInstance();
-    $is_page_refreshed = (isset($_SERVER['HTTP_CACHE_CONTROL']) && $_SERVER['HTTP_CACHE_CONTROL'] == 'max-age=0');
-    $searchedId=$_SESSION["searchedId"];
-    $userFactory = new UserFactory();
-    $searchedPerson = $userFactory->build($searchedId);
-    if(!isset($_SESSION["ContactR"])){
-        $sql = "UPDATE infection_record  set autority_id=:autority_id  where user_id=:user_id && autority_id IS NULL && release_date IS NULL ";
-        $stmt = $connection->prepare($sql);
-        $stmt->execute(array(":autority_id"=> $autority_officer_id,":user_id"=>$searchedId));
-        $_SESSION["ContactR"]=true;
-    }
+$connection = PDOSingleton::getInstance();
+$is_page_refreshed = (isset($_SERVER['HTTP_CACHE_CONTROL']) && $_SERVER['HTTP_CACHE_CONTROL'] == 'max-age=0');
+$searchedId=$_SESSION["searchedId"];
+$userFactory = new UserFactory();
+$searchedPerson = $userFactory->build($searchedId);
+if(!isset($_SESSION["ContactR"])){
+    $sql = "UPDATE infection_record  set autority_id=:autority_id  where user_id=:user_id && autority_id IS NULL && release_date IS NULL ";
+    $stmt = $connection->prepare($sql);
+    $stmt->execute(array(":autority_id"=> $autority_officer_id,":user_id"=>$searchedId));
+    $_SESSION["ContactR"]=true;
+}
 
-    $current_user = $searchedId ; //testing setting.
-    $results = [];
-    $contactRecords = null ;
-    $contactRecords = $connection->query("SELECT contact_record.contact_id,contact_record.trace_date,contact_record.contact_user_id
+$current_user = $searchedId ; //testing setting.
+$results = [];
+$contactRecords = null ;
+$contactRecords = $connection->query("SELECT contact_record.contact_id,contact_record.trace_date,contact_record.contact_user_id
                                                             FROM contact_record join infection_record ON infection_record.infection_record_id=contact_record.infection_record_id AND infection_record.release_date IS NULL
                                                             WHERE contact_record.user_id = $current_user
                                                             ORDER BY contact_record.trace_date");
 
 
-    if(isset($_POST["account_id"]) || isset($_POST["nic_number"])){
-        if($_POST["account_id"] != null || $_POST["nic_number"] != null){
-            $_SESSION["search_account_id"] = $_POST["account_id"];
-            $_SESSION["search_nic_number"] = $_POST["nic_number"];
+if(isset($_POST["account_id"]) || isset($_POST["nic_number"])){
+    if($_POST["account_id"] != null || $_POST["nic_number"] != null){
+        $_SESSION["search_account_id"] = $_POST["account_id"];
+        $_SESSION["search_nic_number"] = $_POST["nic_number"];
+    }
+    header("Location:AddContact.php");
+    return;
+}
+
+if(isset($_GET["findPage"])){
+    if($_GET["id"] != ""){
+        $add_contact_id = $_GET["id"] ;
+        $contact = $userFactory->build($add_contact_id);
+        $today = date("Y-m-d");
+        $infectionRecordID= $connection->query("SELECT infection_record_id FROM infection_record WHERE infection_record.user_id=$searchedId && infection_record.release_date IS NULL")->fetch(PDO::FETCH_ASSOC)['infection_record_id'];
+        $sql = "INSERT INTO contact_record (contact_user_id,trace_date,user_id,infection_record_id) VALUES (:contact_user_id,:trace_date,:user_id,:infection_record_id)";
+        $stmt = $connection->prepare($sql);
+        $stmt->execute(array(':contact_user_id'=>$contact->getUserID(),':trace_date'=>$today,':user_id'=>$current_user,':infection_record_id'=>$infectionRecordID));
+        $sql = "INSERT INTO  quarantine_record (user_id, start_date, end_date, administrator_id,place_id) VALUES (:user_id,:start_date,:end_date,:administrator_id,:place_id)";
+        $stmt = $connection->prepare($sql);
+        $administrator_id = $connection->query("SELECT administrator_id FROM administrator WHERE user_id=".$autority_officer_id)->fetch(PDO:: FETCH_ASSOC);
+        $stmt->execute(array(':user_id' =>$add_contact_id, ':start_date' => date('y-m-d'), ':end_date' => date('Y-m-d', strtotime(' +7 day')), ':administrator_id' => $administrator_id["administrator_id"],':place_id'=>1));
+        try {
+            $contact->startQuarantine();
+        } catch (Exception $e) {
         }
         header("Location:AddContact.php");
         return;
     }
+}
+$result = false;
+if(isset($_SESSION["search_account_id"]) || isset($_SESSION["search_nic_number"])){
+    $result = true;
+    $searchSql = "SELECT user.user_id FROM user WHERE user.account_id=:account_id OR user.nic_number=:nic_number ORDER BY account_id";
+    $searchstmt = $connection->prepare($searchSql);
+    $searchstmt->execute(array(':account_id' => $_SESSION["search_account_id"], ':nic_number'=>$_SESSION["search_nic_number"]));
 
-    if(isset($_GET["findPage"])){
-        if($_GET["id"] != ""){
-            $add_contact_id = $_GET["id"] ;
-            $contact = $userFactory->build($add_contact_id);
-            $today = date("Y-m-d");
-            $infectionRecordID= $connection->query("SELECT infection_record_id FROM infection_record WHERE infection_record.user_id=$searchedId && infection_record.release_date IS NULL")->fetch(PDO::FETCH_ASSOC)['infection_record_id'];
-            $sql = "INSERT INTO contact_record (contact_user_id,trace_date,user_id,infection_record_id) VALUES (:contact_user_id,:trace_date,:user_id,:infection_record_id)";
-            $stmt = $connection->prepare($sql);
-            $stmt->execute(array(':contact_user_id'=>$contact->getUserID(),':trace_date'=>$today,':user_id'=>$current_user,':infection_record_id'=>$infectionRecordID));
-            $sql = "INSERT INTO  quarantine_record (user_id, start_date, end_date, administrator_id,place_id) VALUES (:user_id,:start_date,:end_date,:administrator_id,:place_id)";
-            $stmt = $connection->prepare($sql);
-            $administrator_id = $connection->query("SELECT administrator_id FROM administrator WHERE user_id=".$autority_officer_id)->fetch(PDO:: FETCH_ASSOC);
-            $stmt->execute(array(':user_id' =>$add_contact_id, ':start_date' => date('y-m-d'), ':end_date' => date('Y-m-d', strtotime(' +7 day')), ':administrator_id' => $administrator_id["administrator_id"],':place_id'=>1));
-            try {
-                $contact->startQuarantine();
-            } catch (Exception $e) {
-            }
-            header("Location:AddContact.php");
-            return;
-        }
-    }
-    $result = false;
-    if(isset($_SESSION["search_account_id"]) || isset($_SESSION["search_nic_number"])){
-        $result = true;
-        $searchSql = "SELECT user.user_id FROM user WHERE user.account_id=:account_id OR user.nic_number=:nic_number ORDER BY account_id";
-        $searchstmt = $connection->prepare($searchSql);
-        $searchstmt->execute(array(':account_id' => $_SESSION["search_account_id"], ':nic_number'=>$_SESSION["search_nic_number"]));
-
-        unset($_SESSION["search_account_id"]);
-        unset($_SESSION["search_nic_number"]);
-    }
+    unset($_SESSION["search_account_id"]);
+    unset($_SESSION["search_nic_number"]);
+}
 
 
 
@@ -97,7 +97,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>CovInfo - Home</title>
+    <title>CovInfo | Add Contacts</title>
     <link rel="stylesheet" href="https://www.cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css" />
     <link rel="stylesheet" href="css/bootstrap.min.css.map" />
     <link rel="stylesheet" href="styles/search.css">
@@ -148,14 +148,51 @@
             </ul>
             <?php if ($logged_user) { ?>
                 <ul class="nav navbar-nav ">
-                    <li class="nav-item"><a class="nav-link" href="profile.php" title=""><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M12 2.5a5.5 5.5 0 00-3.096 10.047 9.005 9.005 0 00-5.9 8.18.75.75 0 001.5.045 7.5 7.5 0 0114.993 0 .75.75 0 101.499-.044 9.005 9.005 0 00-5.9-8.181A5.5 5.5 0 0012 2.5zM8 8a4 4 0 118 0 4 4 0 01-8 0z"></path></svg><?php echo $user->getFirstName()." ".$user->getLastName() ?></a></li>
-                    <li class="nav-item"><a class="nav-link" href="logout.php" title=""><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M3 3.25c0-.966.784-1.75 1.75-1.75h5.5a.75.75 0 010 1.5h-5.5a.25.25 0 00-.25.25v17.5c0 .138.112.25.25.25h5.5a.75.75 0 010 1.5h-5.5A1.75 1.75 0 013 20.75V3.25zm16.006 9.5l-3.3 3.484a.75.75 0 001.088 1.032l4.5-4.75a.75.75 0 000-1.032l-4.5-4.75a.75.75 0 00-1.088 1.032l3.3 3.484H10.75a.75.75 0 000 1.5h8.256z"></path></svg>Logout</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="nav-link" style="border-bottom: none" role="button" data-bs-toggle="dropdown" id="notify" aria-expanded="false">
+                            <?php  if(true) {?>    <!--   have_notifications-->
+                            <img src="images/notification.svg" alt="" width="24" height="24">
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notify" style="list-style-type: none;">
+                            <div class="notif">
+                                <li class="notif-header">
+                                    <div class="d-flex">
+                                        <div class="me-auto" style="font-weight: 500; color: #0C91E6;font-size: 20px">Notifications
+                                        </div><div class=""><a href="#" class="btn btn-primary btn-sm rounded-0">Read all</a>
+                                        </div></div>
+                                </li>
+                                <div class="notif-items">
+                                    <li class="dropdown-item">
+                                        <span class="item-name">You've been Infected!</span>
+                                    </li>
+                                </div>
+                            </div>
+                        </ul>
+                        <?php } else { ?>
+                            <img src="images/bell.svg" alt="" width="24" height="24">
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notify" style="list-style-type: none;">
+                                <div class="notif">
+                                    <li class="notif-header">
+                                        <div class="d-flex"><div class="me-auto" style="font-weight: 500; color: #0C91E6;font-size: 20px">Notifications</div></div>
+                                    </li>
+                                    <div class="notif-items">
+                                        <li class="dropdown-item">
+                                            <span class="item-name">No new Notifications!</span>
+                                        </li>
+                                    </div>
+                                </div>
+                            </ul>
+                        <?php } ?>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="profile.php" title=""><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M12 2.5a5.5 5.5 0 00-3.096 10.047 9.005 9.005 0 00-5.9 8.18.75.75 0 001.5.045 7.5 7.5 0 0114.993 0 .75.75 0 101.499-.044 9.005 9.005 0 00-5.9-8.181A5.5 5.5 0 0012 2.5zM8 8a4 4 0 118 0 4 4 0 01-8 0z"></path></svg>&nbsp;<?php echo $user->getFirstName()." ".$user->getLastName() ?></a></li>
+                    <li class="nav-item"><a class="nav-link" href="logout.php" title=""><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M3 3.25c0-.966.784-1.75 1.75-1.75h5.5a.75.75 0 010 1.5h-5.5a.25.25 0 00-.25.25v17.5c0 .138.112.25.25.25h5.5a.75.75 0 010 1.5h-5.5A1.75 1.75 0 013 20.75V3.25zm16.006 9.5l-3.3 3.484a.75.75 0 001.088 1.032l4.5-4.75a.75.75 0 000-1.032l-4.5-4.75a.75.75 0 00-1.088 1.032l3.3 3.484H10.75a.75.75 0 000 1.5h8.256z"></path></svg>&nbsp;Logout</a></li>
                 </ul>
             <?php } else { ?>
-                <span class="navbar-text">Already have an account?</span>
+                <span class="navbar-text">Already have an account?&nbsp;&nbsp;&nbsp;</span>
                 <ul class="navbar-nav ">
                     <li class="nav-item">
-                        <a class="nav-link" role="button" aria-expanded="false" href="Login.php"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M3 3.25c0-.966.784-1.75 1.75-1.75h5.5a.75.75 0 010 1.5h-5.5a.25.25 0 00-.25.25v17.5c0 .138.112.25.25.25h5.5a.75.75 0 010 1.5h-5.5A1.75 1.75 0 013 20.75V3.25zm9.994 9.5l3.3 3.484a.75.75 0 01-1.088 1.032l-4.5-4.75a.75.75 0 010-1.032l4.5-4.75a.75.75 0 011.088 1.032l-3.3 3.484h8.256a.75.75 0 010 1.5h-8.256z"></path></svg>Login</a>
+                        <a class="nav-link" role="button" aria-expanded="false" href="Login.php"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M3 3.25c0-.966.784-1.75 1.75-1.75h5.5a.75.75 0 010 1.5h-5.5a.25.25 0 00-.25.25v17.5c0 .138.112.25.25.25h5.5a.75.75 0 010 1.5h-5.5A1.75 1.75 0 013 20.75V3.25zm9.994 9.5l3.3 3.484a.75.75 0 01-1.088 1.032l-4.5-4.75a.75.75 0 010-1.032l4.5-4.75a.75.75 0 011.088 1.032l-3.3 3.484h8.256a.75.75 0 010 1.5h-8.256z"></path></svg>&nbsp;Login</a>
                     </li>
                 </ul>
             <?php } ?>
@@ -254,22 +291,22 @@
 
                     <?php $i += 1;
                     if($i == 1){?>
-                    <div class="container">
+                        <div class="container">
                         <div class="table-wrap">
-                            <table class="table table-borderless table-responsive">
-                                <thead>
-                                <tr>
-                                    <th class="text-muted fw-600">No</th>
-                                    <th class="text-muted fw-600">Email</th>
-                                    <th class="text-muted fw-600">NIC Number</th>
-                                    <th class="text-muted fw-600">Name</th>
-                                    <th class="text-muted fw-600">Address</th>
-                                    <th class="text-muted fw-600">Status</th>
-                                    <th></th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                            <?php } ?>
+                        <table class="table table-borderless table-responsive">
+                        <thead>
+                        <tr>
+                            <th class="text-muted fw-600">No</th>
+                            <th class="text-muted fw-600">Email</th>
+                            <th class="text-muted fw-600">NIC Number</th>
+                            <th class="text-muted fw-600">Name</th>
+                            <th class="text-muted fw-600">Address</th>
+                            <th class="text-muted fw-600">Status</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                    <?php } ?>
                     <tr class="align-middle alert" role="alert">
                         <td> <?php echo $i ?></td>
                         <td>
