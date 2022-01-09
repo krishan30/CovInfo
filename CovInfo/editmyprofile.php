@@ -24,18 +24,20 @@ if(isset($_SESSION["ep-needUpdate"])){
         $_SESSION["ep-address"],
         $_SESSION["ep-phoneNumber"],$_SESSION["ep-bloodType"],$_SESSION["ep-medical"]);
     unset($_SESSION["ep-needUpdate"]);
-    $goto = $_SESSION["ep-id"];
+
+    if(is_a($user->getAccountState(),'PreUser')){
+        try {
+            header("Location:change-password.php");
+            return;
+        } catch (Exception $e) {
+        }
+    }
+
     header("Location:profile.php");
     return;
 }
 
 if(isset($_POST["update"])){
-    if(is_a($user->getAccountState(),'PreUser')){
-        try {
-            $user->activateAccount();
-        } catch (Exception $e) {
-        }
-    }
     $_SESSION["ep-phoneNumber"] = $_POST["phoneNumber"];
     $_SESSION["ep-email"] = $_POST["email"];
     $_SESSION["ep-address"] = $_POST["address"];
