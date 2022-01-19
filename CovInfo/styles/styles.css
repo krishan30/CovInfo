@@ -172,3 +172,8 @@ body{
     color: red;
     font-size: large;
 }
+
+#btn-select:hover{
+    background-color: #2D4183;
+;
+}
