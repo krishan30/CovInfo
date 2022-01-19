@@ -12,6 +12,15 @@
     $userProxyFactory = new UserProxyFactory();
     $user = $userProxyFactory->build($officer_id);
 
+    if(is_a($user->getAccountState(),'PreUser')){
+        try {
+            //$user->activateAccount();
+            header("Location:editmyprofile.php");
+            return;
+        } catch (Exception $e) {
+        }
+    }
+
     $connection = PDOSingleton::getInstance();
     if(isset($_POST["NotificationID"])){
         $notification=NotificationFactory::buildNotification((int)$_POST["NotificationID"]);

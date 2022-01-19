@@ -14,6 +14,9 @@
 
     $connection = PDOSingleton::getInstance();
 
+    $error1 = false;
+    $error2 = false;
+
     /*
       should get from session variable after connecting with logging page
     */
@@ -21,17 +24,25 @@
     $userFactory = new UserFactory();
     $user = $userFactory->build($user_id);
 
+    if(is_a($user->getAccountState(),'PreUser')){
+        try {
+            //$user->activateAccount();
+            header("Location:editmyprofile.php");
+            return;
+        } catch (Exception $e) {
+        }
+    }
+
     if(isset($_SESSION["ch"])){
         if($user->getPassword() == md5($_SESSION["ch-cPassword"])){
             if($_SESSION["ch-conPassword"] == $_SESSION["ch-nPassword"]){
                 $user->setPassword(md5($_SESSION["ch-nPassword"]),$user->getUserID());
                 echo "password changed";
             }else{
-                //new password not match
-                echo "new password not match";
+                $error1 = true;
             }
         }else{
-            echo "invalidPassword";
+            $error2 = true;
         }
         unset($_SESSION["ch"]);
     }
@@ -199,6 +210,17 @@
 <br><br>
 <p class="h-4 m-3 p-3 row justify-content-center border border-2 rounded-3 boxy" style="font-weight: bold">User Profile</p>
 <br>
+
+<?php if($error1){?>
+    <p class="h-4 m-3 p-3 row  border border-2 rounded-3 boxy" style="font-weight: bold">Passwords are not match! try again</p>
+    <br>
+<?php } ?>
+
+<?php if($error2){?>
+    <p class="h-4 m-3 p-3 row  border border-2 rounded-3 boxy" style="font-weight: bold" >Current password is invalid! try again</p>
+    <br>
+<?php } ?>
+
 <div class="container justify-content-center">
     <div class="container boxy-blue p-3 m-4">
         <ul class="nav nav-tabs" id="myTab">
