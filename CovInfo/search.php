@@ -12,7 +12,7 @@ if($logged_user){
     $user_id = $_SESSION["user_id"];
     $userProxyFactory = new UserProxyFactory();
     $user = $userProxyFactory->build($user_id);
-    if($user->getUserType() == "Public"){
+    if($user->getUserType() == "Public" || $user->getUserType() == "Admin"){
         header("Location:index.php");
         return;
     }

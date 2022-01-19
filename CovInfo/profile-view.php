@@ -13,7 +13,7 @@ $connection = PDOSingleton::getInstance();
 if (isset($_SESSION["user_id"])){
     $authority = $userProxyFactory->build($_SESSION["user_id"]);
     $logged_user = true;
-    if($authority->getUserType() == "Public"){
+    if($authority->getUserType() == "Public" || $authority->getUserType() == "Admin"){
         header("Location:index.php");
         return;
     }
@@ -511,7 +511,7 @@ $quarantineRecords = $connection->query("SELECT quarantine_record.start_date,qua
                 </a>
             </div>
 
-            <?php if($status!="Infected"){?>
+            <?php if($status!="Infected" && $status != "Deceased"){?>
                 <div class="col-3">
                     <a href="NewPatientReport.php" class="hiddenLink">
                         <div class="p-3 card-child text-center btn-outline-primary d-inline-flex rounded-3">
@@ -569,7 +569,7 @@ $quarantineRecords = $connection->query("SELECT quarantine_record.start_date,qua
                 </div>
             <?php } ?>
 
-            <?php if($vaccinated !="FullyVaccinated" && $authority->getUserType() == "Medical"){?>
+            <?php if($vaccinated !="FullyVaccinated" && $authority->getUserType() == "Medical" && $status != "Deceased"){?>
                 <?php unset($_SESSION["VRegistration"]); ?>
                 <div class="col-3">
                     <a href="VaccinationRegisterForm.php" class="hiddenLink">
@@ -600,7 +600,7 @@ $quarantineRecords = $connection->query("SELECT quarantine_record.start_date,qua
                 </div>
             <?php } ?>
 
-            <?php if($authority->getUserType() == "Medical"){?>
+            <?php if($authority->getUserType() == "Medical" && $status != "Deceased"){?>
                 <div class="col-3">
                     <a href="DeathReportForm.php" class="hiddenLink">
                         <div class="p-3 card-child text-center btn-outline-primary d-inline-flex rounded-3">
