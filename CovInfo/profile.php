@@ -201,15 +201,30 @@
 <p class="h-4 m-3 p-3 row justify-content-center border border-2 rounded-3 boxy" style="font-weight: bold">User Profile</p>
 <br>
 
-<?php if($error1){?>
-    <p class="h-4 m-3 p-3 row  border border-2 rounded-3 boxy" style="font-weight: bold">Passwords are not match! try again</p>
-    <br>
-<?php } ?>
-
-<?php if($error2){?>
-    <p class="h-4 m-3 p-3 row  border border-2 rounded-3 boxy" style="font-weight: bold" >Current password is invalid! try again</p>
-    <br>
-<?php } ?>
+    <div class="toast-container" style="position: absolute; top: 100px; right: 10px;">
+        <?php if($error1){?>
+        <div class="toast fade show boxy-red">
+            <div class="toast-header" style="background-color: rgba(182,3,35,0.41);color: white">
+                <strong class="me-auto"><i class="bi-globe"></i> CovInfo</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+            </div>
+            <div class="toast-body" style="color: red">
+                Passwords don't match! Try again
+            </div>
+        </div>
+        <?php } ?>
+        <?php if($error2){?>
+            <div class="toast fade show boxy-red">
+                <div class="toast-header" style="background-color: rgba(182,3,35,0.41);color: white">
+                    <strong class="me-auto"><i class="bi-globe"></i> CovInfo</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+                </div>
+                <div class="toast-body" style="color: red">
+                    Current password is invalid! Try again
+                </div>
+            </div>
+        <?php } ?>
+    </div>
 
 <div class="container justify-content-center">
     <div class="container boxy-blue p-3 m-4">
