@@ -31,6 +31,18 @@
         $index++;
     }
 
+    $query = "SELECT notification_id  FROM notification WHERE receiver_id=:receiver_id && read_status_id=2 ORDER BY sent_date_time DESC ";
+    $stmt = $connection->prepare($query);
+    $stmt->execute(array(":receiver_id" => $user->getUserId()));
+    $oldNotificationsIDS = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $oldNotifications = array();
+    $index = 0;
+    foreach ($oldNotificationsIDS as $notificationID) {
+        $notification = NotificationFactory::buildNotification((int)$notificationID["notification_id"]);
+        $oldNotifications[$index] = $notification;
+        $index++;
+    }
+
 
 
 ?>
@@ -110,9 +122,20 @@
         <h3 class="text-center fw-bolder ">Notifications </h3>
     </div>
     <div class="row">
+        <ul class="nav nav-tabs mb-3" id="myTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Unread</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Read</a>
+            </li>
+
+        </ul>
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
         <div class="d-flex align-items-start">
-            <div class="col-4 border-right-1">
-                <div class="nav flex-column nav-tabs me-3 d-grid gap-2 col float-left" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+            <div class="col-5 border-right-1">
+                <div class="nav flex-column nav-tabs me-3 d-grid gap-2 col float-left" id="v-pills-tab" role="tablist" aria-orientation="vertical" style="overflow-y:auto;max-height:400px;">
                    <?php
                    if(!$notifications){
                        echo ("<div class='text-muted'>No New Notifications</div>");
@@ -123,7 +146,7 @@
                         $notificationReceivedTime = $notification->getReceivedTime();
                         $notificationReceivedDate = $notification->getReceivedDate();
                         $link=str_replace(' ', '-', $notificationMessage);
-                        echo(" <button  class='nav-link' id='v-pills-home-tab' data-bs-toggle='tab' data-bs-target='#$link' type='button' role='tab' aria-controls='v-pills-home' aria-selected='true' value='$notificationID'><i class='bi bi-chat-fill'></i> &nbsp; 
+                        echo(" <button  class='nav-link border border-secondary' id='v-pills-home-tab' data-bs-toggle='tab' data-bs-target='#$link' type='button' role='tab' aria-controls='v-pills-home' aria-selected='true' value='$notificationID'><div class='position-relative'><span class='badge rounded-pill bg-primary position-absolute top-0 end-0'>New</span></div><i class='bi bi-chat-fill'></i> &nbsp; 
                         <div >
                          $notificationMessage
                         </div> 
@@ -136,11 +159,11 @@
             </div>
             <div class="col">
                 <div class="tab-content bg-light " id="v-pills-tabContent">
-                    <div class="tab-pane fade show active" id="default" role="tabpanel" aria-labelledby="v-pills-home-tab" style="align-items: center; text-align:center;">
+                    <div class="tab-pane fade show active border border-secondary p-2" id="default" role="tabpanel" aria-labelledby="v-pills-home-tab" style="align-items: center; text-align:center;">
                         <small class="text-muted">Select a notification to view.</small>
                     </div>
 
-                    <div class="tab-pane fade" id="Covid-19-Quarantine-Alert" role="tabpanel" aria-labelledby="v-pills-home-tab">
+                    <div class="tab-pane fade border border-secondary p-2" id="Covid-19-Quarantine-Alert" role="tabpanel" aria-labelledby="v-pills-home-tab">
                         <p>
                             We are sorry to inform you that you are now placed under quarantine.
                                 The relevant authorities are notified, and the Public Health Inspector of your area will get in touch with you soon.
@@ -149,7 +172,7 @@
                         </p>
 
                     </div>
-                    <div class="tab-pane fade" id="Covid-19-Infection-Alert" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+                    <div class="tab-pane fade border border-secondary p-2" id="Covid-19-Infection-Alert" role="tabpanel" aria-labelledby="v-pills-profile-tab">
                         <p>
                             We regret to inform you that according to recent PCR test results, you are now infected with CoVID-19.
                             Strictly isolate yourself from your family members and observe maximum vigilance on your condition.
@@ -159,7 +182,7 @@
                         </p>
 
                     </div>
-                    <div class="tab-pane fade" id="Covid-19-Quarantine Extend-Alert" role="tabpanel" aria-labelledby="v-pills-messages-tab">
+                    <div class="tab-pane fade border border-secondary p-2" id="Covid-19-Quarantine Extend-Alert" role="tabpanel" aria-labelledby="v-pills-messages-tab">
                         <p>
                             We are sorry to inform you that as per the latest PCR test results, your quarantine period is extended.
                             Please remain indoors and be vigilant on any symptoms.
@@ -168,7 +191,7 @@
                         </p>
 
                     </div>
-                    <div class="tab-pane fade" id="Covid-19-Quarantine-Ended-Alert" role="tabpanel" aria-labelledby="v-pills-settings-tab">
+                    <div class="tab-pane fade border border-secondary p-2" id="Covid-19-Quarantine-Ended-Alert" role="tabpanel" aria-labelledby="v-pills-settings-tab">
                         <p>
                             We are pleased to inform you that your quarantine period is now over. Please continue to follow government health regulations while you recommence your daily activities.
                             Thank you for your cooperation.
@@ -177,7 +200,7 @@
                         </p>
 
                     </div>
-                    <div class="tab-pane fade" id="Covid-19-Patient-Release-Alert" role="tabpanel" aria-labelledby="v-pills-settings-tab">
+                    <div class="tab-pane fade border border-secondary p-2" id="Covid-19-Patient-Release-Alert" role="tabpanel" aria-labelledby="v-pills-settings-tab">
                         <p>
                             We are pleased to inform you that according to latest PCR reports you are no longer infected with CoVID-19. Please continue to take necessary health precautions and do not engage in physically strenuous tasks.
                             <br><br>
@@ -185,7 +208,7 @@
                         </p>
 
                     </div>
-                    <div class="tab-pane fade" id="Covid-19-Vaccination-Registration-Complete" role="tabpanel" aria-labelledby="v-pills-settings-tab">
+                    <div class="tab-pane fade border border-secondary p-2" id="Covid-19-Vaccination-Registration-Complete" role="tabpanel" aria-labelledby="v-pills-settings-tab">
                         <p>
                             Vaccination registration is successfully completed. Please do not forget to bring your vaccination record if you have been vaccinated before. Be on time at the scheduled date and follow all health protocols at the vaccination center. Your cooperation is much appreciated.
                             <br><br>
@@ -197,20 +220,111 @@
                 </div>
                 <form action="notificationPage.php" method="post" >
                     <input id="NI" type="text"  name="NotificationID" hidden>
-                    <div class="col-sm text-end">
+                    <div class="col-sm text-end mt-3">
                         <button style="display:none" type="submit" class="btn btn-outline-primary " id="MR" name="register" >Mark As Read</button>
                     </div>
                 </form>
 
             </div>
         </div>
+            </div>
+            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                <div class="d-flex align-items-start">
+                    <div class="col-5 border-right-1">
+                      <div class="nav flex-column nav-tabs me-3 d-grid gap-2 col float-left" id="v-pills-tab" role="tablist" aria-orientation="vertical" style="overflow-y: auto;max-height:250px;">
+                        <?php
+                        if(! $oldNotifications){
+                            echo ("<div class='text-muted'>No Old Notifications</div>");
+                        }
+                        foreach ( $oldNotifications as $index => $notification) {
+                            $notificationID=$notification->getNotificationRecordID();
+                            $notificationMessage = $notification->getNotificationTypeHeading();
+                            $notificationReceivedTime = $notification->getReceivedTime();
+                            $notificationReceivedDate = $notification->getReceivedDate();
+                            $link="#R-".str_replace(' ', '-', $notificationMessage);
+                            echo(" <button  class='nav-link border border-secondary' id='v-pills-home-tab' data-bs-toggle='tab' data-bs-target='$link' type='button' role='tab' aria-controls='v-pills-home' aria-selected='true' value='$notificationID'><div class='position-relative'><span class='badge rounded-pill  position-absolute top-0 end-0'>Read</span></div><i class='bi bi-chat-fill'></i> &nbsp; 
+                        <div >
+                         $notificationMessage
+                        </div> 
+                        <div style='display: inline-flex'>
+                         <div style='margin-right:7vw'>$notificationReceivedDate</div> <div style='margin-left:7vw'>$notificationReceivedTime</div>     
+                        </div>
+                        </button>");
+                        } ?>
+                    </div>
+                </div>
+                 <div class="col">
+                    <div class="tab-content bg-light " id="v-pills-tabContent">
+                        <div class="tab-pane fade show active border border-secondary p-2" id="default" role="tabpanel" aria-labelledby="v-pills-home-tab" style="align-items: center; text-align:center;">
+                            <small class="text-muted">Select a notification to view.</small>
+                        </div>
+
+                        <div class="tab-pane fade border border-secondary p-2" id="R-Covid-19-Quarantine-Alert" role="tabpanel" aria-labelledby="v-pills-home-tab">
+                            <p>
+                                We are sorry to inform you that you are now placed under quarantine.
+                                The relevant authorities are notified, and the Public Health Inspector of your area will get in touch with you soon.
+                                <br><br>
+                                Please check your mail for further details.
+                            </p>
+
+                        </div>
+                        <div class="tab-pane fade border border-secondary p-2" id="R-Covid-19-Infection-Alert" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+                            <p>
+                                We regret to inform you that according to recent PCR test results, you are now infected with CoVID-19.
+                                Strictly isolate yourself from your family members and observe maximum vigilance on your condition.
+                                Use a pulse oximetry if available and request immediate medical assistance if the Oxygen saturation drops below 94%. Also, be attentive to any shortness of breath, difficulty breathing, and heaviness in the chest. If any of these symptoms are present and worsening, visit the nearest government hospital as soon as possible.
+                                <br><br>
+                                Please check your mail for further details.
+                            </p>
+
+                        </div>
+                        <div class="tab-pane fade border border-secondary p-2" id="R-Covid-19-Quarantine Extend-Alert" role="tabpanel" aria-labelledby="v-pills-messages-tab">
+                            <p>
+                                We are sorry to inform you that as per the latest PCR test results, your quarantine period is extended.
+                                Please remain indoors and be vigilant on any symptoms.
+                                <br><br>
+                                Please check your mail for further details.
+                            </p>
+
+                        </div>
+                        <div class="tab-pane fade border border-secondary p-2" id="R-Covid-19-Quarantine-Ended-Alert" role="tabpanel" aria-labelledby="v-pills-settings-tab">
+                            <p>
+                                We are pleased to inform you that your quarantine period is now over. Please continue to follow government health regulations while you recommence your daily activities.
+                                Thank you for your cooperation.
+                                <br><br>
+                                Please check your mail for further details.
+                            </p>
+
+                        </div>
+                        <div class="tab-pane fade border border-secondary p-2" id="R-Covid-19-Patient-Release-Alert" role="tabpanel" aria-labelledby="v-pills-settings-tab">
+                            <p>
+                                We are pleased to inform you that according to latest PCR reports you are no longer infected with CoVID-19. Please continue to take necessary health precautions and do not engage in physically strenuous tasks.
+                                <br><br>
+                                Please check your mail for further details.
+                            </p>
+
+                        </div>
+                        <div class="tab-pane fade border border-secondary p-2" id="R-Covid-19-Vaccination-Registration-Complete" role="tabpanel" aria-labelledby="v-pills-settings-tab">
+                            <p>
+                                Vaccination registration is successfully completed. Please do not forget to bring your vaccination record if you have been vaccinated before. Be on time at the scheduled date and follow all health protocols at the vaccination center. Your cooperation is much appreciated.
+                                <br><br>
+                                Please check your mail for further details.
+                            </p>
+
+                        </div>
+
+                    </div>
+                   </div>
+                </div>
+                </div>
+            </div>
 
 
     </div>
     <div class="text-center pt-4 pb-3">
         <a href="index.php" class="hiddenLink"> <button type="button" class="btn btn-outline-secondary " name="Home">Back To Home</button></a>
     </div>
-    
+
 </div>
 
     <script >$("button").click(function() {
@@ -226,6 +340,12 @@
             }
         });
 
+    </script>
+    <script >
+        $('ul').click(function(){
+            var Button=document.getElementById("MR");
+            Button.style.display='none';
+        });
 
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
