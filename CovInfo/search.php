@@ -16,6 +16,7 @@ if($logged_user){
         header("Location:index.php");
         return;
     }
+
 }else{
     header("Location:Login.php");
     return;
