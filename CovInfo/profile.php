@@ -24,15 +24,6 @@
     $userFactory = new UserFactory();
     $user = $userFactory->build($user_id);
 
-    if(is_a($user->getAccountState(),'PreUser')){
-        try {
-            //$user->activateAccount();
-            header("Location:editmyprofile.php");
-            return;
-        } catch (Exception $e) {
-        }
-    }
-
     if(isset($_SESSION["ch"])){
         if($user->getPassword() == md5($_SESSION["ch-cPassword"])){
             if($_SESSION["ch-conPassword"] == $_SESSION["ch-nPassword"]){

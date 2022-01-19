@@ -22,14 +22,6 @@ if (isset($_SESSION["user_id"])){
     return;
 }
 
-if(is_a($authority->getAccountState(),'PreUser')){
-    try {
-        //$user->activateAccount();
-        header("Location:editmyprofile.php");
-        return;
-    } catch (Exception $e) {
-    }
-}
 
 
 if (isset($_GET["id"])){

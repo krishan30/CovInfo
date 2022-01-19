@@ -13,15 +13,6 @@ if($logged_user){
     $user = $userProxyFactory->build($user_id);
 }
 
-if(is_a($user->getAccountState(),'PreUser')){
-    try {
-        //$user->activateAccount();
-        header("Location:editmyprofile.php");
-        return;
-    } catch (Exception $e) {
-    }
-}
-
 
 
 ?>

@@ -16,14 +16,7 @@ if($logged_user){
         header("Location:index.php");
         return;
     }
-    if(is_a($user->getAccountState(),'PreUser')){
-        try {
-            //$user->activateAccount();
-            header("Location:editmyprofile.php");
-            return;
-        } catch (Exception $e) {
-        }
-    }
+
 }else{
     header("Location:Login.php");
     return;

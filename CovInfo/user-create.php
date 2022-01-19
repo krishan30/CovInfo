@@ -21,14 +21,6 @@ if($logged_user){
 
 $connection = PDOSingleton::getInstance();
 
-if(is_a($user->getAccountState(),'PreUser')){
-    try {
-        //$user->activateAccount();
-        header("Location:editmyprofile.php");
-        return;
-    } catch (Exception $e) {
-    }
-}
 
 if(isset($_SESSION["ep-needInsert"])){
     $new_user_id = User::createNewUser($_SESSION["ep-email"],$_SESSION["ep-firstName"],$_SESSION["ep-middleName"],$_SESSION["ep-lastName"],$_SESSION["ep-nic"],
