@@ -182,8 +182,17 @@ $name = $user->getFirstName()." ".$user->getMiddleName()." ".$user->getLastName(
 <br>
 
 <?php if($error){?>
-<p class="h-4 m-3 p-3 row  border border-2 rounded-3 boxy" style="font-weight: bold color: red">Passwords are not match! try again</p>
-<br>
+    <div class="toast-container" style="position: absolute; top: 100px; right: 10px;">
+        <div class="toast fade show boxy-red">
+            <div class="toast-header" style="background-color: rgba(182,3,35,0.41);color: white">
+                <strong class="me-auto"><i class="bi-globe"></i> CovInfo</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+            </div>
+            <div class="toast-body" style="color: red">
+                Passwords don't match! Try again
+            </div>
+        </div>
+    </div>
 <?php } ?>
 
 
