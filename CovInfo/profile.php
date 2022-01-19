@@ -201,12 +201,12 @@
 <p class="h-4 m-3 p-3 row justify-content-center border border-2 rounded-3 boxy" style="font-weight: bold">User Profile</p>
 <br>
 
-<?php if($error1){?>
+<?php if(true){?>
     <p class="h-4 m-3 p-3 row  border border-2 rounded-3 boxy" style="font-weight: bold">Passwords are not match! try again</p>
     <br>
 <?php } ?>
 
-<?php if($error2){?>
+<?php if(true){?>
     <p class="h-4 m-3 p-3 row  border border-2 rounded-3 boxy" style="font-weight: bold" >Current password is invalid! try again</p>
     <br>
 <?php } ?>
