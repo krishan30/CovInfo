@@ -138,7 +138,7 @@ https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css
                             <li class="notif-header">
                                 <div class="d-flex">
                                     <div class="me-auto" style="font-weight: 500; color: #0C91E6;font-size: 20px">Notifications
-                                    </div><div class=""><a href="#" class="btn btn-primary btn-sm rounded-0" style="color: white">Read all</a>
+                                    </div><div class=""><a href="notificationPage.php" class="btn btn-primary btn-sm rounded-0" style="color: white">Read all</a>
                                     </div></div>
                             </li>
                             <div class="notif-items" >
@@ -172,7 +172,7 @@ https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css
                         </div>
                     </ul>
                     <?php } else { ?>
-                        <img src="images/bell.svg" alt="" width="24" height="24">
+                        <img src="images/notification.svg" alt="" width="24" height="24">
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notify" style="list-style-type: none;">
                             <div class="notif">
@@ -181,7 +181,7 @@ https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css
                                 </li>
                                 <div class="notif-items">
                                     <li class="dropdown-item">
-                                        <span class="item-name">No new Notifications!</span>
+                                        <span class="item-name">No New Notifications!</span>
                                     </li>
                                 </div>
                             </div>

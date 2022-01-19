@@ -120,7 +120,7 @@ if(isset($_SESSION["search_account_id"]) || isset($_SESSION["search_nic_number"]
                                 <li class="notif-header">
                                     <div class="d-flex">
                                         <div class="me-auto" style="font-weight: 500; color: #0C91E6;font-size: 20px">Notifications
-                                        </div><div class=""><a href="#" class="btn btn-primary btn-sm rounded-0" style="color: white">Read all</a>
+                                        </div><div class=""><a href="notificationPage.php" class="btn btn-primary btn-sm rounded-0" style="color: white">Read all</a>
                                         </div></div>
                                 </li>
                                 <div class="notif-items" >
@@ -154,7 +154,7 @@ if(isset($_SESSION["search_account_id"]) || isset($_SESSION["search_nic_number"]
                             </div>
                         </ul>
                         <?php } else { ?>
-                            <img src="images/bell.svg" alt="" width="24" height="24">
+                            <img src="images/notification.svg" alt="" width="24" height="24">
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notify" style="list-style-type: none;">
                                 <div class="notif">
@@ -163,7 +163,7 @@ if(isset($_SESSION["search_account_id"]) || isset($_SESSION["search_nic_number"]
                                     </li>
                                     <div class="notif-items">
                                         <li class="dropdown-item">
-                                            <span class="item-name">No new Notifications!</span>
+                                            <span class="item-name">No New Notifications!</span>
                                         </li>
                                     </div>
                                 </div>
