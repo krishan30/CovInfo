@@ -15,7 +15,6 @@ if($logged_user){
 
 
 
-
 ?>
 
 <!DOCTYPE html>

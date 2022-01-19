@@ -13,7 +13,7 @@ if (isset($_SESSION["user_id"])){
 }
 
 $connection = PDOSingleton::getInstance();
-
+$error = false;
 /*
   should get from session variable after connecting with logging page
 */
@@ -33,13 +33,14 @@ if(isset($_SESSION["ch1"])){
                 $user->activateAccount();
             } catch (Exception $e) {
             }
+            unset($_SESSION["ch1"]);
+            header("Location:profile.php");
+            return;
         }
     else{
-
+        $error = true;
     }
-    unset($_SESSION["ch1"]);
-    header("Location:profile.php");
-    return;
+
 }
 
 if(isset($_POST["passwordChange"])){
@@ -180,12 +181,19 @@ $name = $user->getFirstName()." ".$user->getMiddleName()." ".$user->getLastName(
 <p class="h-4 m-3 p-3 row justify-content-center border border-2 rounded-3 boxy" style="font-weight: bold">Change Password</p>
 <br>
 
+<?php if($error){?>
+<p class="h-4 m-3 p-3 row  border border-2 rounded-3 boxy" style="font-weight: bold color: red">Passwords are not match! try again</p>
+<br>
+<?php } ?>
+
+
 
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Update password</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
+
                     <div class="modal-body">
                         <form method="post">
                             <div class="form-floating mb-3">

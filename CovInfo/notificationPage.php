@@ -12,6 +12,7 @@
     $userProxyFactory = new UserProxyFactory();
     $user = $userProxyFactory->build($officer_id);
 
+
     $connection = PDOSingleton::getInstance();
     if(isset($_POST["NotificationID"])){
         $notification=NotificationFactory::buildNotification((int)$_POST["NotificationID"]);

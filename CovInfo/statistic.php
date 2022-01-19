@@ -27,6 +27,7 @@ if($logged_user){
     $user = $userProxyFactory->build($user_id);
 }
 
+
 ?>
 
 <!DOCTYPE html>
