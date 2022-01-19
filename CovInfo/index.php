@@ -154,7 +154,7 @@ https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css
 
 <div class="container-fluid div1">
     <div class="h1 display-1">
-        <br><br><br>
+        <br><br><br><br>
         &nbsp;Welcome to CovInfo <br>
         <div class="small h-50" style="color: #0d6efd; font-size: 1.7rem">&emsp;National COVID Information System for Rapid Patient Management
         </div>
@@ -512,7 +512,7 @@ https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css
     <br><br><br><br>
     <div class="container mx-5">
         <div class="row justify-content-center">
-            <div class="col-7 div6 boxy rounded-3">
+            <div class="col-7 div6 boxy-blue rounded-3">
                 <div>
                     <br>
                     <div class="display-5 text-center" style="font-weight: 400;color: #052452">Information for General Public</div>
