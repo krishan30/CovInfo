@@ -28,7 +28,6 @@
         if($user->getPassword() == md5($_SESSION["ch-cPassword"])){
             if($_SESSION["ch-conPassword"] == $_SESSION["ch-nPassword"]){
                 $user->setPassword(md5($_SESSION["ch-nPassword"]),$user->getUserID());
-                echo "password changed";
             }else{
                 $error1 = true;
             }
