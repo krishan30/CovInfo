@@ -213,7 +213,7 @@
             </div>
         </div>
         <?php } ?>
-        <?php if($error1){?>
+        <?php if($error2){?>
             <div class="toast fade show boxy-red">
                 <div class="toast-header" style="background-color: rgba(182,3,35,0.41);color: white">
                     <strong class="me-auto"><i class="bi-globe"></i> CovInfo</strong>
@@ -225,12 +225,6 @@
             </div>
         <?php } ?>
     </div>
-
-
-<?php if(true){?>
-    <p class="h-4 m-3 p-3 row  border border-2 rounded-3 boxy" style="font-weight: bold" ></p>
-    <br>
-<?php } ?>
 
 <div class="container justify-content-center">
     <div class="container boxy-blue p-3 m-4">
