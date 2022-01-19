@@ -54,9 +54,20 @@ $connection=PDOSingleton::getInstance();
         $updatestmt = $connection->prepare($updateQuery);
         $updatestmt->execute();
 
-        MailWrapper::sendMail($userProxyFactory->build($searchedId),"Releasing as a Covid Patient and informing about quarantining","
-Congratulations! you are fully recovered. You should home quarantine until ".$_POST["end-date"]." Stay alone and follow all health guidelines. 
-");
+        $sender = $userProxyFactory->build($searchedId);
+        if($sender->getGender() == "Male"){
+            $temp = "sir";
+        }else{
+            $temp = "madam";
+        }
+        MailWrapper::sendMail($sender,"CoVID-19 Patient Release Alert",
+            "<p>Dear ".$temp." , </p>
+<p>
+    We are pleased to inform you that according to latest PCR reports you are no longer infected with CoVID-19. Please be advised that you will now be placed under quarantine. Kindly continue taking necessary steps to isolate yourself and avoid engaging in physically strenuous tasks.
+</p>
+<p>
+    An automated message via Covinfo CoVID Information System. Do not reply.
+</p>");
         $_SESSION['PRelease']=true;
         header("Location:PatientReleaseForm.php");
         return;

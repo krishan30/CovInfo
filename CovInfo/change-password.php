@@ -39,6 +39,7 @@ if(isset($_SESSION["ch1"])){
         }
     else{
         $error = true;
+        unset($_SESSION["ch1"]);
     }
 
 }
@@ -188,10 +189,11 @@ $name = $user->getFirstName()." ".$user->getMiddleName()." ".$user->getLastName(
 
 
 
+            <div class="container my-2 mx-5 mx-auto">
+                <div class="col-9 mx-auto">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Update password</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
                     <div class="modal-body">
@@ -211,6 +213,8 @@ $name = $user->getFirstName()." ".$user->getMiddleName()." ".$user->getLastName(
                     </div>
                     </form>
                 </div>
+            </div>
+            </div>
             </div>
         </div>
 

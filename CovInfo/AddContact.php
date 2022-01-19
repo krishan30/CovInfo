@@ -249,6 +249,7 @@ if(isset($_SESSION["search_account_id"]) || isset($_SESSION["search_nic_number"]
             <table class="table table-striped table-hover">
                 <thead>
                 <tr>
+                    <th scope="col">No</th>
                     <th scope="col">Contact Name</th>
                     <th scope="col">Date Added as a Contact</th>
 
@@ -266,7 +267,7 @@ if(isset($_SESSION["search_account_id"]) || isset($_SESSION["search_nic_number"]
                     ?>
 
                     <tr>
-                        <th scope="row"><?php echo $i?></th>
+                        <td style="text-align: start"><?php echo $i?></td>
                         <td><?php echo $fullName?></td>
                         <td> <?php echo $row["trace_date"]?></td>
                     </tr>
@@ -349,7 +350,7 @@ if(isset($_SESSION["search_account_id"]) || isset($_SESSION["search_nic_number"]
                         <tbody>
                     <?php } ?>
                     <tr class="align-middle alert" role="alert">
-                        <td> <?php echo $i ?></td>
+                        <td style="text-align: start"> <?php echo $i ?></td>
                         <td>
                             <div class="d-flex align-items-center">
                                 <div class="img-container">
@@ -384,7 +385,7 @@ if(isset($_SESSION["search_account_id"]) || isset($_SESSION["search_nic_number"]
                             <div class="fw-600">
                                 <form method="get">
                                     <input type="text" name="id" value="<?php echo $row["user_id"]?>" hidden>
-                                    <button type="submit" name="findPage">Select</button>
+                                    <button class="btn btn-outline-primary p-1" type="submit" name="findPage">Select</button>
                                 </form>
                             </div>
                         </td>
@@ -392,8 +393,8 @@ if(isset($_SESSION["search_account_id"]) || isset($_SESSION["search_nic_number"]
 
                 <?php }
                 if($i == 0){ ?>
-                    <div class="container boxy-blue text-center">
-                        <div class="h1">Result not found!</div>
+                    <div class="container boxy-blue text-center p-4">
+                        <div class="h1" style="color: #0e3c80">Result not found!</div>
                     </div>
                 <?php }else{ ?>
                     </tbody>
