@@ -57,4 +57,9 @@ class Notification{
         $this->currentNotificationState->ViewNotification($this);
     }
 
+    public function getNotificationRecordID(): int
+    {
+        return $this->notificationRecordID;
+    }
+
 }

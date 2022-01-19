@@ -167,17 +167,19 @@ if(isset($_SESSION["search_account_id"]) || isset($_SESSION["search_nic_number"]
                     <li class="dropdown">
                         <a  href="#" class="nav-link" style="border-bottom: none" role="button" data-bs-toggle="dropdown" id="notify" aria-expanded="false">
                             <?php  if($user->isNewNotificationsAvailable()) {?>    <!--   have_notifications-->
-                            <img src="images/notification.svg" alt="" width="24" height="24">
+                            <img src="images/notification.png" alt="" width="24" height="24">
+                            <span class="badge bg-primary"><?= $user->getNewNotificationCount() ?></span>
+                            </button>
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notify" style="list-style-type: none;">
-                            <div class="notif">
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notify" style="list-style-type: none;overflow-y:scroll;height:50vh;">
+                            <div class="notif" style="width:31vw">
                                 <li class="notif-header">
                                     <div class="d-flex">
                                         <div class="me-auto" style="font-weight: 500; color: #0C91E6;font-size: 20px">Notifications
-                                        </div><div class=""><a href="#" class="btn btn-primary btn-sm rounded-0" style="color: white">Read all</a>
+                                        </div><div class=""><a href="notificationPage.php" class="btn btn-primary btn-sm rounded-0" style="color: white">Read all</a>
                                         </div></div>
                                 </li>
-                                <div class="notif-items">
+                                <div class="notif-items" >
                                     <?php
                                     $connection = PDOSingleton::getInstance();
                                     $query = "SELECT notification_id  FROM notification WHERE receiver_id=:receiver_id && read_status_id=1 ORDER BY sent_date_time DESC ";
@@ -198,8 +200,8 @@ if(isset($_SESSION["search_account_id"]) || isset($_SESSION["search_nic_number"]
                                         echo("<li style='cursor: pointer' class='dropdown-item'>
                                         <span  class='item-name fw-bold'> $notificationMessage</span>
                                         <br>
-                                        <span class='fw-lighter me-5 '>$notificationReceivedDate</span>
-                                        <span class='fw-lighter ms-5 '>$notificationReceivedTime</span>
+                                        <span class='fw-lighter '>$notificationReceivedDate</span>
+                                        <span style='padding-left:60%' class='fw-lighter  '>$notificationReceivedTime</span>
                                         </li>");
                                     }
                                     ?>
@@ -208,7 +210,7 @@ if(isset($_SESSION["search_account_id"]) || isset($_SESSION["search_nic_number"]
                             </div>
                         </ul>
                         <?php } else { ?>
-                            <img src="images/bell.svg" alt="" width="24" height="24">
+                            <img src="images/notification.svg" alt="" width="24" height="24">
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notify" style="list-style-type: none;">
                                 <div class="notif">
@@ -217,7 +219,7 @@ if(isset($_SESSION["search_account_id"]) || isset($_SESSION["search_nic_number"]
                                     </li>
                                     <div class="notif-items">
                                         <li class="dropdown-item">
-                                            <span class="item-name">No new Notifications!</span>
+                                            <span class="item-name">No New Notifications!</span>
                                         </li>
                                     </div>
                                 </div>

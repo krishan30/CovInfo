@@ -131,17 +131,19 @@
                 <li class="dropdown">
                     <a  href="#" class="nav-link" style="border-bottom: none" role="button" data-bs-toggle="dropdown" id="notify" aria-expanded="false">
                         <?php  if($user->isNewNotificationsAvailable()) {?>    <!--   have_notifications-->
-                        <img src="images/notification.svg" alt="" width="24" height="24">
+                        <img src="images/notification.png" alt="" width="24" height="24">
+                        <span class="badge bg-primary"><?= $user->getNewNotificationCount() ?></span>
+                        </button>
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notify" style="list-style-type: none;">
-                        <div class="notif">
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notify" style="list-style-type: none;overflow-y:scroll;height:50vh;">
+                        <div class="notif" style="width:31vw">
                             <li class="notif-header">
                                 <div class="d-flex">
                                     <div class="me-auto" style="font-weight: 500; color: #0C91E6;font-size: 20px">Notifications
-                                    </div><div class=""><a href="#" class="btn btn-primary btn-sm rounded-0" style="color: white">Read all</a>
+                                    </div><div class=""><a href="notificationPage.php" class="btn btn-primary btn-sm rounded-0" style="color: white">Read all</a>
                                     </div></div>
                             </li>
-                            <div class="notif-items">
+                            <div class="notif-items" >
                                 <?php
                                 $connection = PDOSingleton::getInstance();
                                 $query = "SELECT notification_id  FROM notification WHERE receiver_id=:receiver_id && read_status_id=1 ORDER BY sent_date_time DESC ";
@@ -162,8 +164,8 @@
                                     echo("<li style='cursor: pointer' class='dropdown-item'>
                                         <span  class='item-name fw-bold'> $notificationMessage</span>
                                         <br>
-                                        <span class='fw-lighter me-5 '>$notificationReceivedDate</span>
-                                        <span class='fw-lighter ms-5 '>$notificationReceivedTime</span>
+                                        <span class='fw-lighter '>$notificationReceivedDate</span>
+                                        <span style='padding-left:60%' class='fw-lighter  '>$notificationReceivedTime</span>
                                         </li>");
                                 }
                                 ?>
@@ -172,7 +174,7 @@
                         </div>
                     </ul>
                     <?php } else { ?>
-                        <img src="images/bell.svg" alt="" width="24" height="24">
+                        <img src="images/notification.svg" alt="" width="24" height="24">
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notify" style="list-style-type: none;">
                             <div class="notif">
@@ -181,14 +183,14 @@
                                 </li>
                                 <div class="notif-items">
                                     <li class="dropdown-item">
-                                        <span class="item-name">No new Notifications!</span>
+                                        <span class="item-name">No New Notifications!</span>
                                     </li>
                                 </div>
                             </div>
                         </ul>
                     <?php } ?>
                 </li>
-                <li class="nav-item active"><a class="nav-link active" href="profile.php" title=""><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M12 2.5a5.5 5.5 0 00-3.096 10.047 9.005 9.005 0 00-5.9 8.18.75.75 0 001.5.045 7.5 7.5 0 0114.993 0 .75.75 0 101.499-.044 9.005 9.005 0 00-5.9-8.181A5.5 5.5 0 0012 2.5zM8 8a4 4 0 118 0 4 4 0 01-8 0z"></path></svg>&nbsp;<?php echo $user->getFirstName()." ".$user->getLastName()?></a></li>
+                <li class="nav-item"><a class="nav-link" href="profile.php" title=""><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M12 2.5a5.5 5.5 0 00-3.096 10.047 9.005 9.005 0 00-5.9 8.18.75.75 0 001.5.045 7.5 7.5 0 0114.993 0 .75.75 0 101.499-.044 9.005 9.005 0 00-5.9-8.181A5.5 5.5 0 0012 2.5zM8 8a4 4 0 118 0 4 4 0 01-8 0z"></path></svg>&nbsp;<?php echo $user->getFirstName()." ".$user->getLastName() ?></a></li>
                 <li class="nav-item"><a class="nav-link" href="logout.php" title=""><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M3 3.25c0-.966.784-1.75 1.75-1.75h5.5a.75.75 0 010 1.5h-5.5a.25.25 0 00-.25.25v17.5c0 .138.112.25.25.25h5.5a.75.75 0 010 1.5h-5.5A1.75 1.75 0 013 20.75V3.25zm16.006 9.5l-3.3 3.484a.75.75 0 001.088 1.032l4.5-4.75a.75.75 0 000-1.032l-4.5-4.75a.75.75 0 00-1.088 1.032l3.3 3.484H10.75a.75.75 0 000 1.5h8.256z"></path></svg>&nbsp;Logout</a></li>
             </ul>
         </div>
