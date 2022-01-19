@@ -157,7 +157,8 @@ https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css
     <div class="h1 display-1">
         <br><br><br>
         &nbsp;Welcome to CovInfo <br>
-        <div class="small h-50" style="color: #0d6efd; font-size: 2rem">&emsp;&emsp;Some info about our website</div>
+        <div class="small h-50" style="color: #0d6efd; font-size: 1.7rem">&emsp;National COVID Information System for Rapid Patient Management
+        </div>
         <br>
         <br>
     </div>
@@ -660,7 +661,7 @@ https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css
 </div>
 
 
-<div class="footer m-0 mt-5 p-5 text-center">© 2021 Digitally Crafted by #dec0ders_Lite</div>
+<div class="footer m-0 mt-5 p-5 text-center">© 2021 Digitally Crafted by Sanitizers</div>
 <!--<script src="
 https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js
 " integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
