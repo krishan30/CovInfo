@@ -76,7 +76,7 @@ https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css
                     <li class="dropdown">
                         <a  href="#" class="nav-link" style="border-bottom: none" role="button" data-bs-toggle="dropdown" id="notify" aria-expanded="false">
                             <?php  if($user->isNewNotificationsAvailable()) {?>    <!--   have_notifications-->
-                            <img src="images/notification.svg" alt="" width="24" height="24">
+                            <img src="images/notification.png" alt="" width="24" height="24">
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notify" style="list-style-type: none;">
                             <div class="notif">
@@ -117,7 +117,7 @@ https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css
                             </div>
                         </ul>
                         <?php } else { ?>
-                            <img src="images/bell.svg" alt="" width="24" height="24">
+                            <img src="images/bell.png" alt="" width="24" height="24">
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notify" style="list-style-type: none;">
                                 <div class="notif">

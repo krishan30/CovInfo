@@ -500,7 +500,7 @@
 
 <div class="container justify-content-center">
     <div class="container px-3 mx-4 ">
-        <a href="editProfile.php" class="hiddenLink">
+        <a href="editmyprofile.php" class="hiddenLink">
             <div class="p-3 card-child text-center btn-outline-primary d-inline-flex col-3 rounded-3">
                 <div class="d-flex flex-row align-items-center"> <span class="circle"> <i class="fa fa-home"> <img src="images\edit.png" width="80%"></i>  </span>
                     <div class="d-flex flex-column ms-3">
