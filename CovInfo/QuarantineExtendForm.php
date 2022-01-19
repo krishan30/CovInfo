@@ -31,9 +31,24 @@
             $sql = "UPDATE quarantine_record  set end_date=:end_date  where user_id=:user_id && end_date=:prev_end_date";
             $stmt = $connection->prepare($sql);
             $stmt->execute(array(":user_id"=>$searchedId,":end_date"=>$_POST["new_end_date"],":prev_end_date"=>$end_date));
-            MailWrapper::sendMail($userProxyFactory->build($searchedId),"Extending quarantine period","
-Your quarantine period has extended until ".$_POST["new_end_date"]." Stay alone and follow all health guidelines. 
-");
+
+            $newDate = $_POST["new_end_date"];
+            $sender = $userProxyFactory->build($searchedId);
+            if($sender->getGender() == "Male"){
+                $temp = "sir";
+            }else{
+                $temp = "madam";
+            }
+            MailWrapper::sendMail($sender,"CoVID-19 Quarantine Termination Alert",
+                "<p>Dear ".$temp." , </p>
+<p>
+    We are sorry to inform you that your quarantine period is extended until $newDate. 
+Please remain indoors and be vigilant on any symptoms.
+</p>
+<p>
+    An automated message via Covinfo CoVID Information System. Do not reply.
+</p>");
+
             $_SESSION['QExtend']=true;
         }
         header("Location:QuarantineExtendForm.php");
