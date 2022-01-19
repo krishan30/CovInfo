@@ -127,7 +127,7 @@ $quarantineRecords = $connection->query("SELECT quarantine_record.start_date,qua
                 <li class="dropdown">
                     <a  href="#" class="nav-link" style="border-bottom: none" role="button" data-bs-toggle="dropdown" id="notify" aria-expanded="false">
                         <?php  if($authority->isNewNotificationsAvailable()) {?>    <!--   have_notifications-->
-                        <img src="images/notification.svg" alt="" width="24" height="24">
+                        <img src="images/notification.png" alt="" width="24" height="24">
                         <span class="badge bg-primary"><?= $authority->getNewNotificationCount() ?></span>
                         </button>
                     </a>
