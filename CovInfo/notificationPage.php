@@ -195,15 +195,16 @@
                     </div>
 
                 </div>
+                <form action="notificationPage.php" method="post" >
+                    <input id="NI" type="text"  name="NotificationID" hidden>
+                    <div class="col-sm text-end">
+                        <button style="display:none" type="submit" class="btn btn-outline-primary " id="MR" name="register" >Mark As Read</button>
+                    </div>
+                </form>
 
             </div>
         </div>
-        <form action="notificationPage.php" method="post" >
-            <input id="NI" type="text"  name="NotificationID" hidden>
-            <div class="col-sm text-end">
-                <button style="display:none" type="submit" class="btn btn-outline-primary " id="MR" name="register" >Mark As Read</button>
-            </div>
-        </form>
+
 
     </div>
     <div class="text-center pt-4 pb-3">
