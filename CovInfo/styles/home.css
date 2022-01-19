@@ -216,13 +216,13 @@ body{
 }
 
 .div6{
-    background-color: rgba(3, 94, 197, 0.53);
+    background-color: rgb(199, 210, 227);
     background-image: url("../images/dark-background.png");
     background-size: 200px;
     background-repeat: repeat;
 }
 .div6 a{
-    color: #e70707;
+    color: #0000FF;
 }
 
 .div7 .display-3{
