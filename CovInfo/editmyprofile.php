@@ -53,9 +53,9 @@ if(isset($_POST["update"])){
 }
 
 $genderList = $connection->query("SELECT gender FROM gender");
-$districtList = $connection->query("SELECT name FROM district");
+$districtList = $connection->query("SELECT district_id,name FROM district");
 $bloodTypeList = $connection->query("SELECT blood_type_name FROM blood_type");
-$mohDivisionList = $connection->query("SELECT moh_name FROM moh_division");
+$mohDivisionList = $connection->query("SELECT moh_division_id,moh_name FROM moh_division");
 
 
 

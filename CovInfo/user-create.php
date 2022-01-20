@@ -61,9 +61,9 @@ if(isset($_POST["register"])){
 
 
 $genderList = $connection->query("SELECT gender FROM gender");
-$districtList = $connection->query("SELECT name FROM district");
+$districtList = $connection->query("SELECT district_id,name FROM district");
 $bloodTypeList = $connection->query("SELECT blood_type_name FROM blood_type");
-$mohDivisionList = $connection->query("SELECT moh_name FROM moh_division");
+$mohDivisionList = $connection->query("SELECT moh_division_id,moh_name FROM moh_division");
 $userTypesList = $connection->query("SELECT user_type_name FROM user_type");
 
 
@@ -286,7 +286,7 @@ https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css
 
                                     <?php $i = 1;
                                     while ($row = $districtList->fetch(PDO::FETCH_ASSOC)){?>
-                                        <option value="<?php echo $i++ ?>" ><?php echo $row["name"] ?></option>
+                                        <option value="<?php echo $row["district_id"] ?>" ><?php echo $row["name"] ?></option>
                                     <?php } ?>
                                 </select>
                             </div>
@@ -317,7 +317,7 @@ https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css
 
                                     <?php $i = 1;
                                     while ($row = $mohDivisionList->fetch(PDO::FETCH_ASSOC)){?>
-                                        <option value="<?php echo $i++ ?>" ><?php echo $row["moh_name"] ?></option>
+                                        <option value="<?php echo $row["moh_division_id"] ?>" ><?php echo $row["moh_name"] ?></option>
                                     <?php } ?>
                                 </select>
                             </div>
