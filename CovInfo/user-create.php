@@ -111,7 +111,7 @@ https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css
                             <a class="nav-link" aria-current="page" href="search.php">Search</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="user-create.php">Add New User</a>
+                            <a class="nav-link active" aria-current="page" href="user-create.php">Add New User</a>
                         </li>
                     <?php }
 
@@ -236,7 +236,8 @@ https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css
                         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4">
                             <div class="form-group">
                                 <label for="dob" class="mx-1">Date of Birth</label>
-                                <input type="date" required class="form-control" id="dob" name="dob" placeholder="Enter date of birth">
+                                <input max="<?= date("Y-m-d") ?>" min="<?=date('Y-m-d', strtotime(' -120 years'));?>"
+                                       type="date" required class="form-control" id="dob" name="dob" placeholder="Enter date of birth">
                             </div>
                         </div>
                         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4">
