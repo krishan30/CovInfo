@@ -182,7 +182,10 @@ $connection=PDOSingleton::getInstance();
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notify" style="list-style-type: none;">
                                 <div class="notif">
                                     <li class="notif-header">
-                                        <div class="d-flex"><div class="me-auto" style="font-weight: 500; color: #0C91E6;font-size: 20px">Notifications</div></div>
+                                        <div class="d-flex">
+                                            <div class="me-auto" style="font-weight: 500; color: #0C91E6;font-size: 20px">Notifications
+                                            </div><div class=""><a href="notificationPage.php" class="btn btn-primary btn-sm rounded-0" style="color: white">Read all</a>
+                                            </div></div>
                                     </li>
                                     <div class="notif-items">
                                         <li class="dropdown-item">

@@ -242,7 +242,7 @@
                             $notificationReceivedTime = $notification->getReceivedTime();
                             $notificationReceivedDate = $notification->getReceivedDate();
                             $link="#R-".str_replace(' ', '-', $notificationMessage);
-                            echo(" <button  class='nav-link border border-secondary' id='v-pills-home-tab' data-bs-toggle='tab' data-bs-target='$link' type='button' role='tab' aria-controls='v-pills-home' aria-selected='true' value='$notificationID'><div class='position-relative'><span class='badge rounded-pill  position-absolute top-0 end-0'>Read</span></div><i class='bi bi-chat-fill'></i> &nbsp; 
+                            echo(" <button  class='nav-link border border-secondary' id='v-pills-home-tab' data-bs-toggle='tab' data-bs-target='$link' type='button' role='tab' aria-controls='v-pills-home' aria-selected='true' ><div class='position-relative'><span class='badge rounded-pill  position-absolute top-0 end-0'>Read</span></div><i class='bi bi-chat-fill'></i> &nbsp; 
                         <div >
                          $notificationMessage
                         </div> 
@@ -343,8 +343,11 @@
     </script>
     <script >
         $('ul').click(function(){
+            var Input=document.getElementById("NI");
             var Button=document.getElementById("MR");
-            Button.style.display='none';
+            if(!Input.value){
+                Button.style.display='none';
+            }
         });
 
     </script>
