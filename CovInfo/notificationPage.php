@@ -95,6 +95,11 @@ foreach ($oldNotificationsIDS  as $notificationID) {
                     <?php }
                 }
                 ?>
+            <?php if ($notifications) { ?> 
+                <button type="button" class=" btn btn-outline-primary"> Mark all as read</button>
+            <?php } else { ?> 
+                <button type="button" class=" btn btn-outline-primary" disabled> Mark all as read</button>
+            <?php } ?> 
 
             </ul>
             <?php if ($logged_user) { ?>
