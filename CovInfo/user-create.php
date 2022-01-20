@@ -19,9 +19,8 @@ if($logged_user){
     return;
 }
 
-
-
 $connection = PDOSingleton::getInstance();
+
 
 if(isset($_SESSION["ep-needInsert"])){
     $new_user_id = User::createNewUser($_SESSION["ep-email"],$_SESSION["ep-firstName"],$_SESSION["ep-middleName"],$_SESSION["ep-lastName"],$_SESSION["ep-nic"],

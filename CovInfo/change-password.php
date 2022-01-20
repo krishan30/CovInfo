@@ -13,7 +13,7 @@ if (isset($_SESSION["user_id"])){
 }
 
 $connection = PDOSingleton::getInstance();
-
+$error = false;
 /*
   should get from session variable after connecting with logging page
 */
@@ -33,13 +33,15 @@ if(isset($_SESSION["ch1"])){
                 $user->activateAccount();
             } catch (Exception $e) {
             }
+            unset($_SESSION["ch1"]);
+            header("Location:profile.php");
+            return;
         }
     else{
-
+        $error = true;
+        unset($_SESSION["ch1"]);
     }
-    unset($_SESSION["ch1"]);
-    header("Location:profile.php");
-    return;
+
 }
 
 if(isset($_POST["passwordChange"])){
@@ -180,12 +182,29 @@ $name = $user->getFirstName()." ".$user->getMiddleName()." ".$user->getLastName(
 <p class="h-4 m-3 p-3 row justify-content-center border border-2 rounded-3 boxy" style="font-weight: bold">Change Password</p>
 <br>
 
+<?php if($error){?>
+    <div class="toast-container" style="position: absolute; top: 100px; right: 10px;">
+        <div class="toast fade show boxy-red">
+            <div class="toast-header" style="background-color: rgba(182,3,35,0.41);color: white">
+                <strong class="me-auto"><i class="bi-globe"></i> CovInfo</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+            </div>
+            <div class="toast-body" style="color: red">
+                Passwords don't match! Try again
+            </div>
+        </div>
+    </div>
+<?php } ?>
 
+
+
+            <div class="container my-2 mx-5 mx-auto">
+                <div class="col-9 mx-auto">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Update password</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
+
                     <div class="modal-body">
                         <form method="post">
                             <div class="form-floating mb-3">
@@ -203,6 +222,8 @@ $name = $user->getFirstName()." ".$user->getMiddleName()." ".$user->getLastName(
                     </div>
                     </form>
                 </div>
+            </div>
+            </div>
             </div>
         </div>
 

@@ -14,6 +14,9 @@
 
     $connection = PDOSingleton::getInstance();
 
+    $error1 = false;
+    $error2 = false;
+
     /*
       should get from session variable after connecting with logging page
     */
@@ -25,13 +28,11 @@
         if($user->getPassword() == md5($_SESSION["ch-cPassword"])){
             if($_SESSION["ch-conPassword"] == $_SESSION["ch-nPassword"]){
                 $user->setPassword(md5($_SESSION["ch-nPassword"]),$user->getUserID());
-                echo "password changed";
             }else{
-                //new password not match
-                echo "new password not match";
+                $error1 = true;
             }
         }else{
-            echo "invalidPassword";
+            $error2 = true;
         }
         unset($_SESSION["ch"]);
     }
@@ -199,6 +200,32 @@
 <br><br>
 <p class="h-4 m-3 p-3 row justify-content-center border border-2 rounded-3 boxy" style="font-weight: bold">User Profile</p>
 <br>
+
+    <div class="toast-container" style="position: absolute; top: 100px; right: 10px;">
+        <?php if($error1){?>
+        <div class="toast fade show boxy-red">
+            <div class="toast-header" style="background-color: rgba(182,3,35,0.41);color: white">
+                <strong class="me-auto"><i class="bi-globe"></i> CovInfo</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+            </div>
+            <div class="toast-body" style="color: red">
+                Passwords don't match! Try again
+            </div>
+        </div>
+        <?php } ?>
+        <?php if($error2){?>
+            <div class="toast fade show boxy-red">
+                <div class="toast-header" style="background-color: rgba(182,3,35,0.41);color: white">
+                    <strong class="me-auto"><i class="bi-globe"></i> CovInfo</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+                </div>
+                <div class="toast-body" style="color: red">
+                    Current password is invalid! Try again
+                </div>
+            </div>
+        <?php } ?>
+    </div>
+
 <div class="container justify-content-center">
     <div class="container boxy-blue p-3 m-4">
         <ul class="nav nav-tabs" id="myTab">
